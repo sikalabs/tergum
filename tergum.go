@@ -60,8 +60,8 @@ func main() {
 	dst := flag.String("dst", "", "choose backup destination form: {stdout file}")
 	dstFilePath := flag.String("dst-file-path", "", "output full file path, eg.: ~/backup/backup.sql")
 	dstFileDir := flag.String("dst-file-dir", "", "output directory, eg.: ~/backup")
-	dstFilePrefix := flag.String("dst-file-prefix", "", "output file path, eg.: default")
-	dstFileSuffix := flag.String("dst-file-suffix", "", "output file path, eg.: sql")
+	dstFilePrefix := flag.String("dst-file-prefix", "", "output file prefix, eg.: default")
+	dstFileSuffix := flag.String("dst-file-suffix", "", "output file suffix, eg.: sql")
 
 	flag.Parse()
 
