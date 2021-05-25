@@ -1,0 +1,9 @@
+# General
+*.backup
+*.log
+
+# Mac
+.DS_Store
+
+# Editor
+.vscode
