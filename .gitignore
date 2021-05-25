@@ -6,6 +6,10 @@
 # Mac
 .DS_Store
 
+# ENV
+.env
+.env.sh
+
 # Editor
 .vscode
 
