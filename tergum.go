@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -11,6 +12,11 @@ import (
 	"path"
 	"path/filepath"
 	"time"
+
+	amazon_aws "github.com/aws/aws-sdk-go/aws"
+	amazon_credentials "github.com/aws/aws-sdk-go/aws/credentials"
+	amazon_session "github.com/aws/aws-sdk-go/aws/session"
+	amazon_s3manager "github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyz"
@@ -36,12 +42,43 @@ func saveFile(fileName string, fileContent []byte) error {
 	return err
 }
 
+func getOutputFileName(prefix string, suffix string) string {
+	nowFormatted := time.Now().UTC().Format("2006-01-02_15-04-05")
+	return prefix + "." + nowFormatted + "_" + randLetters(3) + "." + suffix
+}
+
 func getOutputPath(dstFilePath string, dstFileDir string, dstFilePrefix string, dstFileSuffix string) string {
 	if dstFilePath != "" {
 		return dstFilePath
 	}
-	nowFormatted := time.Now().UTC().Format("2006-01-02_15-04-05")
-	return path.Join(dstFileDir, dstFilePrefix+"."+nowFormatted+"_"+randLetters(3)+"."+dstFileSuffix)
+	return path.Join(dstFileDir, getOutputFileName(dstFilePrefix, dstFileSuffix))
+}
+
+func saveS3(dstAwsAccessKey string, dstAwsSecretKey string, dstAwsRegion string, dstAwsBucketName string, dstAwsPrefix string, dstAwsSuffix string, fileContent []byte) error {
+	session, err := amazon_session.NewSession(
+		&amazon_aws.Config{
+			Region: amazon_aws.String(dstAwsRegion),
+			Credentials: amazon_credentials.NewStaticCredentials(
+				dstAwsAccessKey,
+				dstAwsSecretKey,
+				"",
+			),
+		},
+	)
+	if err != nil {
+		return err
+	}
+	uploader := amazon_s3manager.NewUploader(session)
+	_, err = uploader.Upload(&amazon_s3manager.UploadInput{
+		Bucket: amazon_aws.String(dstAwsBucketName),
+		ACL:    amazon_aws.String("private"),
+		Key:    amazon_aws.String(getOutputFileName(dstAwsPrefix, dstAwsSuffix)),
+		Body:   bytes.NewReader(fileContent),
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func main() {
@@ -62,6 +99,12 @@ func main() {
 	dstFileDir := flag.String("dst-file-dir", "", "output directory, eg.: ~/backup")
 	dstFilePrefix := flag.String("dst-file-prefix", "", "output file prefix, eg.: default")
 	dstFileSuffix := flag.String("dst-file-suffix", "", "output file suffix, eg.: sql")
+	dstAwsAccessKey := flag.String("dst-aws-access-key", "", "AWS Access Key")
+	dstAwsSecretKey := flag.String("dst-aws-secret-key", "", "AWS Secret Key")
+	dstAwsRegion := flag.String("dst-aws-region", "", "AWS Region, eg.: eu-central-1")
+	dstAwsBucketName := flag.String("dst-aws-bucket-name", "", "AWS Bucket Name")
+	dstAwsPrefix := flag.String("dst-aws-prefix", "", "output file prefix, eg.: default")
+	dstAwsSuffix := flag.String("dst-aws-suffix", "", "output file suffix, eg.: sql")
 
 	flag.Parse()
 
@@ -102,6 +145,14 @@ func main() {
 		}
 		finaldstFilePath := getOutputPath(*dstFilePath, *dstFileDir, *dstFilePrefix, *dstFileSuffix)
 		err = saveFile(finaldstFilePath, out)
+		if err != nil {
+			log.Fatal(err)
+		}
+	case "s3":
+		if *dstAwsAccessKey == "" || *dstAwsSecretKey == "" || *dstAwsRegion == "" || *dstAwsBucketName == "" || *dstAwsPrefix == "" || *dstAwsSuffix == "" {
+			log.Fatal("args (-dst-aws-access-key AND -dst-aws-secret-key AND -dst-aws-region AND -dst-aws-bucket-name AND -dst-aws-prefix AND -dst-aws-suffix) must be set")
+		}
+		err = saveS3(*dstAwsAccessKey, *dstAwsSecretKey, *dstAwsRegion, *dstAwsBucketName, *dstAwsPrefix, *dstAwsSuffix, out)
 		if err != nil {
 			log.Fatal(err)
 		}
