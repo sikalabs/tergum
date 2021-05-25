@@ -1,6 +1,7 @@
 # General
 *.backup
 *.log
+/tmp
 
 # Mac
 .DS_Store
