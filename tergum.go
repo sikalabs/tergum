@@ -55,6 +55,7 @@ type TergumConfig struct {
 			AwsBucketName string
 			AwsPrefix     string
 			AwsSuffix     string
+			AwsEndpoint   string
 		}
 	}
 }
@@ -84,17 +85,26 @@ func getOutputPath(dstFilePath string, dstFileDir string, dstFilePrefix string, 
 	return path.Join(dstFileDir, getOutputFileName(dstFilePrefix, dstFileSuffix))
 }
 
-func saveS3(dstAwsAccessKey string, dstAwsSecretKey string, dstAwsRegion string, dstAwsBucketName string, dstAwsPrefix string, dstAwsSuffix string, fileContent []byte) error {
+func saveS3(dstAwsAccessKey string, dstAwsSecretKey string, dstAwsRegion string, dstAwsBucketName string, dstAwsPrefix string, dstAwsSuffix string, dstAwsEndpoint string, fileContent []byte) error {
+	config := amazon_aws.Config{
+		Credentials: amazon_credentials.NewStaticCredentials(
+			dstAwsAccessKey,
+			dstAwsSecretKey,
+			"",
+		),
+	}
+	if dstAwsRegion != "" {
+		config.Region = amazon_aws.String(string(dstAwsRegion))
+	}
+	if dstAwsEndpoint != "" {
+		config.Region = amazon_aws.String(string("us-east-1"))
+		config.S3ForcePathStyle = amazon_aws.Bool(true)
+		config.Endpoint = amazon_aws.String(string(dstAwsEndpoint))
+	}
 	session, err := amazon_session.NewSession(
-		&amazon_aws.Config{
-			Region: amazon_aws.String(dstAwsRegion),
-			Credentials: amazon_credentials.NewStaticCredentials(
-				dstAwsAccessKey,
-				dstAwsSecretKey,
-				"",
-			),
-		},
+		&config,
 	)
+
 	if err != nil {
 		return err
 	}
@@ -136,6 +146,7 @@ func main() {
 	dstAwsSecretKey := flag.String("dst-aws-secret-key", "", "AWS Secret Key")
 	dstAwsRegion := flag.String("dst-aws-region", "", "AWS Region, eg.: eu-central-1")
 	dstAwsBucketName := flag.String("dst-aws-bucket-name", "", "AWS Bucket Name")
+	dstAwsEndpoint := flag.String("dst-aws-endpoint", "", "AWS Endpoint, used for example for Minio")
 	dstAwsPrefix := flag.String("dst-aws-prefix", "", "output file prefix, eg.: default")
 	dstAwsSuffix := flag.String("dst-aws-suffix", "", "output file suffix, eg.: sql")
 
@@ -198,8 +209,8 @@ func main() {
 					if dst.AwsSecretKey == "" {
 						log.Fatal("arg awsSecretKey must be set")
 					}
-					if dst.AwsRegion == "" {
-						log.Fatal("arg awsRegion must be set")
+					if dst.AwsRegion == "" && dst.AwsEndpoint == "" {
+						log.Fatal("arg awsRegion OR awsEndpoint must be set")
 					}
 					if dst.AwsBucketName == "" {
 						log.Fatal("arg awBucketName must be set")
@@ -210,7 +221,7 @@ func main() {
 					if dst.AwsSuffix == "" {
 						log.Fatal("arg awsSuffix must be set")
 					}
-					err = saveS3(dst.AwsAccessKey, dst.AwsSecretKey, dst.AwsRegion, dst.AwsBucketName, dst.AwsPrefix, dst.AwsSuffix, out)
+					err = saveS3(dst.AwsAccessKey, dst.AwsSecretKey, dst.AwsRegion, dst.AwsBucketName, dst.AwsPrefix, dst.AwsSuffix, dst.AwsEndpoint, out)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -266,8 +277,8 @@ func main() {
 		if *dstAwsSecretKey == "" {
 			log.Fatal("arg -dst-aws-secret-key must be set")
 		}
-		if *dstAwsRegion == "" {
-			log.Fatal("arg -dst-aws-region must be set")
+		if *dstAwsRegion == "" && *dstAwsEndpoint == "" {
+			log.Fatal("arg -dst-aws-region OR -dst-aws-endpoint must be set")
 		}
 		if *dstAwsBucketName == "" {
 			log.Fatal("arg -dst-aws-bucket-name must be set")
@@ -278,7 +289,7 @@ func main() {
 		if *dstAwsSuffix == "" {
 			log.Fatal("arg -dst-aws-suffix must be set")
 		}
-		err = saveS3(*dstAwsAccessKey, *dstAwsSecretKey, *dstAwsRegion, *dstAwsBucketName, *dstAwsPrefix, *dstAwsSuffix, out)
+		err = saveS3(*dstAwsAccessKey, *dstAwsSecretKey, *dstAwsRegion, *dstAwsBucketName, *dstAwsPrefix, *dstAwsSuffix, *dstAwsEndpoint, out)
 		if err != nil {
 			log.Fatal(err)
 		}
