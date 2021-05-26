@@ -4,6 +4,8 @@ import (
 	"errors"
 	"flag"
 	"log"
+	"math/rand"
+	"time"
 
 	"github.com/sikalabs/tergum/alerting"
 	"github.com/sikalabs/tergum/backup"
@@ -11,6 +13,9 @@ import (
 )
 
 func main() {
+	// Seed random library
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	// Backup parameters from config file
 	path := flag.String("config", "", "tergum config file (json)")
 
