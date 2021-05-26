@@ -17,3 +17,6 @@
 # Tergum
 tergum
 tergum.exe
+
+# Goreleaser
+/dist
