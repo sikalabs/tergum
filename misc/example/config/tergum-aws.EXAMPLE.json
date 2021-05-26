@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "schemaVersion": 2
+  },
+  "backups": [
+    {
+      "source": {
+        "name": "mysql",
+        "mysql":{
+          "Host": "127.0.0.1",
+          "Port": "13306",
+          "User": "root",
+          "Password": "root",
+          "Database": "default"
+        }
+      },
+      "destinations": [
+        {
+          "name": "s3",
+          "s3":{
+            "AccessKey": "XXX",
+			      "SecretKey": "XXX",
+			      "Region": "eu-central-1",
+			      "BucketName": "tergum-backups",
+            "Prefix": "default",
+            "Suffix": "sql"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "schemaVersion": 2
+  },
+  "backups": [
+    {
+      "source": {
+        "name": "mysql",
+        "mysql":{
+          "Host": "127.0.0.1",
+          "Port": "13306",
+          "User": "root",
+          "Password": "root",
+          "Database": "default"
+        }
+      },
+      "destinations": [
+        {
+          "name": "filepath",
+          "filePath": {
+            "path": "tmp/11-backup-file-from-config.sql"
+          }
+        },
+        {
+          "name": "file",
+          "file":{
+            "Dir": "tmp/",
+            "Prefix": "default",
+            "Suffix": "sql"
+          }
+        },
+        {
+          "name": "s3",
+          "s3": {
+            "AccessKey": "admin",
+            "SecretKey": "asdfasdf",
+            "Endpoint": "http://127.0.0.1:19000",
+            "BucketName": "tergum-backups",
+            "Prefix": "default",
+            "Suffix": "sql"
+          }
+        }
+      ]
+    }
+  ]
+}
