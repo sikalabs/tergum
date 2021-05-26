@@ -192,8 +192,23 @@ func main() {
 						log.Fatal(err)
 					}
 				case "s3":
-					if dst.AwsAccessKey == "" || dst.AwsSecretKey == "" || dst.AwsRegion == "" || dst.AwsBucketName == "" || dst.AwsPrefix == "" || dst.AwsSuffix == "" {
-						log.Fatal("args (awsAccessKey AND awsSecretKey AND awsRegion AND awsBucketName AND awsPrefix AND awsSuffix) must be set")
+					if dst.AwsAccessKey == "" {
+						log.Fatal("arg awsAccessKey must be set")
+					}
+					if dst.AwsSecretKey == "" {
+						log.Fatal("arg awsSecretKey must be set")
+					}
+					if dst.AwsRegion == "" {
+						log.Fatal("arg awsRegion must be set")
+					}
+					if dst.AwsBucketName == "" {
+						log.Fatal("arg awBucketName must be set")
+					}
+					if dst.AwsPrefix == "" {
+						log.Fatal("arg awsPrefix must be set")
+					}
+					if dst.AwsSuffix == "" {
+						log.Fatal("arg awsSuffix must be set")
 					}
 					err = saveS3(dst.AwsAccessKey, dst.AwsSecretKey, dst.AwsRegion, dst.AwsBucketName, dst.AwsPrefix, dst.AwsSuffix, out)
 					if err != nil {
@@ -245,8 +260,23 @@ func main() {
 			log.Fatal(err)
 		}
 	case "s3":
-		if *dstAwsAccessKey == "" || *dstAwsSecretKey == "" || *dstAwsRegion == "" || *dstAwsBucketName == "" || *dstAwsPrefix == "" || *dstAwsSuffix == "" {
-			log.Fatal("args (-dst-aws-access-key AND -dst-aws-secret-key AND -dst-aws-region AND -dst-aws-bucket-name AND -dst-aws-prefix AND -dst-aws-suffix) must be set")
+		if *dstAwsAccessKey == "" {
+			log.Fatal("arg -dst-aws-access-key must be set")
+		}
+		if *dstAwsSecretKey == "" {
+			log.Fatal("arg -dst-aws-secret-key must be set")
+		}
+		if *dstAwsRegion == "" {
+			log.Fatal("arg -dst-aws-region must be set")
+		}
+		if *dstAwsBucketName == "" {
+			log.Fatal("arg -dst-aws-bucket-name must be set")
+		}
+		if *dstAwsPrefix == "" {
+			log.Fatal("arg -dst-aws-prefix must be set")
+		}
+		if *dstAwsSuffix == "" {
+			log.Fatal("arg -dst-aws-suffix must be set")
 		}
 		err = saveS3(*dstAwsAccessKey, *dstAwsSecretKey, *dstAwsRegion, *dstAwsBucketName, *dstAwsPrefix, *dstAwsSuffix, out)
 		if err != nil {
