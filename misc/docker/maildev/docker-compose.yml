@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  maildev:
+    image: maildev/maildev
+    command: ["--web", "1080", "--smtp", "1025", "--hide-extensions", "STARTTLS"]
+    ports:
+      - "11080:1080"
+      - "11025:1025"
