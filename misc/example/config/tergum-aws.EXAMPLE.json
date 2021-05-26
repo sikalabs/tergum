@@ -4,6 +4,7 @@
   },
   "backups": [
     {
+      "id": "example-mysql-default",
       "source": {
         "name": "mysql",
         "mysql":{
@@ -16,6 +17,7 @@
       },
       "destinations": [
         {
+          "id": "s3",
           "name": "s3",
           "s3":{
             "AccessKey": "XXX",

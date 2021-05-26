@@ -4,6 +4,7 @@
   },
   "backups": [
     {
+      "id": "example-mysql-default",
       "source": {
         "name": "mysql",
         "mysql":{
@@ -16,12 +17,14 @@
       },
       "destinations": [
         {
+          "id": "filepath",
           "name": "filepath",
           "filePath": {
             "path": "tmp/11-backup-file-from-config.sql"
           }
         },
         {
+          "id": "file",
           "name": "file",
           "file":{
             "Dir": "tmp/",
@@ -30,6 +33,7 @@
           }
         },
         {
+          "id": "s3",
           "name": "s3",
           "s3": {
             "AccessKey": "admin",
