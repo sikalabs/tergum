@@ -2,8 +2,8 @@ package backup
 
 import (
 	"errors"
-	"log"
 
+	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/driver/file"
 	"github.com/sikalabs/tergum/driver/filepath"
 	"github.com/sikalabs/tergum/driver/mysql"
@@ -16,6 +16,7 @@ type BackupSource struct {
 }
 
 type BackupDestination struct {
+	ID       string
 	Name     string
 	Mysql    mysql.Mysql
 	FilePath filepath.FilePath
@@ -24,6 +25,7 @@ type BackupDestination struct {
 }
 
 type Backups struct {
+	ID           string
 	Source       BackupSource
 	Destinations []BackupDestination
 }
@@ -65,19 +67,36 @@ func Save(config BackupDestination, data []byte) error {
 }
 
 func BackupAndSaveAll(backups []Backups) error {
+	var globalLog backup_log.BackupGlobalLog
 	for i := 0; i < len(backups); i++ {
 		backup := backups[i]
 		data, err := Backup(backup.Source)
 		if err != nil {
-			log.Fatal(err)
+			globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
+				BackupID: backup.ID,
+				Success:  false,
+				Error:    err,
+			})
 		}
 		for i := 0; i < len(backup.Destinations); i++ {
 			destination := backup.Destinations[i]
 			err := Save(destination, data)
 			if err != nil {
-				log.Fatal(err)
+				globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
+					BackupID:      backup.ID,
+					DestinationID: destination.ID,
+					Success:       false,
+					Error:         err,
+				})
 			}
+			globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
+				BackupID:      backup.ID,
+				DestinationID: destination.ID,
+				Success:       true,
+				Error:         nil,
+			})
 		}
 	}
+	backup_log.ShowGlobalLog(globalLog)
 	return nil
 }
