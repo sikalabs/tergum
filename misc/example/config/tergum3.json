@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "schemaVersion": 1
+  },
+  "backups": [
+    {
+      "src": {
+        "src": "mysql",
+        "mysqlHost": "192.168.54.108",
+        "mysqlPort": "13306",
+        "mysqlUser": "root",
+        "mysqlPassword": "root",
+        "mysqlDatabase": "default"
+      },
+      "dsts": [
+        {
+          "dst": "s3",
+          "awsAccessKey": "admin",
+			    "awsSecretKey": "asdfasdf",
+			    "awsEndpoint": "http://127.0.0.1:19000",
+			    "awsBucketName": "tergum-backups",
+			    "awsRegion": "foo",
+          "awsPrefix": "default",
+          "awsSuffix": "sql"
+        }
+      ]
+    }
+  ]
+}

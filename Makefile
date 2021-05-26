@@ -15,8 +15,14 @@ dev-test-mysql-to-file-with-time:
 dev-test-mysql-to-s3:
 	go run tergum.go -src mysql -src-mysql-host 127.0.0.1 -src-mysql-port 13306 -src-mysql-user root -src-mysql-password root -src-mysql-database default -dst s3 -dst-aws-access-key $$(echo $$AWS_ACCESS_KEY_ID) -dst-aws-secret-key $$(echo $$AWS_SECRET_ACCESS_KEY) -dst-aws-region eu-central-1 -dst-aws-bucket-name tergum-backups -dst-aws-prefix default -dst-aws-suffix sql
 
+dev-test-mysql-to-minio:
+	go run tergum.go -src mysql -src-mysql-host 127.0.0.1 -src-mysql-port 13306 -src-mysql-user root -src-mysql-password root -src-mysql-database default -dst s3 -dst-aws-access-key admin -dst-aws-secret-key asdfasdf -dst-aws-endpoint http://127.0.0.1:19000 -dst-aws-bucket-name tergum-backups -dst-aws-prefix default -dst-aws-suffix sql
+
 dev-test-config1:
 	go run tergum.go -config misc/example/config/tergum1.json
 
 dev-test-config2:
 	go run tergum.go -config misc/example/config/tergum2.local.json
+
+dev-test-config3:
+	go run tergum.go -config misc/example/config/tergum3.json
