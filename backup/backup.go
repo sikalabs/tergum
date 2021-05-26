@@ -77,6 +77,7 @@ func BackupAndSaveAll(backups []Backups) (backup_log.BackupGlobalLog, error) {
 				Success:  false,
 				Error:    err,
 			})
+			continue
 		}
 		for i := 0; i < len(backup.Destinations); i++ {
 			destination := backup.Destinations[i]
