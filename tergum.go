@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -27,6 +28,35 @@ func randLetters(n int) string {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
 	return string(b)
+}
+
+type TergumConfig struct {
+	Meta struct {
+		SchemaVersion int
+	}
+	Backups []struct {
+		Src struct {
+			Src           string
+			MysqlHost     string
+			MysqlPort     string
+			MysqlUser     string
+			MysqlPassword string
+			MysqlDatabase string
+		}
+		Dsts []struct {
+			Dst           string
+			FilePath      string
+			FileDir       string
+			FilePrefix    string
+			FileSuffix    string
+			AwsAccessKey  string
+			AwsSecretKey  string
+			AwsRegion     string
+			AwsBucketName string
+			AwsPrefix     string
+			AwsSuffix     string
+		}
+	}
 }
 
 func mysqlDump(mysqlHost string, mysqlPort string, mysqlUser string, mysqlPassword string, mysqlDatabase string) ([]byte, error) {
@@ -84,6 +114,9 @@ func saveS3(dstAwsAccessKey string, dstAwsSecretKey string, dstAwsRegion string,
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
+	// Backup parameters from config file
+	config := flag.String("config", "", "tergum config file (json)")
+
 	// Backup Source Parameters
 	src := flag.String("src", "", "choose backup source form: {mysql}")
 
@@ -110,6 +143,69 @@ func main() {
 
 	var out []byte
 	var err error
+
+	if *config != "" {
+		jsonFile, err := os.Open(*config)
+		if err != nil {
+			log.Fatal(err)
+		}
+		byteValue, _ := ioutil.ReadAll(jsonFile)
+		var config TergumConfig
+		json.Unmarshal(byteValue, &config)
+
+		for i := 0; i < len(config.Backups); i++ {
+			backup := config.Backups[i]
+			switch backup.Src.Src {
+			case "mysql":
+				if backup.Src.MysqlHost == "" {
+					log.Fatal("mysqlHost must be set")
+				}
+				if backup.Src.MysqlPort == "" {
+					log.Fatal("mysqlPort must be set")
+				}
+				if backup.Src.MysqlUser == "" {
+					log.Fatal("mysqlUser must be set")
+				}
+				if backup.Src.MysqlPassword == "" {
+					log.Fatal("mysqlPassword must be set")
+				}
+				if backup.Src.MysqlDatabase == "" {
+					log.Fatal("mysqlDatabase must be set")
+				}
+				out, err = mysqlDump(backup.Src.MysqlHost, backup.Src.MysqlPort, backup.Src.MysqlUser, backup.Src.MysqlPassword, backup.Src.MysqlDatabase)
+				if err != nil {
+					log.Fatal(err)
+				}
+			default:
+				log.Fatal("no src selected")
+			}
+			for j := 0; j < len(backup.Dsts); j++ {
+				dst := backup.Dsts[j]
+				switch dst.Dst {
+				case "file":
+					if (dst.FilePath == "") && (dst.FileDir == "" || dst.FilePrefix == "" || dst.FileSuffix == "") {
+						log.Fatal("(filePath) OR (fileDir AND filePrefix AND fileSuffix) must be set")
+					}
+					finaldstFilePath := getOutputPath(dst.FilePath, dst.FileDir, dst.FilePrefix, dst.FileSuffix)
+					err = saveFile(finaldstFilePath, out)
+					if err != nil {
+						log.Fatal(err)
+					}
+				case "s3":
+					if dst.AwsAccessKey == "" || dst.AwsSecretKey == "" || dst.AwsRegion == "" || dst.AwsBucketName == "" || dst.AwsPrefix == "" || dst.AwsSuffix == "" {
+						log.Fatal("args (awsAccessKey AND awsSecretKey AND awsRegion AND awsBucketName AND awsPrefix AND awsSuffix) must be set")
+					}
+					err = saveS3(dst.AwsAccessKey, dst.AwsSecretKey, dst.AwsRegion, dst.AwsBucketName, dst.AwsPrefix, dst.AwsSuffix, out)
+					if err != nil {
+						log.Fatal(err)
+					}
+				default:
+					log.Fatal("no dst selected")
+				}
+			}
+		}
+		return
+	}
 
 	switch *src {
 	case "mysql":
