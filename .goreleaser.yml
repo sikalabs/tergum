@@ -2,6 +2,7 @@ project_name: tergum
 
 before:
   hooks:
+    - rf -rf dist
     - go mod tidy
 
 builds:
