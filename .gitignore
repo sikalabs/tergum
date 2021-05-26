@@ -2,6 +2,7 @@
 *.backup
 *.log
 /tmp
+*.local.*
 
 # Mac
 .DS_Store
