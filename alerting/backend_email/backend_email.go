@@ -2,6 +2,8 @@ package backend_email
 
 import (
 	"errors"
+	"fmt"
+	"os"
 
 	gosendmail "github.com/ondrejsika/gosendmail/lib"
 	"github.com/sikalabs/tergum/backup_log"
@@ -57,12 +59,15 @@ func SendAlertEmail(
 ) error {
 	table := backup_log.GlobalLogToString(globalLog)
 	for _, email := range alert.Emails {
-		sendMail(
+		err := sendMail(
 			backendConfig,
 			email,
 			"Backup Summary -- "+globalLog.SuccessString(),
 			table,
 		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+		}
 	}
 	return nil
 }
