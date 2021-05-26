@@ -40,14 +40,21 @@ func (config *AlertEmail) Validate() error {
 func sendMail(config BackendEmail, to string, subject string, body string) error {
 	finalSubject := "[tergum] " + subject
 	finalBody := body + "\n\n--\ntergum"
-	err := gosendmail.GoSendMail(
+	rawMessage := []byte("To: " + to + "\r\n" +
+		"From: " + config.Email + "\r\n" +
+		"Subject: " + finalSubject + "\r\n" +
+		"MIME-Version: 1.0\r\n" +
+		"Content-Type: text/html\r\n" +
+		"Content-Disposition: inline\r\n" +
+		"\r\n" +
+		finalBody + "\r\n")
+	err := gosendmail.GoRawSendMail(
 		config.SmtpHost,
 		config.SmtpPort,
 		config.Email,
 		config.Password,
 		to,
-		finalSubject,
-		finalBody,
+		rawMessage,
 	)
 	return err
 }
@@ -58,12 +65,18 @@ func SendAlertEmail(
 	globalLog backup_log.BackupGlobalLog,
 ) error {
 	table := backup_log.GlobalLogToString(globalLog)
+	body := `
+<html>
+<body>
+<pre style="font: monospace">` + table + `</pre>
+</body>
+</html>`
 	for _, email := range alert.Emails {
 		err := sendMail(
 			backendConfig,
 			email,
 			"Backup Summary -- "+globalLog.SuccessString(),
-			table,
+			body,
 		)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
