@@ -6,11 +6,12 @@ import (
 )
 
 type Mysql struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	Database string
+	Host               string
+	Port               string
+	User               string
+	Password           string
+	Database           string
+	MysqldumpExtraArgs []string
 }
 
 func ValidateMysql(config Mysql) error {
@@ -33,13 +34,17 @@ func ValidateMysql(config Mysql) error {
 }
 
 func BackupMysql(config Mysql) ([]byte, error) {
-	cmd := exec.Command(
-		"mysqldump",
+	args := []string{
 		"-h", config.Host,
 		"-P", config.Port,
 		"-u", config.User,
-		"-p"+config.Password,
-		config.Database)
+		"-p" + config.Password,
+		config.Database,
+	}
+	cmd := exec.Command(
+		"mysqldump",
+		append(config.MysqldumpExtraArgs, args...)...,
+	)
 	out, err := cmd.Output()
 	return out, err
 }
