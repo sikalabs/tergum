@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "schemaVersion": 1
+  },
+  "backups": [
+    {
+      "src": {
+        "src": "mysql",
+        "mysqlHost": "127.0.0.1",
+        "mysqlPort": "13306",
+        "mysqlUser": "root",
+        "mysqlPassword": "root",
+        "mysqlDatabase": "default"
+      },
+      "dsts": [
+        {
+          "dst": "file",
+          "filePath": "tmp/backup-file-from-config.sql"
+        },
+        {
+          "dst": "file",
+          "fileDir": "tmp/",
+          "filePrefix": "default",
+          "fileSuffix": "sql"
+        }
+      ]
+    }
+  ]
+}
