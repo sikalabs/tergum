@@ -8,3 +8,7 @@ dev-test-local:
 
 dev-test-aws:
 	go run tergum.go -config misc/example/config/tergum-aws.local.json
+
+commit-go-mod-tidy:
+	git add go.sum
+	git commit -m "[auto] refactor: go mod tidy"
