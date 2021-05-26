@@ -2,6 +2,28 @@
   "meta": {
     "schemaVersion": 2
   },
+  "alerting": {
+    "Backends": {
+      "Email": {
+        "smtpHost": "127.0.0.1",
+        "smtpPort": "11025",
+        "username": null,
+        "password": null,
+        "from": "tergum@example.com"
+      }
+    },
+    "Alerts":[
+      {
+        "Backend": "email",
+        "Email": {
+          "Emails": [
+            "ondrej@example.com",
+            "monitoring@example.com"
+          ]
+        }
+      }
+    ]
+  },
   "backups": [
     {
       "id": "example-mysql-default",

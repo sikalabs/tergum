@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 
+	"github.com/sikalabs/tergum/alerting"
 	"github.com/sikalabs/tergum/backup"
 	tergum_config "github.com/sikalabs/tergum/config"
 )
@@ -31,8 +32,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = backup.BackupAndSaveAll(config.Backups)
+	globalLog, err := backup.BackupAndSaveAll(config.Backups)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	alerting.SendAlerts(
+		config.Alerting,
+		globalLog,
+	)
+
 }

@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/sikalabs/tergum/alerting"
 	"github.com/sikalabs/tergum/backup"
 )
 
@@ -18,8 +19,9 @@ type TergumConfigMeta struct {
 }
 
 type TergumConfig struct {
-	Meta    TergumConfigMeta
-	Backups []backup.Backups
+	Meta     TergumConfigMeta
+	Backups  []backup.Backups
+	Alerting alerting.Alerting
 }
 
 func LoadConfig(config *TergumConfig, path string) error {

@@ -66,7 +66,7 @@ func Save(config BackupDestination, data []byte) error {
 	return errors.New("no backup target driver found")
 }
 
-func BackupAndSaveAll(backups []Backups) error {
+func BackupAndSaveAll(backups []Backups) (backup_log.BackupGlobalLog, error) {
 	var globalLog backup_log.BackupGlobalLog
 	for i := 0; i < len(backups); i++ {
 		backup := backups[i]
@@ -98,6 +98,6 @@ func BackupAndSaveAll(backups []Backups) error {
 			}
 		}
 	}
-	backup_log.ShowGlobalLog(globalLog)
-	return nil
+	backup_log.GlobalLogToOutput(globalLog)
+	return globalLog, nil
 }
