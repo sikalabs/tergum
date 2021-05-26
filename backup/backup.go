@@ -88,13 +88,14 @@ func BackupAndSaveAll(backups []Backups) error {
 					Success:       false,
 					Error:         err,
 				})
+			} else {
+				globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
+					BackupID:      backup.ID,
+					DestinationID: destination.ID,
+					Success:       true,
+					Error:         nil,
+				})
 			}
-			globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
-				BackupID:      backup.ID,
-				DestinationID: destination.ID,
-				Success:       true,
-				Error:         nil,
-			})
 		}
 	}
 	backup_log.ShowGlobalLog(globalLog)
