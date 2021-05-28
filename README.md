@@ -39,6 +39,22 @@ Tergum supports only JSON config file, but we're working for YAML support.
 
 Config file examples are in [misc/example/config](./misc/example/config) directory
 
+#### Basic Config Structure
+
+```jsx
+{
+  "meta": {
+    "schemaVersion": 2
+  },
+  "alerting": <Alerting>,
+  "backups": [
+    <Backup>,
+    <Backup>,
+    ...
+  ]
+}
+```
+
 ## Current Project State
 
 ### Backup Sources
