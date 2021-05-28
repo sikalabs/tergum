@@ -11,7 +11,7 @@
 
 Tergum is simple tool provides centralized backup solution with multiple sources (databases, files, S3, ...) and multiple backup storages (S3, filesystem, ...). Tergum has native backup monitoring and alerts you when backup fails. Tergum also support backup encryption, compression and automatic recovery testing.
 
-__Tergum is under activedevelopment, not all features are already implemented.__
+__Tergum is under active development, not all features are already implemented. Check [current project state](#current-project-state)__
 
 ## What "Tergum" means?
 
@@ -38,3 +38,31 @@ tergum -config tergum.json
 Tergum supports only JSON config file, but we're working for YAML support.
 
 Config file examples are in [misc/example/config](./misc/example/config) directory
+
+## Current Project State
+
+### Backup Sources
+
+- [ ] Files
+- [ ] Postgres
+- [x] MySQL
+- [ ] S3
+
+### Backup Processors
+
+- [ ] ZIP Compression
+- [ ] Symetric Encryption
+- [ ] Asymetric Encryption
+- [ ] GPG Encryption
+- [ ] GPG Signatures
+
+### Backup Storage
+
+- [x] Files
+- [x] S3
+
+### Alerting
+
+- [x] Email
+- [ ] Slack
+- [ ] Pagerduty
