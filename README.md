@@ -17,6 +17,16 @@ __Tergum is under active development, not all features are already implemented. 
 
 Tergum means backup in latin.
 
+## Tergum Cloud: Bring Your Backups into Cloud
+
+Tergum Cloud allow you to manage your backup using UI & Terraform and store your backups secourly in our AWS.
+
+Are you interested in our public beta? Drop us email [hello@sikalabs.com](mailto:hello@sikalabs.com?subject=Tergum_Cloud)
+
+## Tergum Enterprise: Use Tergum Cloud in Your Private Infrastructure
+
+Tergum Enterprise brings our cloud platform behind your filewall. For an inquiry, contact our sales [sales@sikalabs.com](mailto:sales@sikalabs.com?subject=Tergum_Enterprise)
+
 ## Install
 
 Install using Brew:
