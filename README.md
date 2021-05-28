@@ -55,6 +55,134 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 }
 ```
 
+#### Backup Block
+
+```jsx
+{
+  "id": <UniqueBackupID>,
+  "source": {
+    "name": <BackupSourceBackend (mysq,)>,
+    "mysql": <BackupSourceMysqlConfiguration>,
+  },
+  "destinations": [
+    {
+      "id": <UniqueBackupDestinationID>,
+      "name": <BackupDestinationBackend (filepath, file, s3)>,
+      "filePath": <BackupDestinationFilePathConfiguration>,
+      "file": <BackupDestinationFileConfiguration>,
+      "s3": <BackupDestinationS3Configuration>,
+    },
+    ...
+  ]
+}
+```
+
+#### Example BackupSourceMysqlConfiguration Block
+
+```jsx
+{
+  "host": "127.0.0.1",
+  "port": "3306",
+  "user": "root",
+  "password": "root",
+  "database": "default"
+}
+```
+
+
+#### Example BackupDestinationFilePathConfiguration Block
+
+```jsx
+{
+  "path": "/backup/mysql-default.sql"
+}
+```
+
+#### Example BackupDestinationFileConfiguration Block
+
+```jsx
+{
+  "dir": "/backup/",
+  "prefix": "mysql-default",
+  "suffix": "sql"
+}
+```
+
+#### Example BackupDestinationS3Configuration Block
+
+AWS:
+
+```jsx
+{
+  "accessKey": "admin",
+  "secretKey": "asdfasdf",
+  "endpoint": "https://minio.example.com",
+  "bucketName": "tergum-backups",
+  "prefix": "mysql-default",
+  "suffix": "sql"
+}
+```
+
+Minio:
+
+```jsx
+{
+  "accessKey": "aws_access_key_id",
+  "secretKey": "aws_secret_access_key",
+  "region": "eu-central-1",
+  "bucketName": "tergum-backups",
+  "prefix": "mysql-default",
+  "suffix": "sql"
+}
+```
+
+#### Alerting Block
+
+```jsx
+{
+  "Backends": {
+    "Email":  <AlertingBackendEmail>
+  },
+  "Alerts":[
+    <Alert>,
+    <Alert>,
+    ...
+  ]
+}
+```
+
+#### Example AlertingBackendEmail Block
+
+```jsx
+{
+  "smtpHost": "mail.example.com",
+  "smtpPort": "25",
+  "email": "tergum@example.com",
+  "password": "asdfasdf"
+}
+```
+
+#### Alert Block
+
+```jsx
+{
+  "Backend": <AlertBackendName (email,)>,
+  "Email": <AlertEmail>,
+}
+```
+
+
+#### Example AlertEmail Block
+
+```jsx
+{
+  "Emails": [
+    "ondrej@example.com",
+    "monitoring@example.com"
+  ]
+}
+```
+
 ## Current Project State
 
 ### Backup Sources
