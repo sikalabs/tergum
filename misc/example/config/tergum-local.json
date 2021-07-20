@@ -46,6 +46,18 @@
           }
         },
         {
+          "id": "filepath-gzip",
+          "name": "filepath",
+          "middlewares": [
+            {
+              "name": "gzip"
+            }
+          ],
+          "filePath": {
+            "path": "tmp/11-backup-file-from-config.sql.gz"
+          }
+        },
+        {
           "id": "file",
           "name": "file",
           "file":{

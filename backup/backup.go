@@ -8,6 +8,8 @@ import (
 	"github.com/sikalabs/tergum/driver/filepath"
 	"github.com/sikalabs/tergum/driver/mysql"
 	"github.com/sikalabs/tergum/driver/s3"
+	"github.com/sikalabs/tergum/middleware"
+	"github.com/sikalabs/tergum/utils/gzip_utils"
 )
 
 type BackupSource struct {
@@ -16,12 +18,13 @@ type BackupSource struct {
 }
 
 type BackupDestination struct {
-	ID       string
-	Name     string
-	Mysql    mysql.Mysql
-	FilePath filepath.FilePath
-	File     file.File
-	S3       s3.S3
+	ID          string
+	Name        string
+	Middlewares []middleware.Middleware
+	Mysql       mysql.Mysql
+	FilePath    filepath.FilePath
+	File        file.File
+	S3          s3.S3
 }
 
 type Backups struct {
@@ -40,6 +43,18 @@ func Backup(config BackupSource) ([]byte, error) {
 		return mysql.BackupMysql(config.Mysql)
 	}
 	return nil, errors.New("no backup driver found")
+}
+
+func Transform(middleware middleware.Middleware, data []byte) ([]byte, error) {
+	switch middleware.Name {
+	case "gzip":
+		data, err := gzip_utils.GzipBytes(data)
+		if err != nil {
+			return nil, err
+		}
+		return data, nil
+	}
+	return nil, errors.New("no middleware found")
 }
 
 func Save(config BackupDestination, data []byte) error {
@@ -81,6 +96,23 @@ func BackupAndSaveAll(backups []Backups) (backup_log.BackupGlobalLog, error) {
 		}
 		for i := 0; i < len(backup.Destinations); i++ {
 			destination := backup.Destinations[i]
+			transformOK := true
+			for j := 0; j < len(destination.Middlewares); j++ {
+				mw := destination.Middlewares[j]
+				data, err = Transform(mw, data)
+				if err != nil {
+					transformOK = false
+					globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
+						BackupID:      backup.ID,
+						DestinationID: destination.ID,
+						Success:       false,
+						Error:         err,
+					})
+				}
+			}
+			if !transformOK {
+				continue
+			}
 			err := Save(destination, data)
 			if err != nil {
 				globalLog.Logs = append(globalLog.Logs, backup_log.BackupLog{
