@@ -68,12 +68,24 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
     {
       "id": <UniqueBackupDestinationID>,
       "name": <BackupDestinationBackend (filepath, file, s3)>,
+      "middlewares": [
+        <MiddlewareConfiguration>,
+        ...
+      ],
       "filePath": <BackupDestinationFilePathConfiguration>,
       "file": <BackupDestinationFileConfiguration>,
       "s3": <BackupDestinationS3Configuration>,
     },
     ...
   ]
+}
+```
+
+#### MiddlewareConfiguration
+
+```jsx
+{
+  "name": "<MiddlewareName (gzip,)>",
 }
 ```
 
@@ -194,7 +206,7 @@ Minio:
 
 ### Backup Processors
 
-- [ ] ZIP Compression
+- [x] GZIP Compression
 - [ ] Symetric Encryption
 - [ ] Asymetric Encryption
 - [ ] GPG Encryption
