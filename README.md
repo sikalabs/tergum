@@ -203,6 +203,7 @@ Minio:
 - [ ] Postgres
 - [x] MySQL
 - [ ] S3
+- [ ] MongoDB
 
 ### Backup Processors
 
