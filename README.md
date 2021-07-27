@@ -168,7 +168,7 @@ Minio:
 ```jsx
 {
   "smtpHost": "mail.example.com",
-  "smtpPort": "25",
+  "smtpPort": "587",
   "email": "tergum@example.com",
   "password": "asdfasdf"
 }
