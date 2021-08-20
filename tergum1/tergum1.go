@@ -1,8 +1,6 @@
 package tergum1
 
 import (
-	"errors"
-	"flag"
 	"log"
 	"math/rand"
 	"time"
@@ -12,22 +10,13 @@ import (
 	tergum_config "github.com/sikalabs/tergum/tergum1/config"
 )
 
-func Tergum1() {
+func Tergum1(configPath string) {
 	// Seed random library
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	// Backup parameters from config file
-	path := flag.String("config", "", "tergum config file (json)")
-
-	flag.Parse()
-
-	if *path == "" {
-		log.Fatal(errors.New("tergum require config file (-config)"))
-	}
-
 	var config tergum_config.TergumConfig
 
-	err := tergum_config.LoadConfig(&config, *path)
+	err := tergum_config.LoadConfig(&config, configPath)
 	if err != nil {
 		log.Fatal(err)
 	}
