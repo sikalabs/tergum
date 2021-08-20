@@ -6,11 +6,13 @@ import (
 	"log"
 
 	"github.com/sikalabs/tergum/tergum1"
+	"github.com/sikalabs/tergum/tergum2"
 )
 
 func main() {
 	// Backup parameters from config file
 	path := flag.String("config", "", "tergum config file (json)")
+	v2 := flag.Bool("v2", false, "tergum v2")
 
 	flag.Parse()
 
@@ -18,5 +20,9 @@ func main() {
 		log.Fatal(errors.New("tergum require config file (-config)"))
 	}
 
-	tergum1.Tergum1(*path)
+	if *v2 {
+		tergum2.Tergum2(*path)
+	} else {
+		tergum1.Tergum1(*path)
+	}
 }
