@@ -3,13 +3,13 @@ package backup
 import (
 	"errors"
 
-	"github.com/sikalabs/tergum/backup_log"
-	"github.com/sikalabs/tergum/driver/file"
-	"github.com/sikalabs/tergum/driver/filepath"
-	"github.com/sikalabs/tergum/driver/mysql"
-	"github.com/sikalabs/tergum/driver/s3"
-	"github.com/sikalabs/tergum/middleware"
-	"github.com/sikalabs/tergum/utils/gzip_utils"
+	"github.com/sikalabs/tergum/tergum1/backup_log"
+	"github.com/sikalabs/tergum/tergum1/driver/file"
+	"github.com/sikalabs/tergum/tergum1/driver/filepath"
+	"github.com/sikalabs/tergum/tergum1/driver/mysql"
+	"github.com/sikalabs/tergum/tergum1/driver/s3"
+	"github.com/sikalabs/tergum/tergum1/middleware"
+	"github.com/sikalabs/tergum/tergum1/utils/gzip_utils"
 )
 
 type BackupSource struct {

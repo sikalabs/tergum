@@ -8,7 +8,7 @@ import (
 	aws_credentials "github.com/aws/aws-sdk-go/aws/credentials"
 	aws_session "github.com/aws/aws-sdk-go/aws/session"
 	aws_s3manager "github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/sikalabs/tergum/utils/file_utils"
+	"github.com/sikalabs/tergum/tergum1/utils/file_utils"
 )
 
 type S3 struct {

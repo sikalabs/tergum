@@ -3,7 +3,7 @@ package file_utils
 import (
 	"time"
 
-	"github.com/sikalabs/tergum/utils/rand_utils"
+	"github.com/sikalabs/tergum/tergum1/utils/rand_utils"
 )
 
 func GetFileName(prefix string, suffix string) string {

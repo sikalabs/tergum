@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/sikalabs/tergum/alerting"
-	"github.com/sikalabs/tergum/backup"
+	"github.com/sikalabs/tergum/tergum1/alerting"
+	"github.com/sikalabs/tergum/tergum1/backup"
 )
 
 const MIN_CONFIG_VERSION = 2

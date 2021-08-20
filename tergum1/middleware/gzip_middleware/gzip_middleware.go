@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/sikalabs/tergum/utils/file_utils"
+	"github.com/sikalabs/tergum/tergum1/utils/file_utils"
 )
 
 type File struct {
