@@ -41,177 +41,133 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 
 #### Basic Config Structure
 
-```jsx
-{
-  "meta": {
-    "schemaVersion": 3
-  },
-  "notification": <Notification>,
-  "backups": [
-    <Backup>,
-    <Backup>,
-    ...
-  ]
-}
+```yaml
+Meta:
+  SchemaVersion: 3
+Notification: <Notification>
+Backups:
+  - <Backup>
+  - <Backup>
+  - ...
 ```
 
 #### Backup Block
 
-```jsx
-{
-  "id": <UniqueBackupID>,
-  "source": {
-    "mysql": <BackupSourceMysqlConfiguration>,
-    "postgres": <BackupSourcePostgresConfiguration>,
-  },
-  "middlewares": [
-    <MiddlewareConfiguration>,
-    ...
-  ],
-  "destinations": [
-    {
-      "id": <UniqueBackupDestinationID>,
-      "middlewares": [
-        <MiddlewareConfiguration>,
-        ...
-      ],
-      "filePath": <BackupDestinationFilePathConfiguration>,
-      "file": <BackupDestinationFileConfiguration>,
-      "s3": <BackupDestinationS3Configuration>,
-    },
-    ...
-  ]
-}
-```
-
-#### MiddlewareConfiguration
-
-```jsx
-"<Middleware (gzip,)>"
+```yaml
+ID: <UniqueBackupID>
+Source:
+  Mysql: <BackupSourceMysqlConfiguration>
+  Postgres: <BackupSourcePostgresConfiguration>
+Middlewares:
+  - <MiddlewareConfiguration>
+  - ...
+Destinations:
+  - ID: <UniqueBackupDestinationID>
+    Middlewares:
+      - <MiddlewareConfiguration>
+      - ...
+    FilePath: <BackupDestinationFilePathConfiguration>
+    File: <BackupDestinationFileConfiguration>
+    S3: <BackupDestinationS3Configuration>
+  - ...
 ```
 
 #### GzipMiddlewareConfiguration
 
-```jsx
-{
-  "gzip": {}
-}
+```yaml
+Gzip: {}
 ```
 
 #### Example BackupSourceMysqlConfiguration Block
 
-```jsx
-{
-  "host": "127.0.0.1",
-  "port": "3306",
-  "user": "root",
-  "password": "root",
-  "database": "default"
-}
+```yaml
+Host: "127.0.0.1"
+Port: "3306"
+User: "root"
+Password: "root"
+Database: "default"
 ```
 
 #### Example BackupSourcePostgresConfiguration Block
 
-```jsx
-{
-  "host": "127.0.0.1",
-  "port": "15432",
-  "user": "postgres",
-  "password": "pg",
-  "database": "postgres"
-}
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
+Database: "postgres"
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
 
-```jsx
-{
-  "path": "/backup/mysql-default.sql"
-}
+```yaml
+Path: "/backup/mysql-default.sql"
 ```
 
 #### Example BackupDestinationFileConfiguration Block
 
 ```jsx
-{
-  "dir": "/backup/",
-  "prefix": "mysql-default",
-  "suffix": "sql"
-}
+Dir: "/backup/"
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
 #### Example BackupDestinationS3Configuration Block
 
 AWS:
 
-```jsx
-{
-  "accessKey": "admin",
-  "secretKey": "asdfasdf",
-  "endpoint": "https://minio.example.com",
-  "bucketName": "tergum-backups",
-  "prefix": "mysql-default",
-  "suffix": "sql"
-}
+```yaml
+AccessKey: "admin"
+SecretKey: "asdfasdf"
+Endpoint: "https://minio.example.com"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
 Minio:
 
-```jsx
-{
-  "accessKey": "aws_access_key_id",
-  "secretKey": "aws_secret_access_key",
-  "region": "eu-central-1",
-  "bucketName": "tergum-backups",
-  "prefix": "mysql-default",
-  "suffix": "sql"
-}
+```yaml
+accessKey: "aws_access_key_id"
+secretKey: "aws_secret_access_key"
+region: "eu-central-1"
+bucketName: "tergum-backups"
+prefix: "mysql-default"
+suffix: "sql"
 ```
 
 #### Notification Block
 
-```jsx
-{
-  "Backends": {
-    "Email":  <NotificationBackendEmail>
-  },
-  "Target":[
-    <NotificationTarget>,
-    <NotificationTarget>,
-    ...
-  ]
-}
+```yaml
+Backends: {
+  Email:  <NotificationBackendEmail>
+Target:
+  - <NotificationTarget>
+  - <NotificationTarget>
+  - ...
 ```
 
 #### Example NotificationBackendEmail Block
 
-```jsx
-{
-  "smtpHost": "mail.example.com",
-  "smtpPort": "25",
-  "email": "tergum@example.com",
-  "password": "asdfasdf"
-}
+```yaml
+SmtpHost: "mail.example.com"
+SmtpPort: "25"
+Email: "tergum@example.com"
+Password: "asdfasdf"
 ```
 
 #### NotificationTarget Block
 
-```jsx
-{
-  "Email": <NotificationEmailTarget>,
-}
+```yaml
+Email: <NotificationEmailTarget>
 ```
-
 
 #### Example NotificationEmailTarget Block
 
-```jsx
-{
-  "Emails": [
-    "ondrej@example.com",
-    "monitoring@example.com"
-  ]
-}
+```yaml
+Emails:
+  - ondrej@example.com
+  - monitoring@example.com
 ```
 
 ## Current Project State
