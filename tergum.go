@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sikalabs/tergum/tergum1"
-	"github.com/sikalabs/tergum/tergum2"
+	"github.com/sikalabs/tergum/do_backup"
+	"github.com/sikalabs/tergum/src1"
 	"github.com/sikalabs/tergum/version"
 )
 
@@ -29,8 +29,8 @@ func main() {
 	}
 
 	if *v2 {
-		tergum2.Tergum2(*path)
+		do_backup.DoBackup(*path)
 	} else {
-		tergum1.Tergum1(*path)
+		src1.Tergum1(*path)
 	}
 }
