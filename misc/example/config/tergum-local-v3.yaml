@@ -91,3 +91,24 @@ Backups:
       - ID: filepath-gzip-2
         FilePath:
           Path: tmp/example-mysql-2-2.sql.gz
+  - ID: example-mysql-server
+    Source:
+      MysqlServer:
+        Host: 127.0.0.1
+        Port: 13306
+        User: root
+        Password: root
+    Targets:
+      - ID: file
+        File:
+          Dir: tmp/
+          Prefix: mysql-server
+          Suffix: sql
+      - ID: s3
+        S3:
+          AccessKey: admin
+          SecretKey: asdfasdf
+          Endpoint: http://127.0.0.1:19000
+          BucketName: tergum-backups
+          Prefix: mysql-server
+          Suffix: sql
