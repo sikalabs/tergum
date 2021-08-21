@@ -25,12 +25,28 @@ Install using Brew:
 brew install sikalabs/tap/tergum
 ```
 
-## Usage
+### Autocomplete
 
-See help:
+See: `tergum completion`
+
+#### Bash
 
 ```
-tergum --help
+source <(tergum completion bash)
+```
+
+## CLI Usage
+
+### Generated CLI Docs on Github
+
+See: <https://github.com/sikalabs/tergum-cli-docs/blob/master/tergum.md#tergum>
+
+## Generate CLI Docs
+
+Generate Markdown CLI docs to `./cobra-docs`
+
+```
+tergum generate-docs
 ```
 
 ### Tergum Config File
