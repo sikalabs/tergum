@@ -49,7 +49,7 @@ Generate Markdown CLI docs to `./cobra-docs`
 tergum generate-docs
 ```
 
-### Tergum Config File
+## Tergum Config File
 
 Tergum supports only JSON config file, but we're working on YAML support.
 
