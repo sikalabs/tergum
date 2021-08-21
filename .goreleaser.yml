@@ -4,13 +4,16 @@ before:
   hooks:
     - rm -rf dist
     - go mod tidy
-
 builds:
   - env:
       - CGO_ENABLED=0
     mod_timestamp: "{{ .CommitTimestamp }}"
     flags:
       - -trimpath
+    ldflags:
+      - -s
+      - -w
+      - -X github.com/sikalabs/tergum/version.Version=v{{.Version}}
     goos:
       - windows
       - linux
@@ -40,19 +43,85 @@ archives:
     name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 release:
-
-brews:
-  - name: tergum
-    tap:
-      owner: sikalabs
-      name: homebrew-tap
-    homepage: https://github.com/sikalabs/tergum
-    url_template: "https://github.com/sikalabs/tergum/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    folder: Formula
-    caveats: "How to use this binary: https://github.com/sikalabs/tergum#usage"
-    description: "Ultimate backup tool"
-    test: |
+  prerelease: auto
 
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
   algorithm: sha256
+
+brews:
+  -
+    name: tergum
+    conflicts:
+      - tergum-edge
+    tap:
+      owner: sikalabs
+      name: homebrew-tap
+    skip_upload: auto
+    homepage: https://github.com/sikalabs/tergum
+    url_template: "https://github.com/sikalabs/tergum/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    folder: Formula
+    caveats: "How to use this binary: https://github.com/sikalabs/tergum"
+    description: "Tergum Backup Tool"
+    install: |
+      bin.install "tergum"
+    test: |
+      system "#{bin}/tergum -v"
+  -
+    name: tergum-edge
+    conflicts:
+      - tergum
+    tap:
+      owner: sikalabs
+      name: homebrew-tap
+    skip_upload: false
+    homepage: https://github.com/sikalabs/tergum
+    url_template: "https://github.com/sikalabs/tergum/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    folder: Formula
+    caveats: "How to use this binary: https://github.com/sikalabs/tergum"
+    description: "Tergum Backup Tool"
+    install: |
+      bin.install "tergum"
+    test: |
+      system "#{bin}/tergum -v"
+
+dockers:
+    -
+      goos: linux
+      goarch: amd64
+      image_templates:
+        - "sikalabs/tergum:{{ .Tag }}"
+      dockerfile: Dockerfile
+      ids:
+        - tergum
+      build_flag_templates:
+        - "--platform=linux/amd64"
+        - "--label=org.opencontainers.image.created={{.Date}}"
+        - "--label=org.opencontainers.image.title={{.ProjectName}}"
+        - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+        - "--label=org.opencontainers.image.version={{.Version}}"
+        - "--label=org.label-schema.schema-version=1.0"
+        - "--label=org.label-schema.version={{.Version}}"
+        - "--label=org.label-schema.name={{.ProjectName}}"
+        - "--label=com.github.actions.name={{.ProjectName}}"
+        - "--label=repository=https://github.com/sikalabs/tergum"
+        - "--label=maintainer=SikaLabs <opensource@sikalabs.com>"
+    - goos: linux
+      goarch: arm64
+      image_templates:
+        - "sikalabs/tergum:{{ .Tag }}-arm64v8"
+      dockerfile: Dockerfile.arm64v8
+      ids:
+        - tergum
+      build_flag_templates:
+        - "--platform=linux/arm64"
+        - "--label=org.opencontainers.image.created={{.Date}}"
+        - "--label=org.opencontainers.image.title={{.ProjectName}}"
+        - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+        - "--label=org.opencontainers.image.version={{.Version}}"
+        - "--label=org.label-schema.schema-version=1.0"
+        - "--label=org.label-schema.version={{.Version}}"
+        - "--label=org.label-schema.name={{.ProjectName}}"
+        - "--label=com.github.actions.name={{.ProjectName}}"
+        - "--label=repository=https://github.com/sikalabs/tergum"
+        - "--label=maintainer=SikaLabs <opensource@sikalabs.com>"
