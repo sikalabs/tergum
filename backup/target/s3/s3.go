@@ -12,13 +12,13 @@ import (
 )
 
 type S3Target struct {
-	AccessKey  string
-	SecretKey  string
-	Region     string
-	Endpoint   string
-	BucketName string
-	Prefix     string
-	Suffix     string
+	AccessKey  string `yaml:"AccessKey"`
+	SecretKey  string `yaml:"SecretKey"`
+	Region     string `yaml:"Region"`
+	Endpoint   string `yaml:"Endpoint"`
+	BucketName string `yaml:"BucketName"`
+	Prefix     string `yaml:"Prefix"`
+	Suffix     string `yaml:"Suffix"`
 }
 
 func (t S3Target) Validate() error {

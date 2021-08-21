@@ -6,11 +6,11 @@ import (
 )
 
 type PostgresSource struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	Database string
+	Host     string `yaml:"Host"`
+	Port     string `yaml:"Port"`
+	User     string `yaml:"User"`
+	Password string `yaml:"Password"`
+	Database string `yaml:"Database"`
 }
 
 func (s PostgresSource) Validate() error {

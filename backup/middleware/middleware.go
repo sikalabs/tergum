@@ -7,7 +7,7 @@ import (
 )
 
 type Middleware struct {
-	Gzip *gzip.GzipMiddleware
+	Gzip *gzip.GzipMiddleware `yaml:"Gzip"`
 }
 
 func (m Middleware) Validate() error {

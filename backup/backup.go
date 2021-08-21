@@ -9,10 +9,10 @@ import (
 )
 
 type Backup struct {
-	ID          string
-	Source      *source.Source
-	Middlewares []middleware.Middleware
-	Targets     []target.Target
+	ID          string                  `yaml:"ID"`
+	Source      *source.Source          `yaml:"Source"`
+	Middlewares []middleware.Middleware `yaml:"Middlewares"`
+	Targets     []target.Target         `yaml:"Targets"`
 }
 
 func (b Backup) Validate() error {

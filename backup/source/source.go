@@ -8,8 +8,8 @@ import (
 )
 
 type Source struct {
-	Mysql    *mysql.MysqlSource
-	Postgres *postgres.PostgresSource
+	Mysql    *mysql.MysqlSource       `yaml:"Mysql"`
+	Postgres *postgres.PostgresSource `yaml:"Postgres"`
 }
 
 func (s Source) Validate() error {

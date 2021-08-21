@@ -8,7 +8,7 @@ import (
 )
 
 type FilePathTarget struct {
-	Path string
+	Path string `yaml:"Path"`
 }
 
 func (t FilePathTarget) Validate() error {

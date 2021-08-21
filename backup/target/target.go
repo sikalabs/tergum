@@ -10,11 +10,11 @@ import (
 )
 
 type Target struct {
-	ID          string
-	Middlewares []middleware.Middleware
-	S3          *s3.S3Target
-	File        *file.FileTarget
-	FilePath    *filepath.FilePathTarget
+	ID          string                   `yaml:"ID"`
+	Middlewares []middleware.Middleware  `yaml:"Middlewares"`
+	S3          *s3.S3Target             `yaml:"S3"`
+	File        *file.FileTarget         `yaml:"File"`
+	FilePath    *filepath.FilePathTarget `yaml:"FilePath"`
 }
 
 func (t Target) Validate() error {

@@ -9,8 +9,8 @@ import (
 )
 
 type Target struct {
-	OnErrorOnly bool
-	Email       *email.EmailRule
+	OnErrorOnly bool             `yaml:"OnErrorOnly"`
+	Email       *email.EmailRule `yaml:"Email"`
 }
 
 func (r Target) Validate() error {

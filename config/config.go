@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -9,19 +8,20 @@ import (
 
 	"github.com/sikalabs/tergum/backup"
 	"github.com/sikalabs/tergum/notification"
+	"gopkg.in/yaml.v2"
 )
 
 const MIN_CONFIG_VERSION = 3
 const MAX_CONFIG_VERSION = 3
 
 type TergumConfigMeta struct {
-	SchemaVersion int
+	SchemaVersion int `yaml:"SchemaVersion"`
 }
 
 type TergumConfig struct {
-	Meta         TergumConfigMeta
-	Backups      []backup.Backup
-	Notification *notification.Notification
+	Meta         TergumConfigMeta           `yaml:"Meta"`
+	Backups      []backup.Backup            `yaml:"Backups"`
+	Notification *notification.Notification `yaml:"Notification"`
 }
 
 func (c *TergumConfig) Load(path string) error {
@@ -33,7 +33,7 @@ func (c *TergumConfig) Load(path string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = json.Unmarshal(byteValue, &c)
+	err = yaml.Unmarshal(byteValue, &c)
 	if err != nil {
 		log.Fatal(err)
 	}

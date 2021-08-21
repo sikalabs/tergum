@@ -7,11 +7,11 @@ import (
 )
 
 type EmailBackend struct {
-	SmtpHost string
-	SmtpPort string
-	Email    string
-	Password string
-	From     string
+	SmtpHost string `yaml:"SmtpHost"`
+	SmtpPort string `yaml:"SmtpPort"`
+	Email    string `yaml:"Email"`
+	Password string `yaml:"Password"`
+	From     string `yaml:"From"`
 }
 
 func (b EmailBackend) Validate() error {

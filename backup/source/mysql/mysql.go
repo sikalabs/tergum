@@ -6,12 +6,12 @@ import (
 )
 
 type MysqlSource struct {
-	Host               string
-	Port               string
-	User               string
-	Password           string
-	Database           string
-	MysqldumpExtraArgs []string
+	Host               string   `yaml:"Host"`
+	Port               string   `yaml:"Port"`
+	User               string   `yaml:"User"`
+	Password           string   `yaml:"Password"`
+	Database           string   `yaml:"Database"`
+	MysqldumpExtraArgs []string `yaml:"MysqldumpExtraArgs"`
 }
 
 func (s MysqlSource) Validate() error {

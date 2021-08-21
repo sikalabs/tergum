@@ -10,9 +10,9 @@ import (
 )
 
 type FileTarget struct {
-	Dir    string
-	Prefix string
-	Suffix string
+	Dir    string `yaml:"Dir"`
+	Prefix string `yaml:"Prefix"`
+	Suffix string `yaml:"Suffix"`
 }
 
 func (t FileTarget) Validate() error {

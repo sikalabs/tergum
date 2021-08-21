@@ -10,7 +10,7 @@ import (
 )
 
 type EmailRule struct {
-	Emails []string
+	Emails []string `yaml:"Emails"`
 }
 
 func (r EmailRule) Validate() error {
