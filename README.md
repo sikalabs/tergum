@@ -214,8 +214,11 @@ Emails:
 - [x] Postgres
 - [x] MySQL
 - [x] MySQLServer
+- [ ] Oracle (Enterprise)
 - [ ] S3
 - [ ] MongoDB
+- [ ] Kubernetes Resource
+- [ ] Container Image
 
 ### Backup Processors
 
@@ -229,9 +232,12 @@ Emails:
 
 - [x] Files
 - [x] S3
+- [ ] Tergum Cloud
+- [ ] Container Registry
 
 ### Notification
 
 - [x] Email
 - [ ] Slack
+- [ ] Microsoft Teams
 - [ ] Pagerduty
