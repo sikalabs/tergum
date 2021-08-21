@@ -63,6 +63,7 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
   "source": {
     "name": <BackupSourceBackend (mysq,)>,
     "mysql": <BackupSourceMysqlConfiguration>,
+    "postgres": <BackupSourcePostgresConfiguration>,
   },
   "destinations": [
     {
@@ -101,6 +102,17 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 }
 ```
 
+#### Example BackupSourcePostgresConfiguration Block
+
+```jsx
+{
+  "host": "127.0.0.1",
+  "port": "15432",
+  "user": "postgres",
+  "password": "pg",
+  "database": "postgres"
+}
+```
 
 #### Example BackupDestinationFilePathConfiguration Block
 
