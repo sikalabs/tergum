@@ -73,6 +73,7 @@ Backups:
 ID: <UniqueBackupID>
 Source:
   Mysql: <BackupSourceMysqlConfiguration>
+  MysqlServer: <BackupSourceMysqlServerConfiguration>
   Postgres: <BackupSourcePostgresConfiguration>
 Middlewares:
   - <MiddlewareConfiguration>
@@ -102,6 +103,15 @@ Port: "3306"
 User: "root"
 Password: "root"
 Database: "default"
+```
+
+#### Example BackupSourceMysqlServerConfiguration Block
+
+```yaml
+Host: "127.0.0.1"
+Port: "3306"
+User: "root"
+Password: "root"
 ```
 
 #### Example BackupSourcePostgresConfiguration Block
