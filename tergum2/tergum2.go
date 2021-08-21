@@ -2,6 +2,7 @@ package tergum2
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/sikalabs/tergum/tergum2/backup_log"
 	"github.com/sikalabs/tergum/tergum2/backup_log/backup_log/output"
@@ -22,6 +23,7 @@ func Tergum2(configPath string) {
 	err := config.Validate()
 	if err != nil {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	for _, b := range config.Backups {
