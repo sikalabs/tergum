@@ -35,7 +35,7 @@
           "Database": "default"
         }
       },
-      "Destinations": [
+      "Targets": [
         {
           "ID": "s3",
           "S3":{
