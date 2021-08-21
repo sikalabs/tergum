@@ -2,7 +2,9 @@ package do_backup
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 
 	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/backup_log/backup_log/output"
@@ -10,6 +12,9 @@ import (
 )
 
 func DoBackup(configPath string) {
+	// Seed random library
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	fmt.Println("tergum v2")
 
 	// Load config from file
