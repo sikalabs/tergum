@@ -1,15 +1,15 @@
 {
-  "meta": {
-    "schemaVersion": 3
+  "Meta": {
+    "SchemaVersion": 3
   },
-  "notification": {
+  "Notification": {
     "Backend": {
       "Email": {
-        "smtpHost": "127.0.0.1",
-        "smtpPort": "11025",
-        "username": null,
-        "password": null,
-        "from": "tergum@example.com"
+        "SmtpHost": "127.0.0.1",
+        "SmtpPort": "11025",
+        "Username": null,
+        "Password": null,
+        "From": "tergum@example.com"
       }
     },
     "Targets":[
@@ -23,11 +23,11 @@
       }
     ]
   },
-  "backups": [
+  "Backups": [
     {
-      "id": "example-mysql",
-      "source": {
-        "mysql":{
+      "ID": "example-mysql",
+      "Source": {
+        "Mysql":{
           "Host": "127.0.0.1",
           "Port": "13306",
           "User": "root",
@@ -35,35 +35,35 @@
           "Database": "default"
         }
       },
-      "targets": [
+      "Targets": [
         {
-          "id": "filepath",
-          "filePath": {
-            "path": "tmp/filepath-mysql.sql"
+          "Id": "filepath",
+          "FilePath": {
+            "Path": "tmp/filepath-mysql.sql"
           }
         },
         {
-          "id": "filepath-gzip",
-          "middlewares": [
+          "Id": "filepath-gzip",
+          "Middlewares": [
             {
-              "gzip":{}
+              "Gzip":{}
             }
           ],
-          "filePath": {
-            "path": "tmp/filepath-mysql.sql.gz"
+          "FilePath": {
+            "Path": "tmp/filepath-mysql.sql.gz"
           }
         },
         {
-          "id": "file",
-          "file":{
+          "ID": "file",
+          "File":{
             "Dir": "tmp/",
             "Prefix": "file-mysql",
             "Suffix": "sql"
           }
         },
         {
-          "id": "s3",
-          "s3": {
+          "ID": "s3",
+          "S3": {
             "AccessKey": "admin",
             "SecretKey": "asdfasdf",
             "Endpoint": "http://127.0.0.1:19000",
@@ -75,9 +75,9 @@
       ]
     },
     {
-      "id": "example-postgres",
-      "source": {
-        "postgres":{
+      "ID": "example-postgres",
+      "Source": {
+        "Postgres":{
           "Host": "127.0.0.1",
           "Port": "15432",
           "User": "postgres",
@@ -85,35 +85,35 @@
           "Database": "postgres"
         }
       },
-      "targets": [
+      "Targets": [
         {
-          "id": "filepath",
-          "filePath": {
-            "path": "tmp/filepath-postgres.sql"
+          "ID": "filepath",
+          "FilePath": {
+            "Path": "tmp/filepath-postgres.sql"
           }
         },
         {
-          "id": "filepath-gzip",
-          "middlewares": [
+          "ID": "filepath-gzip",
+          "Middlewares": [
             {
-              "gzip":{}
+              "Gzip":{}
             }
           ],
-          "filePath": {
-            "path": "tmp/filepath-postgres.sql.gz"
+          "FilePath": {
+            "Path": "tmp/filepath-postgres.sql.gz"
           }
         },
         {
-          "id": "file",
-          "file":{
+          "ID": "file",
+          "File":{
             "Dir": "tmp/",
             "Prefix": "file-postgres",
             "Suffix": "sql"
           }
         },
         {
-          "id": "s3",
-          "s3": {
+          "ID": "s3",
+          "S3": {
             "AccessKey": "admin",
             "SecretKey": "asdfasdf",
             "Endpoint": "http://127.0.0.1:19000",
@@ -125,9 +125,9 @@
       ]
     },
       {
-        "id": "example-mysql-2",
-        "source": {
-          "mysql":{
+        "ID": "example-mysql-2",
+        "Source": {
+          "Mysql":{
             "Host": "192.168.54.108",
             "Port": "13306",
             "User": "root",
@@ -135,22 +135,22 @@
             "Database": "default"
           }
         },
-        "middlewares": [
+        "Middlewares": [
           {
-            "gzip":{}
+            "Gzip":{}
           }
         ],
-        "targets": [
+        "Targets": [
           {
-            "id": "filepath-gzip-1",
-            "filePath": {
-              "path": "tmp/example-mysql-2-1.sql.gz"
+            "Id": "filepath-gzip-1",
+            "FilePath": {
+              "Path": "tmp/example-mysql-2-1.sql.gz"
             }
           },
           {
-            "id": "filepath-gzip-2",
-            "filePath": {
-              "path": "tmp/example-mysql-2-2.sql.gz"
+            "ID": "filepath-gzip-2",
+            "FilePath": {
+              "Path": "tmp/example-mysql-2-2.sql.gz"
             }
           }
         ]

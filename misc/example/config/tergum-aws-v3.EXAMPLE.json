@@ -1,15 +1,15 @@
 {
-  "meta": {
-    "schemaVersion": 3
+  "Meta": {
+    "SchemaVersion": 3
   },
-  "notification": {
+  "Notification": {
     "Backend": {
       "Email": {
-        "smtpHost": "127.0.0.1",
-        "smtpPort": "11025",
-        "username": null,
-        "password": null,
-        "from": "tergum@example.com"
+        "SmtpHost": "127.0.0.1",
+        "SmtpPort": "11025",
+        "Username": null,
+        "Password": null,
+        "From": "tergum@example.com"
       }
     },
     "Targets":[
@@ -23,12 +23,11 @@
       }
     ]
   },
-  "backups": [
+  "Backups": [
     {
-      "id": "example-mysql-default",
-      "source": {
-        "name": "mysql",
-        "mysql":{
+      "ID": "example-mysql-default",
+      "Source": {
+        "Mysql":{
           "Host": "127.0.0.1",
           "Port": "13306",
           "User": "root",
@@ -36,11 +35,10 @@
           "Database": "default"
         }
       },
-      "destinations": [
+      "Destinations": [
         {
-          "id": "s3",
-          "name": "s3",
-          "s3":{
+          "ID": "s3",
+          "S3":{
             "AccessKey": "XXX",
 			      "SecretKey": "XXX",
 			      "Region": "eu-central-1",
