@@ -75,4 +75,9 @@ func Tergum2(configPath string) {
 	}
 
 	output.BackupLogToOutput(bl)
+
+	// Send Notifications
+	if config.Notification != nil {
+		config.Notification.SendNotification(bl)
+	}
 }

@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/sikalabs/tergum/tergum2/backup"
+	"github.com/sikalabs/tergum/tergum2/notification"
 )
 
 type TergumConfigMeta struct {
@@ -14,8 +15,9 @@ type TergumConfigMeta struct {
 }
 
 type TergumConfig struct {
-	Meta    TergumConfigMeta
-	Backups []backup.Backup
+	Meta         TergumConfigMeta
+	Backups      []backup.Backup
+	Notification *notification.Notification
 }
 
 func (c *TergumConfig) Load(path string) error {
@@ -38,6 +40,13 @@ func (c TergumConfig) Validate() error {
 	// Validate all Backups
 	for _, b := range c.Backups {
 		err := b.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
+	if c.Notification != nil {
+		err := c.Notification.Validate()
 		if err != nil {
 			return err
 		}
