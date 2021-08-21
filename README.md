@@ -35,7 +35,7 @@ tergum -config tergum.json
 
 ### Tergum Config File
 
-Tergum supports only JSON config file, but we're working for YAML support.
+Tergum supports only JSON config file, but we're working on YAML support.
 
 Config file examples are in [misc/example/config](./misc/example/config) directory
 
@@ -44,9 +44,9 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 ```jsx
 {
   "meta": {
-    "schemaVersion": 2
+    "schemaVersion": 3
   },
-  "alerting": <Alerting>,
+  "notification": <Notification>,
   "backups": [
     <Backup>,
     <Backup>,
@@ -61,14 +61,16 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 {
   "id": <UniqueBackupID>,
   "source": {
-    "name": <BackupSourceBackend (mysq,)>,
     "mysql": <BackupSourceMysqlConfiguration>,
     "postgres": <BackupSourcePostgresConfiguration>,
   },
+  "middlewares": [
+    <MiddlewareConfiguration>,
+    ...
+  ],
   "destinations": [
     {
       "id": <UniqueBackupDestinationID>,
-      "name": <BackupDestinationBackend (filepath, file, s3)>,
       "middlewares": [
         <MiddlewareConfiguration>,
         ...
@@ -85,8 +87,14 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 #### MiddlewareConfiguration
 
 ```jsx
+"<Middleware (gzip,)>"
+```
+
+#### GzipMiddlewareConfiguration
+
+```jsx
 {
-  "name": "<MiddlewareName (gzip,)>",
+  "gzip": {}
 }
 ```
 
@@ -160,22 +168,22 @@ Minio:
 }
 ```
 
-#### Alerting Block
+#### Notification Block
 
 ```jsx
 {
   "Backends": {
-    "Email":  <AlertingBackendEmail>
+    "Email":  <NotificationBackendEmail>
   },
-  "Alerts":[
-    <Alert>,
-    <Alert>,
+  "Target":[
+    <NotificationTarget>,
+    <NotificationTarget>,
     ...
   ]
 }
 ```
 
-#### Example AlertingBackendEmail Block
+#### Example NotificationBackendEmail Block
 
 ```jsx
 {
@@ -186,17 +194,16 @@ Minio:
 }
 ```
 
-#### Alert Block
+#### NotificationTarget Block
 
 ```jsx
 {
-  "Backend": <AlertBackendName (email,)>,
-  "Email": <AlertEmail>,
+  "Email": <NotificationEmailTarget>,
 }
 ```
 
 
-#### Example AlertEmail Block
+#### Example NotificationEmailTarget Block
 
 ```jsx
 {
@@ -230,7 +237,7 @@ Minio:
 - [x] Files
 - [x] S3
 
-### Alerting
+### Notification
 
 - [x] Email
 - [ ] Slack
