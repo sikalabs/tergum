@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -9,6 +10,9 @@ import (
 	"github.com/sikalabs/tergum/tergum2/backup"
 	"github.com/sikalabs/tergum/tergum2/notification"
 )
+
+const MIN_CONFIG_VERSION = 3
+const MAX_CONFIG_VERSION = 3
 
 type TergumConfigMeta struct {
 	SchemaVersion int
@@ -37,6 +41,12 @@ func (c *TergumConfig) Load(path string) error {
 }
 
 func (c TergumConfig) Validate() error {
+	// Validate Schema Version
+	err := c.ValidateSchemaVersion()
+	if err != nil {
+		return err
+	}
+
 	// Validate all Backups
 	for _, b := range c.Backups {
 		err := b.Validate()
@@ -52,5 +62,23 @@ func (c TergumConfig) Validate() error {
 		}
 	}
 
+	return nil
+}
+
+func (c *TergumConfig) ValidateSchemaVersion() error {
+	if c.Meta.SchemaVersion < MIN_CONFIG_VERSION {
+		return fmt.Errorf(
+			"your config schemaVersion %d is lower than minimum schemaVersion %d",
+			c.Meta.SchemaVersion,
+			MIN_CONFIG_VERSION,
+		)
+	}
+	if c.Meta.SchemaVersion > MAX_CONFIG_VERSION {
+		return fmt.Errorf(
+			"your config schemaVersion %d is greather than minimum schemaVersion %d",
+			c.Meta.SchemaVersion,
+			MAX_CONFIG_VERSION,
+		)
+	}
 	return nil
 }
