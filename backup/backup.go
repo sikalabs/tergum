@@ -17,6 +17,9 @@ type Backup struct {
 
 func (b Backup) Validate() error {
 	// Validate Source
+	if b.Source == nil {
+		return fmt.Errorf("source is not defined")
+	}
 	err := b.Source.Validate()
 	if err != nil {
 		return err
