@@ -9,6 +9,7 @@ import (
 )
 
 type Backup struct {
+	ID          string
 	Source      *source.Source
 	Middlewares []middleware.Middleware
 	Targets     []target.Target

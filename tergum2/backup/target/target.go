@@ -10,6 +10,7 @@ import (
 )
 
 type Target struct {
+	ID          string
 	Middlewares []middleware.Middleware
 	S3          *s3.S3Target
 	File        *file.FileTarget
