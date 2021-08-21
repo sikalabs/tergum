@@ -27,10 +27,10 @@ brew install sikalabs/tap/tergum
 
 ## Usage
 
-Tergum has only one CLI argumet which points to config file.
+See help:
 
 ```
-tergum -config tergum.json
+tergum --help
 ```
 
 ### Tergum Config File
