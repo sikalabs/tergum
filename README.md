@@ -212,7 +212,7 @@ Minio:
 ### Backup Sources
 
 - [ ] Files
-- [ ] Postgres
+- [x] Postgres
 - [x] MySQL
 - [ ] S3
 - [ ] MongoDB
