@@ -66,7 +66,7 @@ brews:
     install: |
       bin.install "tergum"
     test: |
-      system "#{bin}/tergum -v"
+      system "#{bin}/tergum version"
   -
     name: tergum-edge
     conflicts:
@@ -83,7 +83,7 @@ brews:
     install: |
       bin.install "tergum"
     test: |
-      system "#{bin}/tergum -v"
+      system "#{bin}/tergum version"
 
 dockers:
     -
