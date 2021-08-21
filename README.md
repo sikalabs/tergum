@@ -203,6 +203,7 @@ Emails:
 - [ ] Files
 - [x] Postgres
 - [x] MySQL
+- [x] MySQLServer
 - [ ] S3
 - [ ] MongoDB
 
