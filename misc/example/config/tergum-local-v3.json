@@ -37,13 +37,13 @@
       },
       "Targets": [
         {
-          "Id": "filepath",
+          "ID": "filepath",
           "FilePath": {
             "Path": "tmp/filepath-mysql.sql"
           }
         },
         {
-          "Id": "filepath-gzip",
+          "ID": "filepath-gzip",
           "Middlewares": [
             {
               "Gzip":{}
@@ -142,7 +142,7 @@
         ],
         "Targets": [
           {
-            "Id": "filepath-gzip-1",
+            "ID": "filepath-gzip-1",
             "FilePath": {
               "Path": "tmp/example-mysql-2-1.sql.gz"
             }
