@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "schemaVersion": 3
+  },
+  "notification": {
+    "Backend": {
+      "Email": {
+        "smtpHost": "127.0.0.1",
+        "smtpPort": "11025",
+        "username": null,
+        "password": null,
+        "from": "tergum@example.com"
+      }
+    },
+    "Targets":[
+      {
+        "Email": {
+          "Emails": [
+            "ondrej@example.com",
+            "monitoring@example.com"
+          ]
+        }
+      }
+    ]
+  },
+  "backups": [
+    {
+      "id": "example-mysql-default",
+      "source": {
+        "name": "mysql",
+        "mysql":{
+          "Host": "127.0.0.1",
+          "Port": "13306",
+          "User": "root",
+          "Password": "root",
+          "Database": "default"
+        }
+      },
+      "destinations": [
+        {
+          "id": "s3",
+          "name": "s3",
+          "s3":{
+            "AccessKey": "XXX",
+			      "SecretKey": "XXX",
+			      "Region": "eu-central-1",
+			      "BucketName": "tergum-backups",
+            "Prefix": "default",
+            "Suffix": "sql"
+          }
+        }
+      ]
+    }
+  ]
+}
