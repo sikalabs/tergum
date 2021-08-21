@@ -7,14 +7,16 @@ import (
 	"github.com/sikalabs/tergum/tergum1/driver/file"
 	"github.com/sikalabs/tergum/tergum1/driver/filepath"
 	"github.com/sikalabs/tergum/tergum1/driver/mysql"
+	"github.com/sikalabs/tergum/tergum1/driver/postgres"
 	"github.com/sikalabs/tergum/tergum1/driver/s3"
 	"github.com/sikalabs/tergum/tergum1/middleware"
 	"github.com/sikalabs/tergum/tergum1/utils/gzip_utils"
 )
 
 type BackupSource struct {
-	Name  string
-	Mysql mysql.Mysql
+	Name     string
+	Mysql    mysql.Mysql
+	Postgres postgres.Postgres
 }
 
 type BackupDestination struct {
@@ -41,6 +43,12 @@ func Backup(config BackupSource) ([]byte, error) {
 			return nil, err
 		}
 		return mysql.BackupMysql(config.Mysql)
+	case "postgres":
+		err := postgres.ValidatePostgres(config.Postgres)
+		if err != nil {
+			return nil, err
+		}
+		return postgres.BackupPostgres(config.Postgres)
 	}
 	return nil, errors.New("no backup driver found")
 }
