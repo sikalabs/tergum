@@ -1,0 +1,159 @@
+{
+  "Meta": {
+    "SchemaVersion": 3
+  },
+  "Notification": {
+    "Backend": {
+      "Email": {
+        "SmtpHost": "127.0.0.1",
+        "SmtpPort": "11025",
+        "Username": null,
+        "Password": null,
+        "From": "tergum@example.com"
+      }
+    },
+    "Targets":[
+      {
+        "Email": {
+          "Emails": [
+            "ondrej@example.com",
+            "monitoring@example.com"
+          ]
+        }
+      }
+    ]
+  },
+  "Backups": [
+    {
+      "ID": "example-mysql",
+      "Source": {
+        "Mysql":{
+          "Host": "127.0.0.1",
+          "Port": "13306",
+          "User": "root",
+          "Password": "root",
+          "Database": "default"
+        }
+      },
+      "Targets": [
+        {
+          "ID": "filepath",
+          "FilePath": {
+            "Path": "tmp/filepath-mysql.sql"
+          }
+        },
+        {
+          "ID": "filepath-gzip",
+          "Middlewares": [
+            {
+              "Gzip":{}
+            }
+          ],
+          "FilePath": {
+            "Path": "tmp/filepath-mysql.sql.gz"
+          }
+        },
+        {
+          "ID": "file",
+          "File":{
+            "Dir": "tmp/",
+            "Prefix": "file-mysql",
+            "Suffix": "sql"
+          }
+        },
+        {
+          "ID": "s3",
+          "S3": {
+            "AccessKey": "admin",
+            "SecretKey": "asdfasdf",
+            "Endpoint": "http://127.0.0.1:19000",
+            "BucketName": "tergum-backups",
+            "Prefix": "mysql",
+            "Suffix": "sql"
+          }
+        }
+      ]
+    },
+    {
+      "ID": "example-postgres",
+      "Source": {
+        "Postgres":{
+          "Host": "127.0.0.1",
+          "Port": "15432",
+          "User": "postgres",
+          "Password": "pg",
+          "Database": "postgres"
+        }
+      },
+      "Targets": [
+        {
+          "ID": "filepath",
+          "FilePath": {
+            "Path": "tmp/filepath-postgres.sql"
+          }
+        },
+        {
+          "ID": "filepath-gzip",
+          "Middlewares": [
+            {
+              "Gzip":{}
+            }
+          ],
+          "FilePath": {
+            "Path": "tmp/filepath-postgres.sql.gz"
+          }
+        },
+        {
+          "ID": "file",
+          "File":{
+            "Dir": "tmp/",
+            "Prefix": "file-postgres",
+            "Suffix": "sql"
+          }
+        },
+        {
+          "ID": "s3",
+          "S3": {
+            "AccessKey": "admin",
+            "SecretKey": "asdfasdf",
+            "Endpoint": "http://127.0.0.1:19000",
+            "BucketName": "tergum-backups",
+            "Prefix": "file-postgres",
+            "Suffix": "sql"
+          }
+        }
+      ]
+    },
+      {
+        "ID": "example-mysql-2",
+        "Source": {
+          "Mysql":{
+            "Host": "192.168.54.108",
+            "Port": "13306",
+            "User": "root",
+            "Password": "root",
+            "Database": "default"
+          }
+        },
+        "Middlewares": [
+          {
+            "Gzip":{}
+          }
+        ],
+        "Targets": [
+          {
+            "ID": "filepath-gzip-1",
+            "FilePath": {
+              "Path": "tmp/example-mysql-2-1.sql.gz"
+            }
+          },
+          {
+            "ID": "filepath-gzip-2",
+            "FilePath": {
+              "Path": "tmp/example-mysql-2-2.sql.gz"
+            }
+          }
+        ]
+      }
+  ]
+}

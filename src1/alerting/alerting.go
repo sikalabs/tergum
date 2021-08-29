@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sikalabs/tergum/alerting/backend_email"
-	"github.com/sikalabs/tergum/backup_log"
+	"github.com/sikalabs/tergum/src1/alerting/backend_email"
+	"github.com/sikalabs/tergum/src1/backup_log"
 )
 
 type Backends struct {

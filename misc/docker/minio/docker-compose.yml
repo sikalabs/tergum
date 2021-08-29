@@ -5,8 +5,11 @@ services:
     command:
       - server
       - /data
+      - --console-address
+      - :19001
     ports:
       - 19000:9000
+      - 19001:19001
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: asdfasdf

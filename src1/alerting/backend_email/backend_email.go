@@ -6,7 +6,7 @@ import (
 	"os"
 
 	gosendmail "github.com/ondrejsika/gosendmail/lib"
-	"github.com/sikalabs/tergum/backup_log"
+	"github.com/sikalabs/tergum/src1/backup_log"
 )
 
 type BackendEmail struct {

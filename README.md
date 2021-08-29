@@ -17,6 +17,16 @@ __Tergum is under active development, not all features are already implemented. 
 
 Tergum means backup in latin.
 
+## Tergum Cloud: Bring Your Backups into Cloud
+
+Tergum Cloud allow you to manage your backup using UI & Terraform and store your backups secourly in our AWS.
+
+Are you interested in our public beta? Drop us email [hello@sikalabs.com](mailto:hello@sikalabs.com?subject=Tergum_Cloud)
+
+## Tergum Enterprise: Use Tergum Cloud in Your Private Infrastructure
+
+Tergum Enterprise brings our cloud platform behind your filewall. For an inquiry, contact our sales [sales@sikalabs.com](mailto:sales@sikalabs.com?subject=Tergum_Enterprise)
+
 ## Install
 
 Install using Brew:
@@ -25,174 +35,177 @@ Install using Brew:
 brew install sikalabs/tap/tergum
 ```
 
-## Usage
+### Autocomplete
 
-Tergum has only one CLI argumet which points to config file.
+See: `tergum completion`
+
+#### Bash
 
 ```
-tergum -config tergum.json
+source <(tergum completion bash)
 ```
 
-### Tergum Config File
+## CLI Usage
 
-Tergum supports only JSON config file, but we're working for YAML support.
+### Generated CLI Docs on Github
+
+See: <https://github.com/sikalabs/tergum-cli-docs/blob/master/tergum.md#tergum>
+
+## Generate CLI Docs
+
+Generate Markdown CLI docs to `./cobra-docs`
+
+```
+tergum generate-docs
+```
+
+## Tergum Config File
+
+Tergum supports only JSON config file, but we're working on YAML support.
 
 Config file examples are in [misc/example/config](./misc/example/config) directory
 
 #### Basic Config Structure
 
-```jsx
-{
-  "meta": {
-    "schemaVersion": 2
-  },
-  "alerting": <Alerting>,
-  "backups": [
-    <Backup>,
-    <Backup>,
-    ...
-  ]
-}
+```yaml
+Meta:
+  SchemaVersion: 3
+Notification: <Notification>
+Backups:
+  - <Backup>
+  - <Backup>
+  - ...
 ```
 
 #### Backup Block
 
-```jsx
-{
-  "id": <UniqueBackupID>,
-  "source": {
-    "name": <BackupSourceBackend (mysq,)>,
-    "mysql": <BackupSourceMysqlConfiguration>,
-  },
-  "destinations": [
-    {
-      "id": <UniqueBackupDestinationID>,
-      "name": <BackupDestinationBackend (filepath, file, s3)>,
-      "middlewares": [
-        <MiddlewareConfiguration>,
-        ...
-      ],
-      "filePath": <BackupDestinationFilePathConfiguration>,
-      "file": <BackupDestinationFileConfiguration>,
-      "s3": <BackupDestinationS3Configuration>,
-    },
-    ...
-  ]
-}
+```yaml
+ID: <UniqueBackupID>
+Source:
+  Mysql: <BackupSourceMysqlConfiguration>
+  MysqlServer: <BackupSourceMysqlServerConfiguration>
+  Postgres: <BackupSourcePostgresConfiguration>
+Middlewares:
+  - <MiddlewareConfiguration>
+  - ...
+Destinations:
+  - ID: <UniqueBackupDestinationID>
+    Middlewares:
+      - <MiddlewareConfiguration>
+      - ...
+    FilePath: <BackupDestinationFilePathConfiguration>
+    File: <BackupDestinationFileConfiguration>
+    S3: <BackupDestinationS3Configuration>
+  - ...
 ```
 
-#### MiddlewareConfiguration
+#### GzipMiddlewareConfiguration
 
-```jsx
-{
-  "name": "<MiddlewareName (gzip,)>",
-}
+```yaml
+Gzip: {}
 ```
 
 #### Example BackupSourceMysqlConfiguration Block
 
-```jsx
-{
-  "host": "127.0.0.1",
-  "port": "3306",
-  "user": "root",
-  "password": "root",
-  "database": "default"
-}
+```yaml
+Host: "127.0.0.1"
+Port: "3306"
+User: "root"
+Password: "root"
+Database: "default"
 ```
 
+#### Example BackupSourceMysqlServerConfiguration Block
+
+```yaml
+Host: "127.0.0.1"
+Port: "3306"
+User: "root"
+Password: "root"
+```
+
+#### Example BackupSourcePostgresConfiguration Block
+
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
+Database: "postgres"
+```
 
 #### Example BackupDestinationFilePathConfiguration Block
 
-```jsx
-{
-  "path": "/backup/mysql-default.sql"
-}
+```yaml
+Path: "/backup/mysql-default.sql"
 ```
 
 #### Example BackupDestinationFileConfiguration Block
 
 ```jsx
-{
-  "dir": "/backup/",
-  "prefix": "mysql-default",
-  "suffix": "sql"
-}
+Dir: "/backup/"
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
 #### Example BackupDestinationS3Configuration Block
 
 AWS:
 
-```jsx
-{
-  "accessKey": "admin",
-  "secretKey": "asdfasdf",
-  "endpoint": "https://minio.example.com",
-  "bucketName": "tergum-backups",
-  "prefix": "mysql-default",
-  "suffix": "sql"
-}
+```yaml
+AccessKey: "admin"
+SecretKey: "asdfasdf"
+Endpoint: "https://minio.example.com"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
 Minio:
 
-```jsx
-{
-  "accessKey": "aws_access_key_id",
-  "secretKey": "aws_secret_access_key",
-  "region": "eu-central-1",
-  "bucketName": "tergum-backups",
-  "prefix": "mysql-default",
-  "suffix": "sql"
-}
+```yaml
+accessKey: "aws_access_key_id"
+secretKey: "aws_secret_access_key"
+region: "eu-central-1"
+bucketName: "tergum-backups"
+prefix: "mysql-default"
+suffix: "sql"
 ```
 
-#### Alerting Block
+#### Notification Block
 
-```jsx
-{
-  "Backends": {
-    "Email":  <AlertingBackendEmail>
-  },
-  "Alerts":[
-    <Alert>,
-    <Alert>,
-    ...
-  ]
-}
+```yaml
+Backends: {
+  Email:  <NotificationBackendEmail>
+Target:
+  - <NotificationTarget>
+  - <NotificationTarget>
+  - ...
 ```
 
-#### Example AlertingBackendEmail Block
+#### Example NotificationBackendEmail Block
 
-```jsx
-{
-  "smtpHost": "mail.example.com",
-  "smtpPort": "587",
-  "email": "tergum@example.com",
-  "password": "asdfasdf"
-}
+
+```yaml
+SmtpHost: "mail.example.com"
+SmtpPort: "587"
+#SmtpPort: "25"
+Email: "tergum@example.com"
+Password: "asdfasdf"
 ```
 
-#### Alert Block
+#### NotificationTarget Block
 
-```jsx
-{
-  "Backend": <AlertBackendName (email,)>,
-  "Email": <AlertEmail>,
-}
+```yaml
+Email: <NotificationEmailTarget>
 ```
 
+#### Example NotificationEmailTarget Block
 
-#### Example AlertEmail Block
-
-```jsx
-{
-  "Emails": [
-    "ondrej@example.com",
-    "monitoring@example.com"
-  ]
-}
+```yaml
+Emails:
+  - ondrej@example.com
+  - monitoring@example.com
 ```
 
 ## Current Project State
@@ -200,10 +213,14 @@ Minio:
 ### Backup Sources
 
 - [ ] Files
-- [ ] Postgres
+- [x] Postgres
 - [x] MySQL
+- [x] MySQLServer
+- [ ] Oracle (Enterprise)
 - [ ] S3
 - [ ] MongoDB
+- [ ] Kubernetes Resource
+- [ ] Container Image
 
 ### Backup Processors
 
@@ -217,9 +234,12 @@ Minio:
 
 - [x] Files
 - [x] S3
+- [ ] Tergum Cloud
+- [ ] Container Registry
 
-### Alerting
+### Notification
 
 - [x] Email
 - [ ] Slack
+- [ ] Microsoft Teams
 - [ ] Pagerduty

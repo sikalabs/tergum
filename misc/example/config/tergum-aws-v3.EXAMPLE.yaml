@@ -1,0 +1,33 @@
+Meta:
+  SchemaVersion: 3
+Notification:
+  Backend:
+    Email:
+      SmtpHost: 127.0.0.1
+      SmtpPort: 11025
+      Username: null
+      Password: null
+      From: tergum@example.com
+  Targets:
+    - Email:
+        Emails:
+          - ondrej@example.com
+          - monitoring@example.com
+Backups:
+  - ID: example-mysql-default
+    Source:
+      Mysql:
+        Host: 127.0.0.1
+        Port: 13306
+        User: root
+        Password: root
+        Database: default
+    Targets:
+      - ID: s3
+        S3:
+          AccessKey: XXX
+          SecretKey: XXX
+          Region: eu-central-1
+          BucketName: tergum-backups
+          Prefix: default
+          Suffix: sql

@@ -79,6 +79,61 @@
           }
         }
       ]
+    },
+    {
+      "id": "example-postgres-default",
+      "source": {
+        "name": "postgres",
+        "postgres":{
+          "Host": "127.0.0.1",
+          "Port": "15432",
+          "User": "postgres",
+          "Password": "pg",
+          "Database": "postgres"
+        }
+      },
+      "destinations": [
+        {
+          "id": "filepath",
+          "name": "filepath",
+          "filePath": {
+            "path": "tmp/example-postgres-default.sql"
+          }
+        },
+        {
+          "id": "filepath-gzip",
+          "name": "filepath",
+          "middlewares": [
+            {
+              "name": "gzip"
+            }
+          ],
+          "filePath": {
+            "path": "tmp/example-postgres-default.sql.gz"
+          }
+        },
+        {
+          "id": "file",
+          "name": "file",
+          "file":{
+            "Dir": "tmp/",
+            "Prefix": "example-postgres-default",
+            "Suffix": "sql"
+          }
+        },
+        {
+          "id": "s3",
+          "name": "s3",
+          "s3": {
+            "AccessKey": "admin",
+            "SecretKey": "asdfasdf",
+            "Endpoint": "http://127.0.0.1:19000",
+            "BucketName": "tergum-backups",
+            "Prefix": "example-postgres-default",
+            "Suffix": "sql"
+          }
+        }
+      ]
     }
   ]
 }
