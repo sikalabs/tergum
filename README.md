@@ -217,6 +217,7 @@ Emails:
 - [ ] Oracle (Enterprise)
 - [ ] S3
 - [ ] MongoDB
+- [ ] Gitlab
 - [ ] Kubernetes Resource
 - [ ] Container Image
 
