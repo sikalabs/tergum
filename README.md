@@ -218,6 +218,7 @@ Emails:
 - [ ] S3
 - [ ] MongoDB
 - [ ] Gitlab
+- [ ] Proxmox
 - [ ] Kubernetes Resource
 - [ ] Container Image
 
