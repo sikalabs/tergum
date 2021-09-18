@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tergum
+data:
+  tergum.yaml: |-
+    Meta:
+      SchemaVersion: 3
+    Notification:
+      Backend:
+        Email:
+          SmtpHost: maildev
+          SmtpPort: 1025
+          Username: null
+          Password: null
+          From: tergum@example.com
+      Targets:
+        - Email:
+            Emails:
+              - ondrej+k8s-job@example.com
+              - monitoring+k8s-job@example.com
+    Backups:
+      - ID: example-postgres
+        Source:
+          Postgres:
+            Host: postgres
+            Port:  5432
+            User: postgres
+            Password: pg
+            Database: postgres
+        Targets:
+          - ID: s3
+            Middlewares:
+              - Gzip: {}
+            S3:
+              AccessKey: admin
+              SecretKey: asdfasdf
+              Endpoint: http://minio:9000
+              BucketName: tergum-backups
+              Prefix: file-postgres
+              Suffix: sql
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: tergum
+spec:
+  schedule: "*/1 * * * *"
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: config
+              configMap:
+                name: tergum
+          containers:
+            - name: main
+              image: reg.istry.cz/tergum-misc/postgres-with-tergum
+              args:
+                - tergum
+                - backup
+                - -c
+                - /config/tergum.yaml
+              volumeMounts:
+              - name: config
+                mountPath: /config
+          restartPolicy: OnFailure

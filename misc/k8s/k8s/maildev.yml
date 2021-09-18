@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: maildev
+spec:
+  clusterIP: None
+  ports:
+    - name: smtp
+      port: 1025
+      protocol: TCP
+      targetPort: 1025
+    - name: http
+      port: 1080
+      protocol: TCP
+      targetPort: 1080
+  selector:
+    app: maildev
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: maildev
+spec:
+  serviceName: maildev
+  selector:
+    matchLabels:
+      app: maildev
+  template:
+    metadata:
+      labels:
+        app: maildev
+    spec:
+      containers:
+        - name: main
+          image: maildev/maildev
+          args:
+            - "--web"
+            - "1080"
+            - "--smtp"
+            - "1025"
+            - "--hide-extensions"
+            - "STARTTLS"
+          ports:
+            - containerPort: 1080
+            - containerPort: 1025
+          resources:
+            requests:
+              cpu: 50m
+              memory: 200Mi
+            # limits:
+            #   memory: 20Mi
+            #   cpu: 20m

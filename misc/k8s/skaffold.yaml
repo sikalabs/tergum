@@ -1,0 +1,17 @@
+apiVersion: skaffold/v2beta19
+kind: Config
+build:
+  artifacts:
+    - image: reg.istry.cz/tergum-misc/postgres
+      context: ../docker/postgres
+      kaniko:
+        cache: {}
+    - image: reg.istry.cz/tergum-misc/postgres-with-tergum
+      context: ../docker/postgres-with-tergum
+      kaniko:
+        cache: {}
+  cluster: {}
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*
