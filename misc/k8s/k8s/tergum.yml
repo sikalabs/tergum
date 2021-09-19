@@ -37,7 +37,7 @@ data:
               SecretKey: asdfasdf
               Endpoint: http://minio:9000
               BucketName: tergum-backups
-              Prefix: file-postgres
+              Prefix: example-postgres
               Suffix: sql.gz
 ---
 apiVersion: batch/v1beta1
