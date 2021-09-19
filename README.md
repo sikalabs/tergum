@@ -142,7 +142,7 @@ Path: "/backup/mysql-default.sql"
 
 #### Example BackupDestinationFileConfiguration Block
 
-```jsx
+```yaml
 Dir: "/backup/"
 Prefix: "mysql-default"
 Suffix: "sql"
