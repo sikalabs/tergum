@@ -6,6 +6,10 @@ build:
       context: ../docker/postgres
       kaniko:
         cache: {}
+    - image: reg.istry.cz/tergum-misc/mysql
+      context: ../docker/mysql
+      kaniko:
+        cache: {}
     - image: reg.istry.cz/tergum-misc/postgres-with-tergum
       context: ../docker/postgres-with-tergum
       kaniko:
