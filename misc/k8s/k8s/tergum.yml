@@ -38,7 +38,7 @@ data:
               Endpoint: http://minio:9000
               BucketName: tergum-backups
               Prefix: file-postgres
-              Suffix: sql
+              Suffix: sql.gz
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
