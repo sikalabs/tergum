@@ -6,8 +6,8 @@ all: build push
 
 build:
 	docker build \
-		--build-arg POSTGRES_VERSION=13 \
-		--build-arg TERGUM_VERSION=v0.12.0 \
+		--build-arg POSTGRES_VERSION=${POSTGRES_VERSION} \
+		--build-arg TERGUM_VERSION=${TERGUM_VERSION} \
 		-t ${IMAGE} \
 		.
 
