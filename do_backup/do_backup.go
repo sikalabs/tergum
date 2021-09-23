@@ -11,18 +11,24 @@ import (
 	"github.com/sikalabs/tergum/config"
 )
 
-func DoBackup(configPath string) {
+func DoBackup(configPath, extraName string) {
 	// Seed random library
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	fmt.Println("tergum v2")
+
+	if extraName != "" {
+		fmt.Println("extra name:", extraName)
+	}
 
 	// Load config from file
 	var config config.TergumConfig
 	config.Load(configPath)
 
 	// Create Backup Log
-	var bl backup_log.BackupLog
+	bl := backup_log.BackupLog{
+		ExtraName: extraName,
+	}
 
 	// Validate config
 	err := config.Validate()

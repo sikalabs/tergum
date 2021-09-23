@@ -2,6 +2,7 @@ package email
 
 import (
 	"errors"
+	"strings"
 
 	gosendmail "github.com/ondrejsika/gosendmail/lib"
 )
@@ -32,7 +33,12 @@ func (b EmailBackend) SendMail(
 	subject string,
 	body string,
 ) error {
-	finalSubject := "[tergum] " + subject
+	var finalSubject string
+	if strings.HasPrefix(subject, "[") {
+		finalSubject = "[tergum]" + subject
+	} else {
+		finalSubject = "[tergum] " + subject
+	}
 	finalBody := body + "\n\n--\ntergum"
 	rawMessage := []byte("To: " + to + "\r\n" +
 		"From: " + b.From + "\r\n" +

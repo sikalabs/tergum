@@ -8,7 +8,8 @@ type BackupLogEvent struct {
 }
 
 type BackupLog struct {
-	Events []BackupLogEvent
+	ExtraName string
+	Events    []BackupLogEvent
 }
 
 func (l *BackupLog) SaveEvent(

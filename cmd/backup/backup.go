@@ -8,6 +8,7 @@ import (
 )
 
 var CmdFlagConfig string
+var CmdFlagExtraName string
 var CmdFlagImplementation1 bool
 
 var Cmd = &cobra.Command{
@@ -20,7 +21,7 @@ var Cmd = &cobra.Command{
 			src1.Tergum1(CmdFlagConfig)
 			return
 		}
-		do_backup.DoBackup(CmdFlagConfig)
+		do_backup.DoBackup(CmdFlagConfig, CmdFlagExtraName)
 	},
 }
 
@@ -39,5 +40,12 @@ func init() {
 		"implementation1",
 		false,
 		"Switch to implementation1 (src1)",
+	)
+	Cmd.Flags().StringVarP(
+		&CmdFlagExtraName,
+		"extra-name",
+		"e",
+		"",
+		"Extra name for easy identification of specific run",
 	)
 }

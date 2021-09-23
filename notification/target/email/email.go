@@ -25,6 +25,10 @@ func (r EmailRule) SendNotification(
 	b backend.Backend,
 ) error {
 	table := output.BackupLogToString(bl)
+	subject := "Backup Summary -- " + bl.GlobalSuccessString()
+	if bl.ExtraName != "" {
+		subject = "[" + bl.ExtraName + "] " + subject
+	}
 	body := `
 <html>
 <body>
@@ -34,7 +38,7 @@ func (r EmailRule) SendNotification(
 	for _, email := range r.Emails {
 		err := b.Email.SendMail(
 			email,
-			"Backup Summary -- "+bl.GlobalSuccessString(),
+			subject,
 			body,
 		)
 		if err != nil {
