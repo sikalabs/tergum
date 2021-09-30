@@ -85,6 +85,7 @@ Source:
   Mysql: <BackupSourceMysqlConfiguration>
   MysqlServer: <BackupSourceMysqlServerConfiguration>
   Postgres: <BackupSourcePostgresConfiguration>
+  Mongo: <BackupSourceMongoConfiguration>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -132,6 +133,34 @@ Port: "15432"
 User: "postgres"
 Password: "pg"
 Database: "postgres"
+```
+
+#### Example BackupSourceMongoConfiguration Block
+
+Dump all dbs & no auth
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+```
+
+Dump all dbs with auth
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+User: "root"
+Password: "root"
+```
+
+Dump single db with auth
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+User: "root"
+Password: "root"
+Database: "test"
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
