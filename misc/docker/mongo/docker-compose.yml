@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+  mongo:
+    build: .
+    ports:
+      - 27017:27017
