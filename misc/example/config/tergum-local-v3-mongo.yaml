@@ -1,0 +1,25 @@
+Meta:
+  SchemaVersion: 3
+Notification:
+  Backend:
+    Email:
+      SmtpHost: 127.0.0.1
+      SmtpPort: 11025
+      Username: null
+      Password: null
+      From: tergum@example.com
+  Targets:
+    - Email:
+        Emails:
+          - ondrej@example.com
+          - monitoring@example.com
+Backups:
+  - ID: example-mongo
+    Source:
+      Mongo:
+        Host: 127.0.0.1
+        Port: 27017
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/mongo.dump
