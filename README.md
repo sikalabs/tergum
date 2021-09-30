@@ -245,7 +245,7 @@ Emails:
 - [x] MySQLServer
 - [ ] Oracle (Enterprise)
 - [ ] S3
-- [ ] MongoDB
+- [x] MongoDB
 - [ ] Gitlab
 - [ ] Proxmox
 - [ ] Kubernetes Resource
