@@ -2,7 +2,8 @@ package single_file
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
+	"os"
 )
 
 type SingleFileSource struct {
@@ -16,7 +17,7 @@ func (s SingleFileSource) Validate() error {
 	return nil
 }
 
-func (s SingleFileSource) Backup() ([]byte, error) {
-	out, err := ioutil.ReadFile(s.Path)
+func (s SingleFileSource) Backup() (io.ReadSeeker, error) {
+	out, err := os.Open(s.Path)
 	return out, err
 }

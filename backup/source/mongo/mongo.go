@@ -2,10 +2,9 @@ package mongo
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
+	"os"
 	"os/exec"
-
-	"github.com/sikalabs/tergum/utils/temp_utils"
 )
 
 type MongoSource struct {
@@ -26,10 +25,14 @@ func (s MongoSource) Validate() error {
 	return nil
 }
 
-func (s MongoSource) Backup() ([]byte, error) {
-	outputFile := temp_utils.GetTempFileName()
+func (s MongoSource) Backup() (io.ReadSeeker, error) {
+	outputFile, err := os.CreateTemp("", "tergum-dump-mongo-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(outputFile.Name())
 	args := []string{
-		"--archive=" + outputFile,
+		"--archive=" + outputFile.Name(),
 		"--host", s.Host,
 		"--port", s.Port,
 	}
@@ -50,7 +53,7 @@ func (s MongoSource) Backup() ([]byte, error) {
 		"mongodump",
 		args...,
 	)
-	cmd.Output()
-	out, err := ioutil.ReadFile(outputFile)
-	return out, err
+	_, err = cmd.Output()
+	outputFile.Seek(0, 0)
+	return outputFile, err
 }

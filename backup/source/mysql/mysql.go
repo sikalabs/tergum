@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"os/exec"
 )
 
@@ -33,7 +35,15 @@ func (s MysqlSource) Validate() error {
 	return nil
 }
 
-func (s MysqlSource) Backup() ([]byte, error) {
+func (s MysqlSource) Backup() (io.ReadSeeker, error) {
+	var err error
+
+	outputFile, err := os.CreateTemp("", "tergum-dump-mysql-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(outputFile.Name())
+
 	args := []string{
 		"-h", s.Host,
 		"-P", s.Port,
@@ -45,6 +55,14 @@ func (s MysqlSource) Backup() ([]byte, error) {
 		"mysqldump",
 		append(s.MysqldumpExtraArgs, args...)...,
 	)
-	out, err := cmd.Output()
-	return out, err
+	cmd.Stdout = outputFile
+
+	err = cmd.Start()
+	if err != nil {
+		return nil, err
+	}
+	cmd.Wait()
+
+	outputFile.Seek(0, 0)
+	return outputFile, nil
 }

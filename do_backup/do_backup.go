@@ -61,6 +61,7 @@ func DoBackup(configPath, extraName string) {
 
 		for _, t := range b.Targets {
 			targetData := data
+			targetData.Seek(0, 0)
 
 			// Process Targets's Middlewares
 			var errTargetMiddleware error = nil

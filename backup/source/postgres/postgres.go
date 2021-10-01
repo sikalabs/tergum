@@ -2,6 +2,8 @@ package postgres
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"os/exec"
 )
 
@@ -32,7 +34,15 @@ func (s PostgresSource) Validate() error {
 	return nil
 }
 
-func (s PostgresSource) Backup() ([]byte, error) {
+func (s PostgresSource) Backup() (io.ReadSeeker, error) {
+	var err error
+
+	outputFile, err := os.CreateTemp("", "tergum-dump-postgres-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(outputFile.Name())
+
 	cmd := exec.Command(
 		"pg_dump",
 		"host="+s.Host+
@@ -41,6 +51,14 @@ func (s PostgresSource) Backup() ([]byte, error) {
 			" password="+s.Password+
 			" dbname="+s.Database,
 	)
-	out, err := cmd.Output()
-	return out, err
+	cmd.Stdout = outputFile
+
+	err = cmd.Start()
+	if err != nil {
+		return nil, err
+	}
+	cmd.Wait()
+
+	outputFile.Seek(0, 0)
+	return outputFile, nil
 }
