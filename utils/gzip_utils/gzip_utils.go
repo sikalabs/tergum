@@ -3,7 +3,10 @@ package gzip_utils
 import (
 	"bytes"
 	"compress/gzip"
+	"io"
 	"os"
+
+	"github.com/sikalabs/tergum/utils/temp_utils"
 )
 
 func WriteGzipFile(path string, data []byte, perm os.FileMode) error {
@@ -39,4 +42,17 @@ func GzipBytes(data []byte) ([]byte, error) {
 		return nil, err
 	}
 	return b.Bytes(), nil
+}
+
+func GzipIO(src io.Reader) (io.Writer, error) {
+	var err error
+
+	outputFileName := temp_utils.GetTempFileName()
+	outputFile, err := os.Create(outputFileName)
+	if err != nil {
+		return nil, err
+	}
+
+	out := gzip.NewWriter(outputFile)
+	return out, nil
 }

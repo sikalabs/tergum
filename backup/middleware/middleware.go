@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/sikalabs/tergum/backup/middleware/gzip"
 )
@@ -18,7 +19,7 @@ func (m Middleware) Validate() error {
 	return fmt.Errorf("no middleware detected")
 }
 
-func (m Middleware) Process(data []byte) ([]byte, error) {
+func (m Middleware) Process(data io.Reader) (io.Writer, error) {
 	if m.Gzip != nil {
 		return m.Gzip.Process(data)
 	}
