@@ -86,6 +86,7 @@ Source:
   MysqlServer: <BackupSourceMysqlServerConfiguration>
   Postgres: <BackupSourcePostgresConfiguration>
   Mongo: <BackupSourceMongoConfiguration>
+  SingleFile: <BackupSourceSingleFileConfiguration>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -161,6 +162,12 @@ Port: "27017"
 User: "root"
 Password: "root"
 Database: "test"
+```
+
+#### Example BackupSourceSingleFileConfiguration Block
+
+```yaml
+Path: /data/export/dump.sql
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
@@ -239,6 +246,7 @@ Emails:
 
 ### Backup Sources
 
+- [x] SingleFile
 - [ ] Files
 - [x] Postgres
 - [x] MySQL
