@@ -7,6 +7,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/mysql"
 	"github.com/sikalabs/tergum/backup/source/mysql_server"
 	"github.com/sikalabs/tergum/backup/source/postgres"
+	"github.com/sikalabs/tergum/backup/source/single_file"
 )
 
 type Source struct {
@@ -14,6 +15,7 @@ type Source struct {
 	MysqlServer *mysql_server.MysqlServerSource `yaml:"MysqlServer"`
 	Postgres    *postgres.PostgresSource        `yaml:"Postgres"`
 	Mongo       *mongo.MongoSource              `yaml:"Mongo"`
+	SingleFile  *single_file.SingleFileSource   `yaml:"SingleFile"`
 }
 
 func (s Source) Validate() error {
@@ -34,6 +36,11 @@ func (s Source) Validate() error {
 
 	if s.Mongo != nil {
 		p := *s.Mongo
+		return p.Validate()
+	}
+
+	if s.SingleFile != nil {
+		p := *s.SingleFile
 		return p.Validate()
 	}
 
@@ -58,6 +65,11 @@ func (s Source) Backup() ([]byte, error) {
 
 	if s.Mongo != nil {
 		p := *s.Mongo
+		return p.Backup()
+	}
+
+	if s.SingleFile != nil {
+		p := *s.SingleFile
 		return p.Backup()
 	}
 
