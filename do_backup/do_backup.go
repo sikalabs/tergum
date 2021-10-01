@@ -45,35 +45,35 @@ func DoBackup(configPath, extraName string) {
 			continue
 		}
 
-		// Process Backup's Middlewares
-		var errBackupMiddleware error = nil
-		for _, m := range b.Middlewares {
-			data, errBackupMiddleware = m.Process(data)
-			if errBackupMiddleware != nil {
-				bl.SaveEvent(b.ID, "---", errBackupMiddleware)
-				continue
-			}
-		}
+		// // Process Backup's Middlewares
+		// var errBackupMiddleware error = nil
+		// for _, m := range b.Middlewares {
+		// 	data, errBackupMiddleware = m.Process(data)
+		// 	if errBackupMiddleware != nil {
+		// 		bl.SaveEvent(b.ID, "---", errBackupMiddleware)
+		// 		continue
+		// 	}
+		// }
 
-		if errBackupMiddleware != nil {
-			continue
-		}
+		// if errBackupMiddleware != nil {
+		// 	continue
+		// }
 
 		for _, t := range b.Targets {
 			targetData := data
 
-			// Process Targets's Middlewares
-			var errTargetMiddleware error = nil
-			for _, m := range t.Middlewares {
-				targetData, errTargetMiddleware = m.Process(targetData)
-				if errTargetMiddleware != nil {
-					bl.SaveEvent(b.ID, t.ID, errTargetMiddleware)
-					continue
-				}
-			}
-			if errTargetMiddleware != nil {
-				continue
-			}
+			// // Process Targets's Middlewares
+			// var errTargetMiddleware error = nil
+			// for _, m := range t.Middlewares {
+			// 	targetData, errTargetMiddleware = m.Process(targetData)
+			// 	if errTargetMiddleware != nil {
+			// 		bl.SaveEvent(b.ID, t.ID, errTargetMiddleware)
+			// 		continue
+			// 	}
+			// }
+			// if errTargetMiddleware != nil {
+			// 	continue
+			// }
 
 			// Save backup to target
 			err = t.Save(targetData)

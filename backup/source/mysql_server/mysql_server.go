@@ -2,7 +2,11 @@ package mysql_server
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"os/exec"
+
+	"github.com/sikalabs/tergum/utils/temp_utils"
 )
 
 type MysqlServerSource struct {
@@ -29,7 +33,16 @@ func (s MysqlServerSource) Validate() error {
 	return nil
 }
 
-func (s MysqlServerSource) Backup() ([]byte, error) {
+func (s MysqlServerSource) Backup() (io.Reader, error) {
+	var err error
+
+	outputFileName := temp_utils.GetTempFileName()
+	outputFile, err := os.Create(outputFileName)
+	if err != nil {
+		return nil, err
+	}
+	defer outputFile.Close()
+
 	args := []string{
 		"-h", s.Host,
 		"-P", s.Port,
@@ -41,6 +54,14 @@ func (s MysqlServerSource) Backup() ([]byte, error) {
 		"mysqldump",
 		append(s.MysqldumpExtraArgs, args...)...,
 	)
-	out, err := cmd.Output()
-	return out, err
+	cmd.Stdout = outputFile
+
+	err = cmd.Start()
+	if err != nil {
+		return nil, err
+	}
+	cmd.Wait()
+
+	outputFileReader, err := os.Open(outputFileName)
+	return outputFileReader, err
 }

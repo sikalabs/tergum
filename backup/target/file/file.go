@@ -2,9 +2,8 @@ package file
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"os"
-	"path"
 
 	"github.com/sikalabs/tergum/utils/file_utils"
 )
@@ -28,12 +27,23 @@ func (t FileTarget) Validate() error {
 	return nil
 }
 
-func (t FileTarget) Save(data []byte) error {
+func (t FileTarget) Save(data io.Reader) error {
 	err := os.MkdirAll(t.Dir, 0755)
 	if err != nil {
 		return err
 	}
+
 	name := file_utils.GetFileName(t.Prefix, t.Suffix)
-	err = ioutil.WriteFile(path.Join(t.Dir, name), data, 0644)
+
+	if err != nil {
+		return err
+	}
+	f, err := os.Create(name)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	_, err = io.Copy(f, data)
 	return err
+
 }

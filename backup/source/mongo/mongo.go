@@ -2,7 +2,8 @@ package mongo
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
+	"os"
 	"os/exec"
 
 	"github.com/sikalabs/tergum/utils/temp_utils"
@@ -26,7 +27,7 @@ func (s MongoSource) Validate() error {
 	return nil
 }
 
-func (s MongoSource) Backup() ([]byte, error) {
+func (s MongoSource) Backup() (io.Reader, error) {
 	outputFile := temp_utils.GetTempFileName()
 	args := []string{
 		"--archive=" + outputFile,
@@ -51,6 +52,6 @@ func (s MongoSource) Backup() ([]byte, error) {
 		args...,
 	)
 	cmd.Output()
-	out, err := ioutil.ReadFile(outputFile)
+	out, err := os.Open(outputFile)
 	return out, err
 }
