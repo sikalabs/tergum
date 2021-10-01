@@ -44,7 +44,7 @@ func GzipBytes(data []byte) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-func GzipIO(src io.Reader) (io.Reader, error) {
+func GzipIO(src io.ReadSeeker) (io.ReadSeeker, error) {
 	var err error
 
 	outputFileName := temp_utils.GetTempFileName()

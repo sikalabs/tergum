@@ -34,7 +34,7 @@ func (t Target) Validate() error {
 	return fmt.Errorf("target/validate: no target detected")
 }
 
-func (t Target) Save(data io.Reader) error {
+func (t Target) Save(data io.ReadSeeker) error {
 	if t.S3 != nil {
 		s3 := *t.S3
 		return s3.Save(data)

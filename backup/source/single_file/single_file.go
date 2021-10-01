@@ -17,7 +17,7 @@ func (s SingleFileSource) Validate() error {
 	return nil
 }
 
-func (s SingleFileSource) Backup() (io.Reader, error) {
+func (s SingleFileSource) Backup() (io.ReadSeeker, error) {
 	out, err := os.Open(s.Path)
 	return out, err
 }

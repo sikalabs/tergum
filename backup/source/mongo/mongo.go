@@ -27,7 +27,7 @@ func (s MongoSource) Validate() error {
 	return nil
 }
 
-func (s MongoSource) Backup() (io.Reader, error) {
+func (s MongoSource) Backup() (io.ReadSeeker, error) {
 	outputFile := temp_utils.GetTempFileName()
 	args := []string{
 		"--archive=" + outputFile,

@@ -43,7 +43,7 @@ func (t S3Target) Validate() error {
 	return nil
 }
 
-func (t S3Target) Save(data io.Reader) error {
+func (t S3Target) Save(data io.ReadSeeker) error {
 	awsConfig := aws_aws.Config{
 		Credentials: aws_credentials.NewStaticCredentials(
 			t.AccessKey,

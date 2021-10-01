@@ -19,7 +19,7 @@ func (m Middleware) Validate() error {
 	return fmt.Errorf("no middleware detected")
 }
 
-func (m Middleware) Process(data io.Reader) (io.Reader, error) {
+func (m Middleware) Process(data io.ReadSeeker) (io.ReadSeeker, error) {
 	if m.Gzip != nil {
 		return m.Gzip.Process(data)
 	}

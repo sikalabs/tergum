@@ -37,7 +37,7 @@ func (s MysqlSource) Validate() error {
 	return nil
 }
 
-func (s MysqlSource) Backup() (io.Reader, error) {
+func (s MysqlSource) Backup() (io.ReadSeeker, error) {
 	var err error
 
 	outputFileName := temp_utils.GetTempFileName()

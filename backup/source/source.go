@@ -48,7 +48,7 @@ func (s Source) Validate() error {
 	return fmt.Errorf("source/validate: no source detected")
 }
 
-func (s Source) Backup() (io.Reader, error) {
+func (s Source) Backup() (io.ReadSeeker, error) {
 	if s.MysqlServer != nil {
 		m := *s.MysqlServer
 		return m.Backup()

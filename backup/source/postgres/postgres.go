@@ -36,7 +36,7 @@ func (s PostgresSource) Validate() error {
 	return nil
 }
 
-func (s PostgresSource) Backup() (io.Reader, error) {
+func (s PostgresSource) Backup() (io.ReadSeeker, error) {
 	var err error
 
 	outputFileName := temp_utils.GetTempFileName()

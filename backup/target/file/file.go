@@ -27,7 +27,7 @@ func (t FileTarget) Validate() error {
 	return nil
 }
 
-func (t FileTarget) Save(data io.Reader) error {
+func (t FileTarget) Save(data io.ReadSeeker) error {
 	err := os.MkdirAll(t.Dir, 0755)
 	if err != nil {
 		return err
