@@ -54,6 +54,7 @@ func GzipIO(src io.Reader) (io.Reader, error) {
 	}
 
 	outputFileGzipWriter := gzip.NewWriter(outputFileWriter)
+	defer outputFileGzipWriter.Close()
 	io.Copy(outputFileGzipWriter, src)
 
 	outputFileReader, err := os.Open(outputFileName)

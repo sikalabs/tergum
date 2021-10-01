@@ -2,6 +2,7 @@ package filepath
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -29,6 +30,7 @@ func (t FilePathTarget) Save(data io.Reader) error {
 		return err
 	}
 	defer f.Close()
-	_, err = io.Copy(f, data)
+	x, err := io.Copy(f, data)
+	fmt.Println(x)
 	return err
 }

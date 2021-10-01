@@ -1,7 +1,9 @@
 package do_backup
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"math/rand"
 	"os"
 	"time"
@@ -59,8 +61,17 @@ func DoBackup(configPath, extraName string) {
 			continue
 		}
 
-		for _, t := range b.Targets {
-			targetData := data
+		bufs := make([]bytes.Buffer, len(b.Targets))
+
+		for i := range b.Targets {
+			data = io.TeeReader(data, &bufs[i])
+		}
+
+		io.ReadAll(data)
+
+		for i, t := range b.Targets {
+			var targetData io.Reader
+			targetData = &bufs[i]
 
 			// Process Targets's Middlewares
 			var errTargetMiddleware error = nil

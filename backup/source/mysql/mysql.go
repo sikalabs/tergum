@@ -41,6 +41,7 @@ func (s MysqlSource) Backup() (io.Reader, error) {
 	var err error
 
 	outputFileName := temp_utils.GetTempFileName()
+	fmt.Println(outputFileName)
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return nil, err
