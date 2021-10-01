@@ -12,6 +12,6 @@ func (m GzipMiddleware) Validate() error {
 	return nil
 }
 
-func (m GzipMiddleware) Process(data io.Reader) (io.Writer, error) {
+func (m GzipMiddleware) Process(data io.Reader) (io.Reader, error) {
 	return gzip_utils.GzipIO(data)
 }

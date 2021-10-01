@@ -44,15 +44,21 @@ func GzipBytes(data []byte) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-func GzipIO(src io.Reader) (io.Writer, error) {
+func GzipIO(src io.Reader) (io.Reader, error) {
 	var err error
 
 	outputFileName := temp_utils.GetTempFileName()
-	outputFile, err := os.Create(outputFileName)
+	outputFileWriter, err := os.Create(outputFileName)
 	if err != nil {
 		return nil, err
 	}
 
-	out := gzip.NewWriter(outputFile)
-	return out, nil
+	outputFileGzipWriter := gzip.NewWriter(outputFileWriter)
+	io.Copy(outputFileGzipWriter, src)
+
+	outputFileReader, err := os.Open(outputFileName)
+	if err != nil {
+		return nil, err
+	}
+	return outputFileReader, nil
 }
