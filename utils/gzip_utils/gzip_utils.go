@@ -3,6 +3,7 @@ package gzip_utils
 import (
 	"bytes"
 	"compress/gzip"
+	"io"
 	"os"
 )
 
@@ -39,4 +40,24 @@ func GzipBytes(data []byte) ([]byte, error) {
 		return nil, err
 	}
 	return b.Bytes(), nil
+}
+
+func GzipIO(src io.ReadSeeker) (io.ReadSeeker, error) {
+	var err error
+
+	outputFile, err := os.CreateTemp("", "tergum-gzip-")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(outputFile.Name())
+
+	gz := gzip.NewWriter(outputFile)
+	defer gz.Close()
+	io.Copy(gz, src)
+
+	outputFileReader, err := os.Open(outputFile.Name())
+	if err != nil {
+		return nil, err
+	}
+	return outputFileReader, nil
 }

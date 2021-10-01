@@ -1,8 +1,8 @@
 package s3
 
 import (
-	"bytes"
 	"fmt"
+	"io"
 
 	aws_aws "github.com/aws/aws-sdk-go/aws"
 	aws_credentials "github.com/aws/aws-sdk-go/aws/credentials"
@@ -43,7 +43,7 @@ func (t S3Target) Validate() error {
 	return nil
 }
 
-func (t S3Target) Save(data []byte) error {
+func (t S3Target) Save(data io.ReadSeeker) error {
 	awsConfig := aws_aws.Config{
 		Credentials: aws_credentials.NewStaticCredentials(
 			t.AccessKey,
@@ -70,7 +70,7 @@ func (t S3Target) Save(data []byte) error {
 		Bucket: aws_aws.String(t.BucketName),
 		ACL:    aws_aws.String("private"),
 		Key:    aws_aws.String(file_utils.GetFileName(t.Prefix, t.Suffix)),
-		Body:   bytes.NewReader(data),
+		Body:   data,
 	})
 	if err != nil {
 		return err

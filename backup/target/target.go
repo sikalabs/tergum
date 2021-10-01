@@ -2,6 +2,7 @@ package target
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/sikalabs/tergum/backup/middleware"
 	"github.com/sikalabs/tergum/backup/target/file"
@@ -33,7 +34,7 @@ func (t Target) Validate() error {
 	return fmt.Errorf("target/validate: no target detected")
 }
 
-func (t Target) Save(data []byte) error {
+func (t Target) Save(data io.ReadSeeker) error {
 	if t.S3 != nil {
 		s3 := *t.S3
 		return s3.Save(data)

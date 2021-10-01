@@ -2,7 +2,7 @@ package filepath
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -18,12 +18,17 @@ func (t FilePathTarget) Validate() error {
 	return nil
 }
 
-func (t FilePathTarget) Save(data []byte) error {
+func (t FilePathTarget) Save(data io.ReadSeeker) error {
 	dir := filepath.Dir(t.Path)
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(t.Path, data, 0644)
+	f, err := os.Create(t.Path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	_, err = io.Copy(f, data)
 	return err
 }
