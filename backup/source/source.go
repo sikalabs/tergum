@@ -44,7 +44,7 @@ func (s Source) Validate() error {
 		return p.Validate()
 	}
 
-	return fmt.Errorf("no source detected")
+	return fmt.Errorf("source/validate: no source detected")
 }
 
 func (s Source) Backup() ([]byte, error) {
@@ -73,5 +73,5 @@ func (s Source) Backup() ([]byte, error) {
 		return p.Backup()
 	}
 
-	return nil, fmt.Errorf("no source detected")
+	return nil, fmt.Errorf("source/backup: no source detected")
 }

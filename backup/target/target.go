@@ -30,7 +30,7 @@ func (t Target) Validate() error {
 		return t.FilePath.Validate()
 	}
 
-	return fmt.Errorf("no target detected")
+	return fmt.Errorf("target/validate: no target detected")
 }
 
 func (t Target) Save(data []byte) error {
@@ -49,5 +49,5 @@ func (t Target) Save(data []byte) error {
 		return fp.Save(data)
 	}
 
-	return fmt.Errorf("no target detected")
+	return fmt.Errorf("target/save: no target detected")
 }
