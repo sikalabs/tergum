@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/aws/aws-sdk-go v1.38.47
+	github.com/cheggaaa/pb/v3 v3.0.8
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/ondrejsika/gosendmail v0.3.0
 	github.com/spf13/cobra v1.2.1

@@ -2,11 +2,13 @@ package s3_utils
 
 import (
 	"io"
+	"os"
 
 	aws_aws "github.com/aws/aws-sdk-go/aws"
 	aws_credentials "github.com/aws/aws-sdk-go/aws/credentials"
 	aws_session "github.com/aws/aws-sdk-go/aws/session"
 	aws_s3manager "github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/cheggaaa/pb/v3"
 )
 
 func Upload(
@@ -16,7 +18,7 @@ func Upload(
 	endpoint string,
 	bucket_name string,
 	key string,
-	f io.Reader,
+	f io.ReadSeeker,
 ) error {
 	awsConfig := aws_aws.Config{
 		Credentials: aws_credentials.NewStaticCredentials(
@@ -43,11 +45,20 @@ func Upload(
 		u.PartSize = 10 * 1024 * 1024 // The minimum/default allowed part size is 5MB
 		u.Concurrency = 10            // default is 5
 	})
+
+	size, _ := f.Seek(0, os.SEEK_END)
+	f.Seek(0, 0)
+
+	bar := pb.Full.Start64(size)
+
+	// create proxy reader
+	barReader := bar.NewProxyReader(f)
+
 	_, err = uploader.Upload(&aws_s3manager.UploadInput{
 		Bucket: aws_aws.String(bucket_name),
 		ACL:    aws_aws.String("private"),
 		Key:    aws_aws.String(key),
-		Body:   f,
+		Body:   barReader,
 	})
 	if err != nil {
 		return err
