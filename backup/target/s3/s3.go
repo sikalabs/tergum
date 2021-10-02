@@ -3,11 +3,13 @@ package s3
 import (
 	"fmt"
 	"io"
+	"os"
 
 	aws_aws "github.com/aws/aws-sdk-go/aws"
 	aws_credentials "github.com/aws/aws-sdk-go/aws/credentials"
 	aws_session "github.com/aws/aws-sdk-go/aws/session"
 	aws_s3manager "github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/cheggaaa/pb/v3"
 	"github.com/sikalabs/tergum/utils/file_utils"
 )
 
@@ -69,11 +71,20 @@ func (t S3Target) Save(data io.ReadSeeker) error {
 		u.PartSize = 10 * 1024 * 1024 // The minimum/default allowed part size is 5MB
 		u.Concurrency = 10            // default is 5
 	})
+
+	size, _ := data.Seek(0, os.SEEK_END)
+	data.Seek(0, 0)
+
+	bar := pb.Full.Start64(size)
+
+	// create proxy reader
+	barReader := bar.NewProxyReader(data)
+
 	_, err = uploader.Upload(&aws_s3manager.UploadInput{
 		Bucket: aws_aws.String(t.BucketName),
 		ACL:    aws_aws.String("private"),
 		Key:    aws_aws.String(file_utils.GetFileName(t.Prefix, t.Suffix)),
-		Body:   data,
+		Body:   barReader,
 	})
 	if err != nil {
 		return err
