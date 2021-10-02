@@ -4,12 +4,15 @@ import (
 	"github.com/sikalabs/tergum/cmd/root"
 	"github.com/sikalabs/tergum/do_backup"
 	"github.com/sikalabs/tergum/src1"
+	"github.com/sikalabs/tergum/telemetry"
 	"github.com/spf13/cobra"
 )
 
 var CmdFlagConfig string
 var CmdFlagExtraName string
+var FlagTelemetryOrigin string
 var CmdFlagImplementation1 bool
+var FlagDisableTelemetry bool
 
 var Cmd = &cobra.Command{
 	Use:     "backup",
@@ -21,7 +24,12 @@ var Cmd = &cobra.Command{
 			src1.Tergum1(CmdFlagConfig)
 			return
 		}
-		do_backup.DoBackup(CmdFlagConfig, CmdFlagExtraName)
+		do_backup.DoBackup(
+			CmdFlagConfig,
+			!FlagDisableTelemetry,
+			FlagTelemetryOrigin,
+			CmdFlagExtraName,
+		)
 	},
 }
 
@@ -47,5 +55,17 @@ func init() {
 		"e",
 		"",
 		"Extra name for easy identification of specific run",
+	)
+	Cmd.Flags().StringVar(
+		&FlagTelemetryOrigin,
+		"telemetry-origin",
+		telemetry.DEFAULT_TELEMETRY_ORIGIN,
+		"Origin of telemetry server",
+	)
+	Cmd.Flags().BoolVar(
+		&FlagDisableTelemetry,
+		"telemetry-disable",
+		false,
+		"Disable telemetry",
 	)
 }

@@ -11,10 +11,16 @@ import (
 	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/backup_log/backup_log/output"
 	"github.com/sikalabs/tergum/config"
+	"github.com/sikalabs/tergum/telemetry"
 	"github.com/sikalabs/tergum/version"
 )
 
-func DoBackup(configPath, extraName string) {
+func DoBackup(
+	configPath string,
+	telemetryEnabled bool,
+	telemetryOrigin string,
+	extraName string,
+) {
 	log.Logger = log.Output(zerolog.ConsoleWriter{
 		Out:        os.Stdout,
 		TimeFormat: time.RFC3339,
@@ -28,6 +34,10 @@ func DoBackup(configPath, extraName string) {
 	if extraName != "" {
 		log.Info().Str("extra_name", extraName).Msg("extra name: " + extraName)
 	}
+
+	t := telemetry.NewTelemetry(telemetryEnabled, telemetryOrigin, extraName)
+
+	t.SendTelemetry()
 
 	// Load config from file
 	var config config.TergumConfig
