@@ -11,13 +11,6 @@ const PHASE_START = "START"
 const PHASE_DONE = "DONE"
 const PHASE_FAILED = "FAILED"
 
-func getMiddlewareID(m middleware.Middleware) string {
-	if m.Gzip != nil {
-		return "gzip"
-	}
-	return ""
-}
-
 func metaLog(
 	b *backup.Backup,
 	t *target.Target,
@@ -39,7 +32,7 @@ func metaLog(
 	}
 	middleware_id := ""
 	if m != nil {
-		middleware_id = getMiddlewareID(*m)
+		middleware_id = m.Name()
 		scope = scope + "+" + middleware_id
 	}
 
