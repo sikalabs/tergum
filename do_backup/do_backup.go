@@ -47,44 +47,26 @@ func DoBackup(configPath, extraName string) {
 
 	for _, b := range config.Backups {
 		// Backup source
-		log.Info().
-			Str("phase", "backup-start").
-			Str("id", b.ID).
-			Msg("Start backing up " + b.ID + " ...")
+		logBackupStart(b)
 		data, err := b.Source.Backup()
 		if err != nil {
 			bl.SaveEvent(b.ID, "---", err)
-			log.Warn().
-				Str("phase", "backup-finish-err").
-				Str("id", b.ID).
-				Msg("Backup failed " + b.ID + ": " + err.Error())
+			logBackupFailed(b, err)
 			continue
 		}
-		log.Info().
-			Str("phase", "backup-finish-ok").
-			Str("id", b.ID).
-			Msg("Finish backing up " + b.ID)
+		logBackupDone(b)
 
 		// Process Backup's Middlewares
 		var errBackupMiddleware error = nil
 		for _, m := range b.Middlewares {
-			log.Info().
-				Str("phase", "backup-middleware-start").
-				Str("id", b.ID).
-				Msg("Start backup middleware")
+			logBackupMiddlewareStart(b, m)
 			data, errBackupMiddleware = m.Process(data)
 			if errBackupMiddleware != nil {
 				bl.SaveEvent(b.ID, "---", errBackupMiddleware)
-				log.Warn().
-					Str("phase", "backup-middleware-err").
-					Str("id", b.ID).
-					Msg("Backup middleware failed: " + errBackupMiddleware.Error())
+				logBackupMiddlewareFailed(b, m, err)
 				continue
 			}
-			log.Info().
-				Str("phase", "backup-middleware-ok").
-				Str("id", b.ID).
-				Msg("Finish backup middleware " + b.ID)
+			logBackupMiddlewareDone(b, m)
 		}
 
 		if errBackupMiddleware != nil {
@@ -98,47 +80,29 @@ func DoBackup(configPath, extraName string) {
 			// Process Targets's Middlewares
 			var errTargetMiddleware error = nil
 			for _, m := range t.Middlewares {
-				log.Info().
-					Str("phase", "target-middleware-start").
-					Str("id", t.ID).
-					Msg("Start target middleware")
+				logTargetMiddlewareStart(b, t, m)
 				targetData, errTargetMiddleware = m.Process(targetData)
 				if errTargetMiddleware != nil {
 					bl.SaveEvent(b.ID, t.ID, errTargetMiddleware)
-					log.Warn().
-						Str("phase", "target-middleware-err").
-						Str("id", t.ID).
-						Msg("Target middleware failed: " + errTargetMiddleware.Error())
+					logTargetMiddlewareFailed(b, t, m, errTargetMiddleware)
 					continue
 				}
-				log.Info().
-					Str("phase", "target-middleware-ok").
-					Str("id", t.ID).
-					Msg("Finish target middleware " + t.ID)
+				logTargetMiddlewareDone(b, t, m)
 			}
 			if errTargetMiddleware != nil {
 				continue
 			}
 
 			// Save backup to target
-			log.Info().
-				Str("phase", "save-start").
-				Str("id", t.ID).
-				Msg("Start save " + t.ID)
+			logTargetStart(b, t)
 			err = t.Save(targetData)
 			if err != nil {
 				bl.SaveEvent(b.ID, t.ID, err)
-				log.Warn().
-					Str("phase", "save-err").
-					Str("id", t.ID).
-					Msg("Save " + t.ID + " failed: " + err.Error())
+				logTargetFailed(b, t, err)
 				continue
 			}
 			bl.SaveEvent(b.ID, t.ID, err)
-			log.Info().
-				Str("phase", "save-ok").
-				Str("id", t.ID).
-				Msg("Finish save " + t.ID)
+			logTargetDone(b, t)
 		}
 	}
 
