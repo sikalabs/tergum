@@ -60,7 +60,7 @@ func DoBackup(
 		logBackupStart(b)
 		data, err := b.Source.Backup()
 		if err != nil {
-			bl.SaveEvent(b.ID, "---", err)
+			bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", err)
 			logBackupFailed(b, err)
 			continue
 		}
@@ -72,7 +72,7 @@ func DoBackup(
 			logBackupMiddlewareStart(b, m)
 			data, errBackupMiddleware = m.Process(data)
 			if errBackupMiddleware != nil {
-				bl.SaveEvent(b.ID, "---", errBackupMiddleware)
+				bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", errBackupMiddleware)
 				logBackupMiddlewareFailed(b, m, err)
 				continue
 			}
@@ -93,7 +93,7 @@ func DoBackup(
 				logTargetMiddlewareStart(b, t, m)
 				targetData, errTargetMiddleware = m.Process(targetData)
 				if errTargetMiddleware != nil {
-					bl.SaveEvent(b.ID, t.ID, errTargetMiddleware)
+					bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, errTargetMiddleware)
 					logTargetMiddlewareFailed(b, t, m, errTargetMiddleware)
 					continue
 				}
@@ -107,11 +107,11 @@ func DoBackup(
 			logTargetStart(b, t)
 			err = t.Save(targetData)
 			if err != nil {
-				bl.SaveEvent(b.ID, t.ID, err)
+				bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, err)
 				logTargetFailed(b, t, err)
 				continue
 			}
-			bl.SaveEvent(b.ID, t.ID, err)
+			bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, err)
 			logTargetDone(b, t)
 		}
 	}

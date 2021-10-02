@@ -1,10 +1,12 @@
 package backup_log
 
 type BackupLogEvent struct {
-	BackupID string
-	TargetID string
-	Success  bool
-	Error    error
+	SourceName string
+	BackupID   string
+	TargetName string
+	TargetID   string
+	Success    bool
+	Error      error
 }
 
 type BackupLog struct {
@@ -13,25 +15,20 @@ type BackupLog struct {
 }
 
 func (l *BackupLog) SaveEvent(
+	sourceName string,
 	backupID string,
+	targetName string,
 	targetID string,
 	err error,
 ) {
-	if err == nil {
-		l.Events = append(l.Events, BackupLogEvent{
-			BackupID: backupID,
-			TargetID: targetID,
-			Success:  true,
-			Error:    nil,
-		})
-	} else {
-		l.Events = append(l.Events, BackupLogEvent{
-			BackupID: backupID,
-			TargetID: targetID,
-			Success:  false,
-			Error:    err,
-		})
-	}
+	l.Events = append(l.Events, BackupLogEvent{
+		SourceName: sourceName,
+		BackupID:   backupID,
+		TargetName: targetName,
+		TargetID:   targetID,
+		Success:    err == nil,
+		Error:      err,
+	})
 
 }
 
