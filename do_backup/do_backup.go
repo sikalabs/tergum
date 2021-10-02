@@ -41,7 +41,7 @@ func DoBackup(
 	// Init Telemetry
 	t := telemetry.NewTelemetry(config.Telemetry, telemetryDisabled, extraName)
 
-	t.SendTelemetry()
+	t.SendEvent("init", "")
 
 	// Create Backup Log
 	bl := backup_log.BackupLog{

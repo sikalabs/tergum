@@ -57,7 +57,7 @@ func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetr
 	}
 }
 
-func (t *Telemetry) SendTelemetry() {
+func (t *Telemetry) SendEvent(name, data string) {
 	if !t.Enabled {
 		log.Info().
 			Msg("Telemetry skip.")
@@ -67,6 +67,8 @@ func (t *Telemetry) SendTelemetry() {
 		SetBody(map[string]interface{}{
 			"version":        version.Version,
 			"telemetry_name": t.Config.Name,
+			"event_name":     name,
+			"data":           data,
 		}).
 		Post(t.Config.Origin + "/api/v1/event")
 	if err == nil {
