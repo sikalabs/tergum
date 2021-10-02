@@ -63,5 +63,8 @@ func Upload(
 	if err != nil {
 		return err
 	}
+
+	bar.Finish()
+
 	return nil
 }
