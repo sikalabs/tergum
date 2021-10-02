@@ -52,3 +52,19 @@ func (t Target) Save(data io.ReadSeeker) error {
 
 	return fmt.Errorf("target/save: no target detected")
 }
+
+func (t Target) Name() string {
+	if t.S3 != nil {
+		return "S3"
+	}
+
+	if t.File != nil {
+		return "File"
+	}
+
+	if t.FilePath != nil {
+		return "FilePath"
+	}
+
+	return ""
+}

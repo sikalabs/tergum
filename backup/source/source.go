@@ -76,3 +76,27 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 
 	return nil, fmt.Errorf("source/backup: no source detected")
 }
+
+func (s Source) Name() string {
+	if s.MysqlServer != nil {
+		return "MysqlServer"
+	}
+
+	if s.Mysql != nil {
+		return "Mysql"
+	}
+
+	if s.Postgres != nil {
+		return "Postgres"
+	}
+
+	if s.Mongo != nil {
+		return "Mongo"
+	}
+
+	if s.SingleFile != nil {
+		return "SingleFile"
+	}
+
+	return ""
+}

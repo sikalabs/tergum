@@ -26,3 +26,11 @@ func (m Middleware) Process(data io.ReadSeeker) (io.ReadSeeker, error) {
 
 	return nil, fmt.Errorf("no middleware detected")
 }
+
+func (m Middleware) Name() string {
+	if m.Gzip != nil {
+		return "Gzip"
+	}
+
+	return ""
+}
