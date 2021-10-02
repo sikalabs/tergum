@@ -20,20 +20,24 @@ func metaLog(
 	message string,
 ) {
 	backup_id := ""
+	source_name := ""
 	scope := ""
 	if b != nil {
 		backup_id = b.ID
+		source_name = b.Source.Name()
 		scope = backup_id
 	}
 	target_id := ""
+	target_name := ""
 	if t != nil {
 		target_id = t.ID
+		target_name = t.Name()
 		scope = backup_id + "/" + target_id
 	}
-	middleware_id := ""
+	middleware_name := ""
 	if m != nil {
-		middleware_id = m.Name()
-		scope = scope + "+" + middleware_id
+		middleware_name = m.Name()
+		scope = scope + "+" + middleware_name
 	}
 
 	message_space := ""
@@ -46,7 +50,9 @@ func metaLog(
 		Str("phase", phase).
 		Str("backup_id", backup_id).
 		Str("target_id", target_id).
-		Str("middleware_id", middleware_id).
+		Str("source_name", source_name).
+		Str("target_name", target_name).
+		Str("middleware_name", middleware_name).
 		Msg(phase + "/" + method + "(" + scope + ")" + message_space + message)
 }
 
