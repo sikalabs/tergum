@@ -1,0 +1,20 @@
+Meta:
+  SchemaVersion: 3
+Backups:
+  - ID: example-mysql
+    Source:
+      Mysql:
+        Host: 127.0.0.1
+        Port: 3306
+        User: root
+        Password: root
+        Database: default
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/mysql.sql
+      - ID: filepath-gzip
+        Middlewares:
+          - Gzip: {}
+        FilePath:
+          Path: tmp/mysql.sql.gz
