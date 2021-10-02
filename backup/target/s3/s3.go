@@ -3,14 +3,9 @@ package s3
 import (
 	"fmt"
 	"io"
-	"os"
 
-	aws_aws "github.com/aws/aws-sdk-go/aws"
-	aws_credentials "github.com/aws/aws-sdk-go/aws/credentials"
-	aws_session "github.com/aws/aws-sdk-go/aws/session"
-	aws_s3manager "github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/cheggaaa/pb/v3"
 	"github.com/sikalabs/tergum/utils/file_utils"
+	"github.com/sikalabs/tergum/utils/s3_utils"
 )
 
 type S3Target struct {
@@ -46,48 +41,13 @@ func (t S3Target) Validate() error {
 }
 
 func (t S3Target) Save(data io.ReadSeeker) error {
-	awsConfig := aws_aws.Config{
-		Credentials: aws_credentials.NewStaticCredentials(
-			t.AccessKey,
-			t.SecretKey,
-			"",
-		),
-	}
-	if t.Region != "" {
-		awsConfig.Region = aws_aws.String(string(t.Region))
-	}
-	if t.Endpoint != "" {
-		awsConfig.Region = aws_aws.String(string("us-east-1"))
-		awsConfig.S3ForcePathStyle = aws_aws.Bool(true)
-		awsConfig.Endpoint = aws_aws.String(string(t.Endpoint))
-	}
-	session, err := aws_session.NewSession(
-		&awsConfig,
+	return s3_utils.Upload(
+		t.AccessKey,
+		t.SecretKey,
+		t.Region,
+		t.Endpoint,
+		t.BucketName,
+		file_utils.GetFileName(t.Prefix, t.Suffix),
+		data,
 	)
-	if err != nil {
-		return err
-	}
-	uploader := aws_s3manager.NewUploader(session, func(u *aws_s3manager.Uploader) {
-		u.PartSize = 10 * 1024 * 1024 // The minimum/default allowed part size is 5MB
-		u.Concurrency = 10            // default is 5
-	})
-
-	size, _ := data.Seek(0, os.SEEK_END)
-	data.Seek(0, 0)
-
-	bar := pb.Full.Start64(size)
-
-	// create proxy reader
-	barReader := bar.NewProxyReader(data)
-
-	_, err = uploader.Upload(&aws_s3manager.UploadInput{
-		Bucket: aws_aws.String(t.BucketName),
-		ACL:    aws_aws.String("private"),
-		Key:    aws_aws.String(file_utils.GetFileName(t.Prefix, t.Suffix)),
-		Body:   barReader,
-	})
-	if err != nil {
-		return err
-	}
-	return nil
 }
