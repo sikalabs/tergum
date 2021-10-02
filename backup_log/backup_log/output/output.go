@@ -30,8 +30,8 @@ func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 
 		table.Append([]string{
 			strStatus,
-			log.BackupID,
-			log.TargetID,
+			log.SourceName + ": " + log.BackupID,
+			log.TargetName + ": " + log.TargetID,
 			strError,
 		})
 	}
