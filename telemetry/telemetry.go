@@ -24,9 +24,7 @@ type Telemetry struct {
 
 func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetry {
 	if tc == nil {
-		tc = &TelemetryConfig{
-			Origin: DEFAULT_TELEMETRY_ORIGIN,
-		}
+		tc = &TelemetryConfig{}
 	}
 
 	if tc.Disable || disabled {
@@ -35,6 +33,10 @@ func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetr
 		return Telemetry{
 			Enabled: false,
 		}
+	}
+
+	if tc.Origin == "" {
+		tc.Origin = DEFAULT_TELEMETRY_ORIGIN
 	}
 
 	if extraName != "" {
