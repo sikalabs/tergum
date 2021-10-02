@@ -10,51 +10,65 @@ import (
 
 const DEFAULT_TELEMETRY_ORIGIN = "https://tergum-telemetry-api.sikalabs.com"
 
+type TelemetryConfig struct {
+	Origin  string `yaml:"Origin"`
+	Disable bool   `yaml:"Disable"`
+	Name    string `yaml:"Name"`
+}
+
 type Telemetry struct {
+	Config  TelemetryConfig
 	Enabled bool
-	Origin  string
-	Name    string
 	Client  *resty.Client
 }
 
-func NewTelemetry(enabled bool, origin string, name string) Telemetry {
-	if !enabled {
-		log.Info().
-			Msg("Telemetry disabled.")
-		return Telemetry{
-			Enabled: enabled,
+func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetry {
+	if tc == nil {
+		tc = &TelemetryConfig{
+			Origin: DEFAULT_TELEMETRY_ORIGIN,
 		}
 	}
 
-	if origin == "" {
-		origin = DEFAULT_TELEMETRY_ORIGIN
+	if tc.Disable || disabled {
+		log.Info().
+			Msg("Telemetry disabled.")
+		return Telemetry{
+			Enabled: false,
+		}
 	}
+
+	if extraName != "" {
+		tc.Name = extraName
+	}
+
 	client := resty.New()
 	client.SetTimeout(5 * time.Second)
+
 	log.Info().
-		Str("origin", origin).
-		Str("telemetry_name", name).
+		Str("origin", tc.Origin).
+		Str("telemetry_name", tc.Name).
+		Str("version", version.Version).
 		Msg("Telemetry backend initialized.")
+
 	return Telemetry{
-		Enabled: enabled,
-		Origin:  origin,
-		Name:    name,
+		Enabled: true,
+		Config:  *tc,
 		Client:  client,
 	}
 }
 
-func (tc *Telemetry) SendTelemetry() {
-	if !tc.Enabled {
+func (t *Telemetry) SendTelemetry() {
+	if !t.Enabled {
 		log.Info().
 			Msg("Telemetry skip.")
 		return
 	}
-	_, err := tc.Client.R().
+	_, err := t.Client.R().
 		SetBody(map[string]interface{}{
 			"version":        version.Version,
-			"telemetry_name": tc.Name,
+			"telemetry_name": t.Config.Name,
 		}).
-		Post(tc.Origin + "/api/v1/event")
+		Post(t.Config.Origin + "/api/v1/event")
 	if err == nil {
 		log.Info().
 			Msg("Telemetry successfully sent.")

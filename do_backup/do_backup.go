@@ -17,8 +17,7 @@ import (
 
 func DoBackup(
 	configPath string,
-	telemetryEnabled bool,
-	telemetryOrigin string,
+	telemetryDisabled bool,
 	extraName string,
 ) {
 	log.Logger = log.Output(zerolog.ConsoleWriter{
@@ -35,13 +34,14 @@ func DoBackup(
 		log.Info().Str("extra_name", extraName).Msg("extra name: " + extraName)
 	}
 
-	t := telemetry.NewTelemetry(telemetryEnabled, telemetryOrigin, extraName)
-
-	t.SendTelemetry()
-
 	// Load config from file
 	var config config.TergumConfig
 	config.Load(configPath)
+
+	// Init Telemetry
+	t := telemetry.NewTelemetry(config.Telemetry, telemetryDisabled, extraName)
+
+	t.SendTelemetry()
 
 	// Create Backup Log
 	bl := backup_log.BackupLog{
