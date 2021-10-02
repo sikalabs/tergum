@@ -39,9 +39,9 @@ func DoBackup(
 	config.Load(configPath)
 
 	// Init Telemetry
-	t := telemetry.NewTelemetry(config.Telemetry, telemetryDisabled, extraName)
+	tel := telemetry.NewTelemetry(config.Telemetry, telemetryDisabled, extraName)
 
-	t.SendEvent("init", "")
+	tel.SendEvent("init", "")
 
 	// Create Backup Log
 	bl := backup_log.BackupLog{
@@ -57,26 +57,26 @@ func DoBackup(
 
 	for _, b := range config.Backups {
 		// Backup source
-		logBackupStart(b)
+		logBackupStart(tel, b)
 		data, err := b.Source.Backup()
 		if err != nil {
 			bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", err)
-			logBackupFailed(b, err)
+			logBackupFailed(tel, b, err)
 			continue
 		}
-		logBackupDone(b)
+		logBackupDone(tel, b)
 
 		// Process Backup's Middlewares
 		var errBackupMiddleware error = nil
 		for _, m := range b.Middlewares {
-			logBackupMiddlewareStart(b, m)
+			logBackupMiddlewareStart(tel, b, m)
 			data, errBackupMiddleware = m.Process(data)
 			if errBackupMiddleware != nil {
 				bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", errBackupMiddleware)
-				logBackupMiddlewareFailed(b, m, err)
+				logBackupMiddlewareFailed(tel, b, m, err)
 				continue
 			}
-			logBackupMiddlewareDone(b, m)
+			logBackupMiddlewareDone(tel, b, m)
 		}
 
 		if errBackupMiddleware != nil {
@@ -90,29 +90,29 @@ func DoBackup(
 			// Process Targets's Middlewares
 			var errTargetMiddleware error = nil
 			for _, m := range t.Middlewares {
-				logTargetMiddlewareStart(b, t, m)
+				logTargetMiddlewareStart(tel, b, t, m)
 				targetData, errTargetMiddleware = m.Process(targetData)
 				if errTargetMiddleware != nil {
 					bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, errTargetMiddleware)
-					logTargetMiddlewareFailed(b, t, m, errTargetMiddleware)
+					logTargetMiddlewareFailed(tel, b, t, m, errTargetMiddleware)
 					continue
 				}
-				logTargetMiddlewareDone(b, t, m)
+				logTargetMiddlewareDone(tel, b, t, m)
 			}
 			if errTargetMiddleware != nil {
 				continue
 			}
 
 			// Save backup to target
-			logTargetStart(b, t)
+			logTargetStart(tel, b, t)
 			err = t.Save(targetData)
 			if err != nil {
 				bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, err)
-				logTargetFailed(b, t, err)
+				logTargetFailed(tel, b, t, err)
 				continue
 			}
 			bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, err)
-			logTargetDone(b, t)
+			logTargetDone(tel, b, t)
 		}
 	}
 

@@ -1,10 +1,14 @@
 package do_backup
 
 import (
+	"encoding/json"
+	"strings"
+
 	"github.com/rs/zerolog/log"
 	"github.com/sikalabs/tergum/backup"
 	"github.com/sikalabs/tergum/backup/middleware"
 	"github.com/sikalabs/tergum/backup/target"
+	"github.com/sikalabs/tergum/telemetry"
 )
 
 const PHASE_START = "START"
@@ -12,6 +16,7 @@ const PHASE_DONE = "DONE"
 const PHASE_FAILED = "FAILED"
 
 func metaLog(
+	tel telemetry.Telemetry,
 	b *backup.Backup,
 	t *target.Target,
 	m *middleware.Middleware,
@@ -54,64 +59,75 @@ func metaLog(
 		Str("target_name", target_name).
 		Str("middleware_name", middleware_name).
 		Msg(phase + "/" + method + "(" + scope + ")" + message_space + message)
+	data := map[string]string{
+		"method":          method,
+		"phase":           phase,
+		"backup_id":       backup_id,
+		"target_id":       target_id,
+		"source_name":     source_name,
+		"target_name":     target_name,
+		"middleware_name": middleware_name,
+	}
+	jsonData, _ := json.Marshal(data)
+	tel.SendEvent(strings.ToLower("do/"+method+"/"+phase), string(jsonData))
 }
 
-func logBackupStart(b backup.Backup) {
-	metaLog(&b, nil, nil, "BACKUP", PHASE_START,
+func logBackupStart(tel telemetry.Telemetry, b backup.Backup) {
+	metaLog(tel, &b, nil, nil, "BACKUP", PHASE_START,
 		"")
 }
 
-func logBackupDone(b backup.Backup) {
-	metaLog(&b, nil, nil, "BACKUP", PHASE_DONE,
+func logBackupDone(tel telemetry.Telemetry, b backup.Backup) {
+	metaLog(tel, &b, nil, nil, "BACKUP", PHASE_DONE,
 		"Backup "+b.ID+" finished.")
 }
 
-func logBackupFailed(b backup.Backup, err error) {
-	metaLog(&b, nil, nil, "BACKUP", PHASE_FAILED,
+func logBackupFailed(tel telemetry.Telemetry, b backup.Backup, err error) {
+	metaLog(tel, &b, nil, nil, "BACKUP", PHASE_FAILED,
 		"Backup "+b.ID+" failed: "+err.Error())
 }
 
-func logTargetStart(b backup.Backup, t target.Target) {
-	metaLog(&b, &t, nil, "TARGET", PHASE_START,
+func logTargetStart(tel telemetry.Telemetry, b backup.Backup, t target.Target) {
+	metaLog(tel, &b, &t, nil, "TARGET", PHASE_START,
 		"")
 }
 
-func logTargetDone(b backup.Backup, t target.Target) {
-	metaLog(&b, &t, nil, "TARGET", PHASE_DONE,
+func logTargetDone(tel telemetry.Telemetry, b backup.Backup, t target.Target) {
+	metaLog(tel, &b, &t, nil, "TARGET", PHASE_DONE,
 		"Target "+b.ID+" finished.")
 }
 
-func logTargetFailed(b backup.Backup, t target.Target, err error) {
-	metaLog(&b, &t, nil, "TARGET", PHASE_FAILED,
+func logTargetFailed(tel telemetry.Telemetry, b backup.Backup, t target.Target, err error) {
+	metaLog(tel, &b, &t, nil, "TARGET", PHASE_FAILED,
 		"Backup "+b.ID+" failed: "+err.Error())
 }
 
-func logTargetMiddlewareStart(b backup.Backup, t target.Target, m middleware.Middleware) {
-	metaLog(&b, &t, &m, "TARGET_MIDDLEWARE", PHASE_START,
+func logTargetMiddlewareStart(tel telemetry.Telemetry, b backup.Backup, t target.Target, m middleware.Middleware) {
+	metaLog(tel, &b, &t, &m, "TARGET_MIDDLEWARE", PHASE_START,
 		"")
 }
 
-func logTargetMiddlewareDone(b backup.Backup, t target.Target, m middleware.Middleware) {
-	metaLog(&b, &t, &m, "TARGET_MIDDLEWARE", PHASE_DONE,
+func logTargetMiddlewareDone(tel telemetry.Telemetry, b backup.Backup, t target.Target, m middleware.Middleware) {
+	metaLog(tel, &b, &t, &m, "TARGET_MIDDLEWARE", PHASE_DONE,
 		"")
 }
 
-func logTargetMiddlewareFailed(b backup.Backup, t target.Target, m middleware.Middleware, err error) {
-	metaLog(&b, &t, &m, "TARGET_MIDDLEWARE", PHASE_FAILED,
+func logTargetMiddlewareFailed(tel telemetry.Telemetry, b backup.Backup, t target.Target, m middleware.Middleware, err error) {
+	metaLog(tel, &b, &t, &m, "TARGET_MIDDLEWARE", PHASE_FAILED,
 		"Backup "+b.ID+" failed: "+err.Error())
 }
 
-func logBackupMiddlewareStart(b backup.Backup, m middleware.Middleware) {
-	metaLog(&b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_START,
+func logBackupMiddlewareStart(tel telemetry.Telemetry, b backup.Backup, m middleware.Middleware) {
+	metaLog(tel, &b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_START,
 		"")
 }
 
-func logBackupMiddlewareDone(b backup.Backup, m middleware.Middleware) {
-	metaLog(&b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_DONE,
+func logBackupMiddlewareDone(tel telemetry.Telemetry, b backup.Backup, m middleware.Middleware) {
+	metaLog(tel, &b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_DONE,
 		"")
 }
 
-func logBackupMiddlewareFailed(b backup.Backup, m middleware.Middleware, err error) {
-	metaLog(&b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_FAILED,
+func logBackupMiddlewareFailed(tel telemetry.Telemetry, b backup.Backup, m middleware.Middleware, err error) {
+	metaLog(tel, &b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_FAILED,
 		"Backup "+b.ID+" failed: "+err.Error())
 }
