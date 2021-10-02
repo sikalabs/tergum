@@ -42,7 +42,7 @@ func GzipBytes(data []byte) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
-func GzipIO(src io.ReadSeeker) (io.ReadSeeker, error) {
+func GzipIO(src io.Reader) (io.ReadSeeker, error) {
 	var err error
 
 	outputFile, err := os.CreateTemp("", "tergum-gzip-")
