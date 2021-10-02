@@ -39,7 +39,10 @@ func Upload(
 	if err != nil {
 		return err
 	}
-	uploader := aws_s3manager.NewUploader(session)
+	uploader := aws_s3manager.NewUploader(session, func(u *aws_s3manager.Uploader) {
+		u.PartSize = 10 * 1024 * 1024 // The minimum/default allowed part size is 5MB
+		u.Concurrency = 10            // default is 5
+	})
 	_, err = uploader.Upload(&aws_s3manager.UploadInput{
 		Bucket: aws_aws.String(bucket_name),
 		ACL:    aws_aws.String("private"),
