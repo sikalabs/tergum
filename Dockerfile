@@ -1,3 +1,3 @@
 FROM debian:10-slim
-COPY tergum /
-ENTRYPOINT [ "/tergum" ]
+COPY tergum /usr/local/bin/
+CMD ["tergum"]
