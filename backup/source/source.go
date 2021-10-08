@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/sikalabs/tergum/backup/source/kubernetes_tls_secret"
 	"github.com/sikalabs/tergum/backup/source/mongo"
 	"github.com/sikalabs/tergum/backup/source/mysql"
 	"github.com/sikalabs/tergum/backup/source/mysql_server"
@@ -12,11 +13,12 @@ import (
 )
 
 type Source struct {
-	Mysql       *mysql.MysqlSource              `yaml:"Mysql"`
-	MysqlServer *mysql_server.MysqlServerSource `yaml:"MysqlServer"`
-	Postgres    *postgres.PostgresSource        `yaml:"Postgres"`
-	Mongo       *mongo.MongoSource              `yaml:"Mongo"`
-	SingleFile  *single_file.SingleFileSource   `yaml:"SingleFile"`
+	Mysql               *mysql.MysqlSource                         `yaml:"Mysql"`
+	MysqlServer         *mysql_server.MysqlServerSource            `yaml:"MysqlServer"`
+	Postgres            *postgres.PostgresSource                   `yaml:"Postgres"`
+	Mongo               *mongo.MongoSource                         `yaml:"Mongo"`
+	SingleFile          *single_file.SingleFileSource              `yaml:"SingleFile"`
+	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret"`
 }
 
 func (s Source) Validate() error {
@@ -42,6 +44,11 @@ func (s Source) Validate() error {
 
 	if s.SingleFile != nil {
 		p := *s.SingleFile
+		return p.Validate()
+	}
+
+	if s.KubernetesTLSSecret != nil {
+		p := *s.KubernetesTLSSecret
 		return p.Validate()
 	}
 
@@ -74,6 +81,11 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 		return p.Backup()
 	}
 
+	if s.KubernetesTLSSecret != nil {
+		p := *s.KubernetesTLSSecret
+		return p.Backup()
+	}
+
 	return nil, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -96,6 +108,10 @@ func (s Source) Name() string {
 
 	if s.SingleFile != nil {
 		return "SingleFile"
+	}
+
+	if s.KubernetesTLSSecret != nil {
+		return "KubernetesTLSSecret"
 	}
 
 	return ""
