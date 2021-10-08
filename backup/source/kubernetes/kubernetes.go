@@ -52,7 +52,7 @@ func (s Kubernetes) Backup() (io.ReadSeeker, error) {
 	if s.Name != "" {
 		args = append(args, s.Name)
 	}
-	fmt.Println(args)
+
 	cmd := exec.Command(
 		"kubectl",
 		args...,

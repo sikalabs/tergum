@@ -49,7 +49,7 @@ func (s KubernetesTLSSecret) Backup() (io.ReadSeeker, error) {
 	if s.SecretName != "" {
 		args = append(args, s.SecretName)
 	}
-	fmt.Println(args)
+
 	cmd := exec.Command(
 		"kubectl",
 		args...,
