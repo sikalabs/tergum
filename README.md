@@ -87,6 +87,7 @@ Source:
   Postgres: <BackupSourcePostgresConfiguration>
   Mongo: <BackupSourceMongoConfiguration>
   SingleFile: <BackupSourceSingleFileConfiguration>
+  KubernetesTLSSecret: <BackupSourceKubernetesTLSSecret>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -162,6 +163,25 @@ Port: "27017"
 User: "root"
 Password: "root"
 Database: "test"
+```
+
+#### Example BackupSourceKubernetesTLSSecret Block
+
+Backup all TLS secrets
+
+```yaml
+Server: https://kubernetes-api.example.com
+Token: foo-bar-baz
+Namespace: default
+```
+
+Backup single TLS secret
+
+```yaml
+Server: https://kubernetes-api.example.com
+Token: foo-bar-baz
+Namespace: default
+SecretName: tls-example-com
 ```
 
 #### Example BackupSourceSingleFileConfiguration Block
@@ -257,6 +277,7 @@ Emails:
 - [ ] Gitlab
 - [ ] Proxmox
 - [ ] Kubernetes Resource
+  - [x] Kubernetes TLS Secret
 - [ ] Container Image
 
 ### Backup Processors
