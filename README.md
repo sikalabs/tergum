@@ -282,7 +282,10 @@ Email: <NotificationEmailTarget>
 Emails:
   - ondrej@example.com
   - monitoring@example.com
+SendOK: false
 ```
+
+- `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
 
 ## Current Project State
 
