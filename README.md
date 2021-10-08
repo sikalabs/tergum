@@ -88,6 +88,7 @@ Source:
   Mongo: <BackupSourceMongoConfiguration>
   SingleFile: <BackupSourceSingleFileConfiguration>
   KubernetesTLSSecret: <BackupSourceKubernetesTLSSecret>
+  Kubernetes: <BackupSourceKubernetes>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -184,6 +185,27 @@ Namespace: default
 SecretName: tls-example-com
 ```
 
+#### Example BackupSourceKubernetes Block
+
+Backup all resources (pods)
+
+```yaml
+Server: https://kubernetes-api.example.com
+Token: foo-bar-baz
+Namespace: default
+Resource: pod
+```
+
+Backup single resource (hello-world pod)
+
+```yaml
+Server: https://kubernetes-api.example.com
+Token: foo-bar-baz
+Namespace: default
+Resource: pod
+Name: hello-world
+```
+
 #### Example BackupSourceSingleFileConfiguration Block
 
 ```yaml
@@ -276,7 +298,7 @@ Emails:
 - [x] MongoDB
 - [ ] Gitlab
 - [ ] Proxmox
-- [ ] Kubernetes Resource
+- [x] Kubernetes Resource
   - [x] Kubernetes TLS Secret
 - [ ] Container Image
 
