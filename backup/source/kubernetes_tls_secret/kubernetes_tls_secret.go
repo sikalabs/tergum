@@ -21,9 +21,6 @@ func (s KubernetesTLSSecret) Validate() error {
 	if s.Token == "" {
 		return fmt.Errorf("KubernetesTLSSecret need to have a Token")
 	}
-	if s.Namespace == "" {
-		return fmt.Errorf("KubernetesTLSSecret need to have a Namespace")
-	}
 	return nil
 }
 
@@ -40,7 +37,6 @@ func (s KubernetesTLSSecret) Backup() (io.ReadSeeker, error) {
 		"--server", s.Server,
 		"--insecure-skip-tls-verify=true",
 		"--token", s.Token,
-		"--namespace", s.Namespace,
 		"get",
 		"secrets",
 		"--field-selector", "type=kubernetes.io/tls",
@@ -48,6 +44,11 @@ func (s KubernetesTLSSecret) Backup() (io.ReadSeeker, error) {
 	}
 	if s.SecretName != "" {
 		args = append(args, s.SecretName)
+	}
+	if s.Namespace != "" {
+		args = append(args, "--namespace", s.Namespace)
+	} else {
+		args = append(args, "--all-namespaces")
 	}
 
 	cmd := exec.Command(

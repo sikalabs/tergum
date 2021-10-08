@@ -22,9 +22,6 @@ func (s Kubernetes) Validate() error {
 	if s.Token == "" {
 		return fmt.Errorf("Kubernetes need to have a Token")
 	}
-	if s.Namespace == "" {
-		return fmt.Errorf("Kubernetes need to have a Namespace")
-	}
 	if s.Resource == "" {
 		return fmt.Errorf("Kubernetes need to have a Resource")
 	}
@@ -44,13 +41,17 @@ func (s Kubernetes) Backup() (io.ReadSeeker, error) {
 		"--server", s.Server,
 		"--insecure-skip-tls-verify=true",
 		"--token", s.Token,
-		"--namespace", s.Namespace,
 		"get",
 		s.Resource,
 		"-o", "yaml",
 	}
 	if s.Name != "" {
 		args = append(args, s.Name)
+	}
+	if s.Namespace != "" {
+		args = append(args, "--namespace", s.Namespace)
+	} else {
+		args = append(args, "--all-namespaces")
 	}
 
 	cmd := exec.Command(
