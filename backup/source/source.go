@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/sikalabs/tergum/backup/source/kubernetes"
 	"github.com/sikalabs/tergum/backup/source/kubernetes_tls_secret"
 	"github.com/sikalabs/tergum/backup/source/mongo"
 	"github.com/sikalabs/tergum/backup/source/mysql"
@@ -19,6 +20,7 @@ type Source struct {
 	Mongo               *mongo.MongoSource                         `yaml:"Mongo"`
 	SingleFile          *single_file.SingleFileSource              `yaml:"SingleFile"`
 	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret"`
+	Kubernetes          *kubernetes.Kubernetes                     `yaml:"Kubernetes"`
 }
 
 func (s Source) Validate() error {
@@ -49,6 +51,11 @@ func (s Source) Validate() error {
 
 	if s.KubernetesTLSSecret != nil {
 		p := *s.KubernetesTLSSecret
+		return p.Validate()
+	}
+
+	if s.Kubernetes != nil {
+		p := *s.Kubernetes
 		return p.Validate()
 	}
 
@@ -86,6 +93,11 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 		return p.Backup()
 	}
 
+	if s.Kubernetes != nil {
+		p := *s.Kubernetes
+		return p.Backup()
+	}
+
 	return nil, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -112,6 +124,10 @@ func (s Source) Name() string {
 
 	if s.KubernetesTLSSecret != nil {
 		return "KubernetesTLSSecret"
+	}
+
+	if s.Kubernetes != nil {
+		return "Kubernetes"
 	}
 
 	return ""
