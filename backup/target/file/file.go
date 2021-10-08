@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/sikalabs/tergum/utils/file_utils"
 )
@@ -33,7 +34,7 @@ func (t FileTarget) Save(data io.ReadSeeker) error {
 		return err
 	}
 
-	name := file_utils.GetFileName(t.Prefix, t.Suffix)
+	name := file_utils.GetFileName(filepath.Join(t.Dir, t.Prefix), t.Suffix)
 
 	if err != nil {
 		return err
