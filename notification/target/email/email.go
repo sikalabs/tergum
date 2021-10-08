@@ -11,6 +11,7 @@ import (
 
 type EmailRule struct {
 	Emails []string `yaml:"Emails"`
+	SendOK bool     `yaml:"SendOK"`
 }
 
 func (r EmailRule) Validate() error {
@@ -24,6 +25,12 @@ func (r EmailRule) SendNotification(
 	bl backup_log.BackupLog,
 	b backend.Backend,
 ) error {
+	// Skip sending email on successfull backups
+	// if SendOK is not set or set to false
+	if bl.GlobalSuccess() && !r.SendOK {
+		logSkipped()
+		return nil
+	}
 	table := output.BackupLogToString(bl)
 	subject := "Backup Summary -- " + bl.GlobalSuccessString()
 	if bl.ExtraName != "" {
@@ -45,5 +52,6 @@ func (r EmailRule) SendNotification(
 			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 		}
 	}
+	logSend()
 	return nil
 }
