@@ -18,8 +18,8 @@ func (s KubernetesTLSSecret) Validate() error {
 	if s.Server == "" {
 		return fmt.Errorf("KubernetesTLSSecret need to have a Server")
 	}
-	if s.Namespace == "" {
-		return fmt.Errorf("KubernetesTLSSecret need to have a Namespace")
+	if s.Token == "" {
+		return fmt.Errorf("KubernetesTLSSecret need to have a Token")
 	}
 	if s.Namespace == "" {
 		return fmt.Errorf("KubernetesTLSSecret need to have a Namespace")
