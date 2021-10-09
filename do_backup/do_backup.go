@@ -61,6 +61,7 @@ func DoBackup(
 
 		// Backup source
 		logBackupStart(tel, b)
+		backupStart := time.Now()
 		if b.RemoteExec == nil {
 			// Standart local backup
 			data, err = b.Source.Backup()
@@ -68,9 +69,12 @@ func DoBackup(
 			// Remote backup using tergum server
 			data, err = remoteBackup(b)
 		}
+		backupDuration := time.Since(backupStart)
 
 		if err != nil {
-			bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", 0, 0, 0, 0, err)
+			bl.SaveEvent(
+				b.Source.Name(), b.ID, "---", "---",
+				int(backupDuration.Seconds()), 0, 0, 0, err)
 			logBackupFailed(tel, b, err)
 			continue
 		}
@@ -78,14 +82,21 @@ func DoBackup(
 
 		// Process Backup's Middlewares
 		var errBackupMiddleware error = nil
+		backupMiddlewareStart := time.Now()
+		var backupMiddlewareDuration time.Duration
 		for _, m := range b.Middlewares {
 			logBackupMiddlewareStart(tel, b, m)
 			data, errBackupMiddleware = m.Process(data)
 			if errBackupMiddleware != nil {
-				bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", 0, 0, 0, 0, errBackupMiddleware)
+				backupMiddlewareDuration = time.Since(backupMiddlewareStart)
+				bl.SaveEvent(b.Source.Name(), b.ID, "---", "---",
+					int(backupDuration.Seconds()),
+					int(backupMiddlewareDuration.Seconds()),
+					0, 0, errBackupMiddleware)
 				logBackupMiddlewareFailed(tel, b, m, err)
 				continue
 			}
+			backupMiddlewareDuration = time.Since(backupMiddlewareStart)
 			logBackupMiddlewareDone(tel, b, m)
 		}
 
@@ -99,14 +110,23 @@ func DoBackup(
 
 			// Process Targets's Middlewares
 			var errTargetMiddleware error = nil
+			targetMiddlewareStart := time.Now()
+			var targetMiddlewareDuration time.Duration
 			for _, m := range t.Middlewares {
 				logTargetMiddlewareStart(tel, b, t, m)
 				targetData, errTargetMiddleware = m.Process(targetData)
 				if errTargetMiddleware != nil {
-					bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, 0, 0, 0, 0, errTargetMiddleware)
+					targetMiddlewareDuration = time.Since(targetMiddlewareStart)
+					bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID,
+						int(backupDuration.Seconds()),
+						int(backupMiddlewareDuration.Seconds()),
+						0,
+						int(targetMiddlewareDuration.Seconds()),
+						errTargetMiddleware)
 					logTargetMiddlewareFailed(tel, b, t, m, errTargetMiddleware)
 					continue
 				}
+				targetMiddlewareDuration = time.Since(targetMiddlewareStart)
 				logTargetMiddlewareDone(tel, b, t, m)
 			}
 			if errTargetMiddleware != nil {
@@ -115,13 +135,27 @@ func DoBackup(
 
 			// Save backup to target
 			logTargetStart(tel, b, t)
+			targetStart := time.Now()
 			err = t.Save(targetData)
+			targetDuration := time.Since(targetStart)
 			if err != nil {
-				bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, 0, 0, 0, 0, err)
+				bl.SaveEvent(
+					b.Source.Name(), b.ID, t.Name(), t.ID,
+					int(backupDuration.Seconds()),
+					int(backupMiddlewareDuration.Seconds()),
+					int(targetDuration.Seconds()),
+					int(targetMiddlewareDuration.Seconds()),
+					err)
 				logTargetFailed(tel, b, t, err)
 				continue
 			}
-			bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID, 0, 0, 0, 0, err)
+			bl.SaveEvent(
+				b.Source.Name(), b.ID, t.Name(), t.ID,
+				int(backupDuration.Seconds()),
+				int(backupMiddlewareDuration.Seconds()),
+				int(targetDuration.Seconds()),
+				int(targetMiddlewareDuration.Seconds()),
+				err)
 			logTargetDone(tel, b, t)
 		}
 	}
