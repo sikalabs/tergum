@@ -18,6 +18,11 @@ type BackupLog struct {
 	Events    []BackupLogEvent
 }
 
+func (e *BackupLogEvent) TotalDuration() int {
+	return e.BackupDuration + e.BackupMiddlewaresDuration +
+		e.TargetDuration + e.TargetMiddlewaresDuration
+}
+
 func (l *BackupLog) SaveEvent(
 	sourceName string,
 	backupID string,
