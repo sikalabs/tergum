@@ -115,3 +115,8 @@ func (t *Telemetry) SendEvent(name, data string) {
 			Msg("Telemetry failed.")
 	}
 }
+
+func (t *Telemetry) SendEventInit() {
+	out, _ := json.Marshal(t.HostData)
+	t.SendEvent("init/v2", string(out))
+}
