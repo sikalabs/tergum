@@ -8,8 +8,13 @@ import (
 	"github.com/sikalabs/tergum/backup/target"
 )
 
+type RemoteExec struct {
+	Server string
+}
+
 type Backup struct {
 	ID          string                  `yaml:"ID"`
+	RemoteExec  *RemoteExec             `yaml:"RemoteExec"`
 	Source      *source.Source          `yaml:"Source"`
 	Middlewares []middleware.Middleware `yaml:"Middlewares"`
 	Targets     []target.Target         `yaml:"Targets"`
