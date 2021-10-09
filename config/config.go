@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/sikalabs/tergum/backup"
+	"github.com/sikalabs/tergum/cloud"
 	"github.com/sikalabs/tergum/notification"
 	"github.com/sikalabs/tergum/telemetry"
 	"gopkg.in/yaml.v2"
@@ -24,6 +25,7 @@ type TergumConfig struct {
 	Backups      []backup.Backup            `yaml:"Backups"`
 	Notification *notification.Notification `yaml:"Notification"`
 	Telemetry    *telemetry.TelemetryConfig `yaml:"Telemetry"`
+	Cloud        *cloud.CloudConfig         `yaml:"Cloud"`
 }
 
 func (c *TergumConfig) Load(path string) error {
