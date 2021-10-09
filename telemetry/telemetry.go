@@ -1,11 +1,14 @@
 package telemetry
 
 import (
+	"encoding/json"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
+	"github.com/shirou/gopsutil/v3/host"
 	"github.com/sikalabs/tergum/version"
 )
 
@@ -19,7 +22,10 @@ type TelemetryConfig struct {
 }
 
 type HostData struct {
-	Hostname string `yaml:"Hostname"`
+	Hostname string
+	GOOS     string
+	GOARCH   string
+	HostInfo host.InfoStat
 }
 
 type Telemetry struct {
@@ -62,8 +68,12 @@ func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetr
 	var hostData *HostData
 	if tc.CollectHostData {
 		hostname, _ := os.Hostname()
+		hostInfo, _ := host.Info()
 		hostData = &HostData{
 			Hostname: hostname,
+			GOOS:     runtime.GOOS,
+			GOARCH:   runtime.GOARCH,
+			HostInfo: *hostInfo,
 		}
 	}
 
