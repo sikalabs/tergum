@@ -21,6 +21,8 @@ data:
               - monitoring+k8s-job@example.com
     Backups:
       - ID: example-postgres
+        RemoteExec:
+          Server: http://127.0.0.1:8000
         Source:
           Postgres:
             Host: postgres
@@ -38,6 +40,27 @@ data:
               Endpoint: http://minio:9000
               BucketName: tergum-backups
               Prefix: example-postgres
+              Suffix: sql.gz
+      - ID: example-mysql
+        RemoteExec:
+          Server: http://127.0.0.1:8001
+        Source:
+          Mysql:
+            Host: mysql
+            Port:  3306
+            User: root
+            Password: root
+            Database: default
+        Targets:
+          - ID: s3
+            Middlewares:
+              - Gzip: {}
+            S3:
+              AccessKey: admin
+              SecretKey: asdfasdf
+              Endpoint: http://minio:9000
+              BucketName: tergum-backups
+              Prefix: example-mysql
               Suffix: sql.gz
 ---
 apiVersion: batch/v1beta1
@@ -58,13 +81,26 @@ spec:
                 name: tergum
           containers:
             - name: main
-              image: reg.istry.cz/tergum-misc/postgres-with-tergum
+              image: reg.istry.cz/tergum-misc/tergum-ca-certificates
               args:
-                - tergum
-                - backup
+                - /bin/bash
                 - -c
-                - /config/tergum.yaml
+                - sleep 10 && tergum backup -c /config/tergum.yaml
               volumeMounts:
               - name: config
                 mountPath: /config
+            - name: postgres
+              image: reg.istry.cz/tergum-misc/postgres-with-tergum
+              args:
+                - tergum
+                - server
+                - -a
+                - :8000
+            - name: mysql
+              image: reg.istry.cz/tergum-misc/mysql-with-tergum
+              args:
+                - tergum
+                - server
+                - -a
+                - :8001
           restartPolicy: OnFailure

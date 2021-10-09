@@ -2,6 +2,10 @@ apiVersion: skaffold/v2beta19
 kind: Config
 build:
   artifacts:
+    - image: reg.istry.cz/tergum-misc/tergum-ca-certificates
+      context: ../docker/tergum-ca-certificates
+      kaniko:
+        cache: {}
     - image: reg.istry.cz/tergum-misc/postgres
       context: ../docker/postgres
       kaniko:
@@ -12,6 +16,10 @@ build:
         cache: {}
     - image: reg.istry.cz/tergum-misc/postgres-with-tergum
       context: ../docker/postgres-with-tergum
+      kaniko:
+        cache: {}
+    - image: reg.istry.cz/tergum-misc/mysql-with-tergum
+      context: ../docker/mysql-with-tergum
       kaniko:
         cache: {}
   cluster: {}
