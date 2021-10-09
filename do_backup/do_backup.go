@@ -40,7 +40,12 @@ func DoBackup(
 	config.Load(configPath)
 
 	// Init Telemetry
-	tel := telemetry.NewTelemetry(config.Telemetry, telemetryDisabled, extraName)
+	tel := telemetry.NewTelemetry(
+		config.Telemetry,
+		telemetryDisabled,
+		extraName,
+		config.Cloud.Email,
+	)
 
 	tel.SendEventInit()
 

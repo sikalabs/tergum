@@ -29,13 +29,19 @@ type HostData struct {
 }
 
 type Telemetry struct {
-	Config   TelemetryConfig
-	Enabled  bool
-	Client   *resty.Client
-	HostData *HostData
+	Config     TelemetryConfig
+	Enabled    bool
+	Client     *resty.Client
+	HostData   *HostData
+	CloudEmail string
 }
 
-func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetry {
+func NewTelemetry(
+	tc *TelemetryConfig,
+	disabled bool,
+	extraName string,
+	cloudEmail string,
+) Telemetry {
 	if tc == nil {
 		tc = &TelemetryConfig{}
 	}
@@ -63,6 +69,7 @@ func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetr
 		Str("origin", tc.Origin).
 		Str("telemetry_name", tc.Name).
 		Str("version", version.Version).
+		Str("cloud_email", cloudEmail).
 		Msg("Telemetry backend initialized.")
 
 	var hostData *HostData
@@ -78,10 +85,11 @@ func NewTelemetry(tc *TelemetryConfig, disabled bool, extraName string) Telemetr
 	}
 
 	return Telemetry{
-		Enabled:  true,
-		Config:   *tc,
-		Client:   client,
-		HostData: hostData,
+		Enabled:    true,
+		Config:     *tc,
+		Client:     client,
+		HostData:   hostData,
+		CloudEmail: cloudEmail,
 	}
 }
 
@@ -102,6 +110,7 @@ func (t *Telemetry) SendEvent(name, data string) {
 		SetBody(map[string]interface{}{
 			"version":        version.Version,
 			"telemetry_name": t.Config.Name,
+			"cloud_email":    t.CloudEmail,
 			"hostname":       t.GetHostname(),
 			"event_name":     name,
 			"data":           data,
