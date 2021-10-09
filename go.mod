@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.38.47
 	github.com/cheggaaa/pb/v3 v3.0.8
 	github.com/go-resty/resty/v2 v2.6.0
-	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/mux v1.8.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/ondrejsika/gosendmail v0.3.0
 	github.com/rs/zerolog v1.25.0
