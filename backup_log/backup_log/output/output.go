@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"os"
+	"strconv"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/sikalabs/tergum/backup_log"
@@ -11,7 +12,13 @@ import (
 
 func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 	table := tablewriter.NewWriter(writer)
-	table.SetHeader([]string{"Success", "Backup", "Target", "Error"})
+	table.SetHeader([]string{
+		"Success",
+		"Backup", "Backup Time",
+		"Target", "Upload Time",
+		"Error",
+		"Time Total",
+	})
 
 	for _, log := range l.Events {
 		var strStatus, strError string
@@ -31,8 +38,13 @@ func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 		table.Append([]string{
 			strStatus,
 			log.SourceName + ": " + log.BackupID,
+			strconv.Itoa(log.BackupDuration) + "s" +
+				" (+" + strconv.Itoa(log.BackupMiddlewaresDuration) + "s)",
 			log.TargetName + ": " + log.TargetID,
+			strconv.Itoa(log.TargetDuration) + "s" +
+				" (+" + strconv.Itoa(log.TargetMiddlewaresDuration) + "s)",
 			strError,
+			strconv.Itoa(log.TotalDuration()) + "s",
 		})
 	}
 	table.Render()
