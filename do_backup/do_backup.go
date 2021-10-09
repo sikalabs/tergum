@@ -2,6 +2,7 @@ package do_backup
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
 	"os"
 	"time"
@@ -56,9 +57,18 @@ func DoBackup(
 	}
 
 	for _, b := range config.Backups {
+		var data io.ReadSeeker
+
 		// Backup source
 		logBackupStart(tel, b)
-		data, err := b.Source.Backup()
+		if b.RemoteExec == nil {
+			// Standart local backup
+			data, err = b.Source.Backup()
+		} else {
+			// Remote backup using tergum server
+			data, err = remoteBackup(b)
+		}
+
 		if err != nil {
 			bl.SaveEvent(b.Source.Name(), b.ID, "---", "---", err)
 			logBackupFailed(tel, b, err)
