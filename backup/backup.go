@@ -9,7 +9,7 @@ import (
 )
 
 type RemoteExec struct {
-	Server string
+	Server string `yaml:"Server"`
 }
 
 type Backup struct {
