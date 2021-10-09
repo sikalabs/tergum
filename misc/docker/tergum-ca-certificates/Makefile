@@ -1,4 +1,4 @@
-TERGUM_VERSION=v0.19.0
+TERGUM_VERSION=v0.20.0
 IMAGE=ghcr.io/tergum-extra/tergum-ca-certificates:${TERGUM_VERSION}
 
 all: build push
