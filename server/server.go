@@ -2,9 +2,13 @@ package server
 
 import (
 	"encoding/json"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/sikalabs/tergum/backup/source"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog"
@@ -32,6 +36,20 @@ func Server(addr string) {
 			},
 		})
 		logApiCall("GET", "/")
+	})
+	router.HandleFunc("/api/v1/backup", func(w http.ResponseWriter, r *http.Request) {
+		var source source.Source
+
+		body, _ := ioutil.ReadAll(r.Body)
+		_ = r.Body.Close()
+		_ = json.Unmarshal(body, &source)
+
+		data, _ := source.Backup()
+
+		w.Header().Set("Content-Type", "application/octet-stream")
+		io.Copy(w, data)
+
+		logApiCall("POST", "/api/v1/backup")
 	})
 	logServerStarted(addr)
 	http.ListenAndServe(addr, router)
