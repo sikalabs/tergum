@@ -2,10 +2,13 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/sikalabs/tergum/version"
 )
 
@@ -15,6 +18,11 @@ func response(w http.ResponseWriter, data interface{}) {
 }
 
 func Server(addr string) {
+	log.Logger = log.Output(zerolog.ConsoleWriter{
+		Out:        os.Stdout,
+		TimeFormat: time.RFC3339,
+	})
+
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		response(w, map[string]interface{}{
@@ -23,7 +31,8 @@ func Server(addr string) {
 				"version": version.Version,
 			},
 		})
+		logApiCall("GET", "/")
 	})
-	fmt.Println("Server started.")
+	logServerStarted(addr)
 	http.ListenAndServe(addr, router)
 }
