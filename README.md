@@ -318,6 +318,8 @@ SendOK: false
 - [x] Files
 - [x] S3
 - [ ] Tergum Cloud
+- [ ] Azure Files
+- [ ] GCS (Google Cloud Storage)
 - [ ] Container Registry
 
 ### Notification
