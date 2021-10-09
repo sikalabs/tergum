@@ -75,10 +75,10 @@ func DoBackup(
 			bl.SaveEvent(
 				b.Source.Name(), b.ID, "---", "---",
 				int(backupDuration.Seconds()), 0, 0, 0, err)
-			logBackupFailed(tel, b, err)
+			logBackupFailed(tel, b, int(backupDuration.Seconds()), err)
 			continue
 		}
-		logBackupDone(tel, b)
+		logBackupDone(tel, b, int(backupDuration.Seconds()))
 
 		// Process Backup's Middlewares
 		var errBackupMiddleware error = nil
@@ -93,11 +93,11 @@ func DoBackup(
 					int(backupDuration.Seconds()),
 					int(backupMiddlewareDuration.Seconds()),
 					0, 0, errBackupMiddleware)
-				logBackupMiddlewareFailed(tel, b, m, err)
+				logBackupMiddlewareFailed(tel, b, m, int(backupMiddlewareDuration.Seconds()), err)
 				continue
 			}
 			backupMiddlewareDuration = time.Since(backupMiddlewareStart)
-			logBackupMiddlewareDone(tel, b, m)
+			logBackupMiddlewareDone(tel, b, m, int(backupMiddlewareDuration.Seconds()))
 		}
 
 		if errBackupMiddleware != nil {
@@ -123,11 +123,13 @@ func DoBackup(
 						0,
 						int(targetMiddlewareDuration.Seconds()),
 						errTargetMiddleware)
-					logTargetMiddlewareFailed(tel, b, t, m, errTargetMiddleware)
+					logTargetMiddlewareFailed(tel, b, t, m,
+						int(targetMiddlewareDuration.Seconds()),
+						errTargetMiddleware)
 					continue
 				}
 				targetMiddlewareDuration = time.Since(targetMiddlewareStart)
-				logTargetMiddlewareDone(tel, b, t, m)
+				logTargetMiddlewareDone(tel, b, t, m, int(targetMiddlewareDuration.Seconds()))
 			}
 			if errTargetMiddleware != nil {
 				continue
@@ -146,7 +148,7 @@ func DoBackup(
 					int(targetDuration.Seconds()),
 					int(targetMiddlewareDuration.Seconds()),
 					err)
-				logTargetFailed(tel, b, t, err)
+				logTargetFailed(tel, b, t, int(targetDuration.Seconds()), err)
 				continue
 			}
 			bl.SaveEvent(
@@ -156,7 +158,7 @@ func DoBackup(
 				int(targetDuration.Seconds()),
 				int(targetMiddlewareDuration.Seconds()),
 				err)
-			logTargetDone(tel, b, t)
+			logTargetDone(tel, b, t, int(targetDuration.Seconds()))
 		}
 	}
 
