@@ -17,7 +17,7 @@ func remoteBackup(backup backup.Backup) (io.ReadSeeker, error) {
 		return nil, err
 	}
 	resp, err := http.Post(
-		backup.RemoteExec.Server,
+		backup.RemoteExec.Server+"/api/v1/backup",
 		"application/json",
 		bytes.NewBuffer(json_data),
 	)
