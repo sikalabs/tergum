@@ -70,6 +70,7 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 ```yaml
 Meta:
   SchemaVersion: 3
+Cloud: <Cloud>
 Notification: <Notification>
 Backups:
   - <Backup>
@@ -287,6 +288,12 @@ SendOK: false
 ```
 
 - `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
+
+#### Cloud Block
+
+```yaml
+Email: <email of tergum cloud account>
+```
 
 ## Current Project State
 
