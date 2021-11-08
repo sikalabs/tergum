@@ -18,6 +18,7 @@ type Backup struct {
 	Source      *source.Source          `yaml:"Source"`
 	Middlewares []middleware.Middleware `yaml:"Middlewares"`
 	Targets     []target.Target         `yaml:"Targets"`
+	SleepBefore int                     `yaml:"SleepBefore"`
 }
 
 func (b Backup) Validate() error {

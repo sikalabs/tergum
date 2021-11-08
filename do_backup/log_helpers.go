@@ -135,3 +135,13 @@ func logBackupMiddlewareFailed(tel telemetry.Telemetry, b backup.Backup, m middl
 	metaLog(tel, &b, nil, &m, "BACKUP_MIDDLEWARE", PHASE_FAILED, dur,
 		"Backup "+b.ID+" failed: "+err.Error())
 }
+
+func logSleepStart(tel telemetry.Telemetry, b backup.Backup) {
+	metaLog(tel, &b, nil, nil, "SLEEP", PHASE_START, 0,
+		"Sleep "+strconv.Itoa(b.SleepBefore)+"s before backup")
+}
+
+func logSleepDone(tel telemetry.Telemetry, b backup.Backup) {
+	metaLog(tel, &b, nil, nil, "SLEEP", PHASE_DONE, 0,
+		"")
+}

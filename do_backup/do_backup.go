@@ -61,8 +61,14 @@ func DoBackup(
 		os.Exit(1)
 	}
 
-	for _, b := range config.Backups {
+	for i, b := range config.Backups {
 		var data io.ReadSeeker
+
+		if b.SleepBefore != 0 && i != 0 {
+			logSleepStart(tel, b)
+			time.Sleep(time.Duration(b.SleepBefore) * time.Second)
+			logSleepDone(tel, b)
+		}
 
 		// Backup source
 		logBackupStart(tel, b)
