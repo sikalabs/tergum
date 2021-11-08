@@ -101,6 +101,7 @@ Destinations:
     File: <BackupDestinationFileConfiguration>
     S3: <BackupDestinationS3Configuration>
   - ...
+SleepBefore: <sleep time befor backup job in seconds>
 ```
 
 #### GzipMiddlewareConfiguration
