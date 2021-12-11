@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
-	"github.com/shirou/gopsutil/v3/host"
 	"github.com/sikalabs/tergum/version"
 )
 
@@ -25,7 +24,6 @@ type HostData struct {
 	Hostname string
 	GOOS     string
 	GOARCH   string
-	HostInfo host.InfoStat
 }
 
 type Telemetry struct {
@@ -75,12 +73,10 @@ func NewTelemetry(
 	var hostData *HostData
 	if tc.CollectHostData {
 		hostname, _ := os.Hostname()
-		hostInfo, _ := host.Info()
 		hostData = &HostData{
 			Hostname: hostname,
 			GOOS:     runtime.GOOS,
 			GOARCH:   runtime.GOARCH,
-			HostInfo: *hostInfo,
 		}
 	}
 
