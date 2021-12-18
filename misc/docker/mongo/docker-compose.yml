@@ -2,5 +2,8 @@ version: "3.8"
 services:
   mongo:
     build: .
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - 27017:27017
