@@ -39,12 +39,17 @@ func DoBackup(
 	var config config.TergumConfig
 	config.Load(configPath)
 
+	var cloudEmail string
+	if config.Cloud != nil {
+		cloudEmail = config.Cloud.Email
+	}
+
 	// Init Telemetry
 	tel := telemetry.NewTelemetry(
 		config.Telemetry,
 		telemetryDisabled,
 		extraName,
-		config.Cloud.Email,
+		cloudEmail,
 	)
 
 	tel.SendEventInit()
