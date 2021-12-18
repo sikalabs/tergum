@@ -8,11 +8,12 @@ import (
 )
 
 type MongoSource struct {
-	Host     string `yaml:"Host"`
-	Port     string `yaml:"Port"`
-	User     string `yaml:"User"`
-	Password string `yaml:"Password"`
-	Database string `yaml:"Database"`
+	Host                   string `yaml:"Host"`
+	Port                   string `yaml:"Port"`
+	User                   string `yaml:"User"`
+	Password               string `yaml:"Password"`
+	Database               string `yaml:"Database"`
+	AuthenticationDatabase string `yaml:"AuthenticationDatabase"`
 }
 
 func (s MongoSource) Validate() error {
@@ -37,11 +38,15 @@ func (s MongoSource) Backup() (io.ReadSeeker, error) {
 		"--port", s.Port,
 	}
 	if s.User != "" {
+		// Default AuthenticationDatabase is admin
+		if s.AuthenticationDatabase == "" {
+			s.AuthenticationDatabase = "admin"
+		}
 		args = append(
 			args,
 			"--username", s.User,
 			"--password", s.Password,
-			"--authenticationDatabase", "admin",
+			"--authenticationDatabase", s.AuthenticationDatabase,
 		)
 	}
 	if s.Database != "" {

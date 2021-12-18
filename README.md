@@ -168,6 +168,17 @@ Password: "root"
 Database: "test"
 ```
 
+Dump single db with auth and custom Authentication Database
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+User: "root"
+Password: "root"
+AuthenticationDatabase: "test" # default is admin
+Database: "test"
+```
+
 #### Example BackupSourceKubernetesTLSSecret Block
 
 Backup all TLS secrets
