@@ -41,6 +41,7 @@ func (s MongoSource) Backup() (io.ReadSeeker, error) {
 			args,
 			"--username", s.User,
 			"--password", s.Password,
+			"--authenticationDatabase", "admin",
 		)
 	}
 	if s.Database != "" {
