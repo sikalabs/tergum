@@ -1,0 +1,59 @@
+Meta:
+  SchemaVersion: 3
+Notification:
+  Backend:
+    Email:
+      SmtpHost: 127.0.0.1
+      SmtpPort: 11025
+      Username: null
+      Password: null
+      From: tergum@example.com
+  Targets:
+    - Email:
+        Emails:
+          - ondrej@example.com
+          - monitoring@example.com
+Backups:
+  - ID: example-mongo-all
+    Source:
+      Mongo:
+        Host: 127.0.0.1
+        Port: 27017
+        User: root
+        Password: root
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/filepath-mongo-all.dump
+      - ID: filepath-gzip
+        Middlewares:
+          - Gzip: {}
+        FilePath:
+          Path: tmp/filepath-mongo-all.dump.gz
+      - ID: file
+        File:
+          Dir: tmp/
+          Prefix: file-mongo-all
+          Suffix: dump
+  - ID: example-mongo-single-db
+    Source:
+      Mongo:
+        Host: 127.0.0.1
+        Port: 27017
+        User: root
+        Password: root
+        Database: test
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/filepath-mongo-single-db.dump
+      - ID: filepath-gzip
+        Middlewares:
+          - Gzip: {}
+        FilePath:
+          Path: tmp/filepath-mongo-single-db.dump.gz
+      - ID: file
+        File:
+          Dir: tmp/
+          Prefix: file-mongo-single-db
+          Suffix: dump
