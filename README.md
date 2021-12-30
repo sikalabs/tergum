@@ -318,7 +318,7 @@ Email: <email of tergum cloud account>
 ### Backup Sources
 
 - [x] SingleFile
-- [ ] Files
+- [x] Files (Dir)
 - [x] Postgres
 - [x] MySQL
 - [x] MySQLServer
