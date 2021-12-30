@@ -88,6 +88,7 @@ Source:
   Postgres: <BackupSourcePostgresConfiguration>
   Mongo: <BackupSourceMongoConfiguration>
   SingleFile: <BackupSourceSingleFileConfiguration>
+  Dir: <BackupSourceDirConfiguration>
   KubernetesTLSSecret: <BackupSourceKubernetesTLSSecret>
   Kubernetes: <BackupSourceKubernetes>
 Middlewares:
@@ -223,6 +224,12 @@ Name: hello-world
 
 ```yaml
 Path: /data/export/dump.sql
+```
+
+### Example BackupSourceDirConfiguration Block
+
+```yaml
+Path: /data
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
