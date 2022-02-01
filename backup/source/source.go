@@ -10,6 +10,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/mongo"
 	"github.com/sikalabs/tergum/backup/source/mysql"
 	"github.com/sikalabs/tergum/backup/source/mysql_server"
+	"github.com/sikalabs/tergum/backup/source/notion"
 	"github.com/sikalabs/tergum/backup/source/postgres"
 	"github.com/sikalabs/tergum/backup/source/single_file"
 )
@@ -23,6 +24,7 @@ type Source struct {
 	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret"`
 	Kubernetes          *kubernetes.Kubernetes                     `yaml:"Kubernetes"`
 	Dir                 *dir.DirSource                             `yaml:"Dir"`
+	Notion              *notion.NotionSource                       `yaml:"Notion"`
 }
 
 func (s Source) Validate() error {
@@ -63,6 +65,11 @@ func (s Source) Validate() error {
 
 	if s.Dir != nil {
 		p := *s.Dir
+		return p.Validate()
+	}
+
+	if s.Notion != nil {
+		p := *s.Notion
 		return p.Validate()
 	}
 
@@ -110,6 +117,11 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 		return p.Backup()
 	}
 
+	if s.Notion != nil {
+		p := *s.Notion
+		return p.Backup()
+	}
+
 	return nil, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -144,6 +156,10 @@ func (s Source) Name() string {
 
 	if s.Dir != nil {
 		return "Dir"
+	}
+
+	if s.Notion != nil {
+		return "Notion"
 	}
 
 	return ""
