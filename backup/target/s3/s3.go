@@ -40,7 +40,10 @@ func (t S3Target) Validate() error {
 	return nil
 }
 
-func (t S3Target) Save(data io.ReadSeeker) error {
+func (t S3Target) Save(
+	data io.ReadSeeker,
+	metadata io.Reader,
+) error {
 	return s3_utils.Upload(
 		t.AccessKey,
 		t.SecretKey,

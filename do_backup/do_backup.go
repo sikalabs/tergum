@@ -154,7 +154,7 @@ func DoBackup(
 			// Save backup to target
 			logTargetStart(tel, b, t)
 			targetStart := time.Now()
-			err = t.Save(targetData)
+			err = t.Save(targetData, backupMetadata)
 			targetDuration := time.Since(targetStart)
 			if err != nil {
 				bl.SaveEvent(

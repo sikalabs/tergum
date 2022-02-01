@@ -18,7 +18,10 @@ func (t FilePathTarget) Validate() error {
 	return nil
 }
 
-func (t FilePathTarget) Save(data io.ReadSeeker) error {
+func (t FilePathTarget) Save(
+	data io.ReadSeeker,
+	metadata io.Reader,
+) error {
 	dir := filepath.Dir(t.Path)
 	err := os.MkdirAll(dir, 0755)
 	if err != nil {
