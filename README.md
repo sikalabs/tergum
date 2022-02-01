@@ -91,6 +91,7 @@ Source:
   Dir: <BackupSourceDirConfiguration>
   KubernetesTLSSecret: <BackupSourceKubernetesTLSSecret>
   Kubernetes: <BackupSourceKubernetes>
+  Notion: <BackupSourceNotion>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -232,6 +233,15 @@ Path: /data/export/dump.sql
 Path: /data
 ```
 
+
+### Example BackupSourceNotion Block
+
+```yaml
+Token: <Notion token_v2>
+SpaceID: <Notion Space UID>
+Format: <Fotmat of export ("html" or "markdown")>
+```
+
 #### Example BackupDestinationFilePathConfiguration Block
 
 ```yaml
@@ -330,6 +340,7 @@ Email: <email of tergum cloud account>
 - [x] Kubernetes Resource
   - [x] Kubernetes TLS Secret
 - [ ] Container Image
+- [x] [Notion](https://notion.so)
 
 ### Backup Processors
 
