@@ -1,0 +1,27 @@
+Meta:
+  SchemaVersion: 3
+Backups:
+  - ID: notion-html
+    Source:
+      Notion: &notion
+        Token: ---notion_token_v2---
+        SpaceID: ---notion_space_id---
+        Format: html
+    Targets:
+      - ID: s3
+        S3: &s3
+          AccessKey: ---aws_access_key---
+          SecretKey: ---aws_secret_key---
+          Region: eu-central-1
+          BucketName: tergum-backups-demo
+          Prefix: notion
+          Suffix: html.zip
+  - ID: notion-md
+    Source:
+      Notion:
+        <<: *notion
+        Format: markdown
+    Targets:
+      - ID: s3
+        <<: *s3
+        Suffix: md.zip
