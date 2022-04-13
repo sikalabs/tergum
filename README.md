@@ -86,6 +86,7 @@ Source:
   Mysql: <BackupSourceMysqlConfiguration>
   MysqlServer: <BackupSourceMysqlServerConfiguration>
   Postgres: <BackupSourcePostgresConfiguration>
+  PostgresServer: <BackupSourcePostgresServerConfiguration>
   Mongo: <BackupSourceMongoConfiguration>
   SingleFile: <BackupSourceSingleFileConfiguration>
   Dir: <BackupSourceDirConfiguration>
@@ -140,6 +141,15 @@ Port: "15432"
 User: "postgres"
 Password: "pg"
 Database: "postgres"
+```
+
+#### Example BackupSourcePostgresServerConfiguration Block
+
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
 ```
 
 #### Example BackupSourceMongoConfiguration Block
