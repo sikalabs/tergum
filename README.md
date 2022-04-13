@@ -340,6 +340,7 @@ Email: <email of tergum cloud account>
 - [x] Kubernetes Resource
   - [x] Kubernetes TLS Secret
 - [ ] Container Image
+- [ ] Redis
 - [x] [Notion](https://notion.so)
 
 ### Backup Processors
