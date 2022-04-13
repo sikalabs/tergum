@@ -12,6 +12,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/mysql_server"
 	"github.com/sikalabs/tergum/backup/source/notion"
 	"github.com/sikalabs/tergum/backup/source/postgres"
+	"github.com/sikalabs/tergum/backup/source/postgres_server"
 	"github.com/sikalabs/tergum/backup/source/single_file"
 )
 
@@ -19,6 +20,7 @@ type Source struct {
 	Mysql               *mysql.MysqlSource                         `yaml:"Mysql"`
 	MysqlServer         *mysql_server.MysqlServerSource            `yaml:"MysqlServer"`
 	Postgres            *postgres.PostgresSource                   `yaml:"Postgres"`
+	PostgresServer      *postgres_server.PostgresServerSource      `yaml:"PostgresServer"`
 	Mongo               *mongo.MongoSource                         `yaml:"Mongo"`
 	SingleFile          *single_file.SingleFileSource              `yaml:"SingleFile"`
 	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret"`
@@ -40,6 +42,11 @@ func (s Source) Validate() error {
 
 	if s.Postgres != nil {
 		p := *s.Postgres
+		return p.Validate()
+	}
+
+	if s.PostgresServer != nil {
+		p := *s.PostgresServer
 		return p.Validate()
 	}
 
@@ -92,6 +99,11 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 		return p.Backup()
 	}
 
+	if s.PostgresServer != nil {
+		p := *s.PostgresServer
+		return p.Backup()
+	}
+
 	if s.Mongo != nil {
 		p := *s.Mongo
 		return p.Backup()
@@ -136,6 +148,10 @@ func (s Source) Name() string {
 
 	if s.Postgres != nil {
 		return "Postgres"
+	}
+
+	if s.PostgresServer != nil {
+		return "PostgresServer"
 	}
 
 	if s.Mongo != nil {
