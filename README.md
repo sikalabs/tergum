@@ -330,6 +330,7 @@ Email: <email of tergum cloud account>
 - [x] SingleFile
 - [x] Files (Dir)
 - [x] Postgres
+- [ ] PostgresServer
 - [x] MySQL
 - [x] MySQLServer
 - [ ] Oracle (Enterprise)
