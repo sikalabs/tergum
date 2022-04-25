@@ -362,7 +362,7 @@ Email: <email of tergum cloud account>
 - [ ] Container Image
 - [ ] Redis
 - [x] [Notion](https://notion.so)
-- [ ] FTP Server (for old school hostings)
+- [x] FTP Server (for old school hostings)
 
 ### Backup Processors
 
