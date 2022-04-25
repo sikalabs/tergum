@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/sikalabs/tergum/backup/source/dir"
+	"github.com/sikalabs/tergum/backup/source/ftp"
 	"github.com/sikalabs/tergum/backup/source/kubernetes"
 	"github.com/sikalabs/tergum/backup/source/kubernetes_tls_secret"
 	"github.com/sikalabs/tergum/backup/source/mongo"
@@ -27,6 +28,7 @@ type Source struct {
 	Kubernetes          *kubernetes.Kubernetes                     `yaml:"Kubernetes"`
 	Dir                 *dir.DirSource                             `yaml:"Dir"`
 	Notion              *notion.NotionSource                       `yaml:"Notion"`
+	FTP                 *ftp.FTPSource                             `yaml:"FTP"`
 }
 
 func (s Source) Validate() error {
@@ -77,6 +79,11 @@ func (s Source) Validate() error {
 
 	if s.Notion != nil {
 		p := *s.Notion
+		return p.Validate()
+	}
+
+	if s.FTP != nil {
+		p := *s.FTP
 		return p.Validate()
 	}
 
@@ -134,6 +141,11 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 		return p.Backup()
 	}
 
+	if s.FTP != nil {
+		p := *s.FTP
+		return p.Backup()
+	}
+
 	return nil, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -176,6 +188,10 @@ func (s Source) Name() string {
 
 	if s.Notion != nil {
 		return "Notion"
+	}
+
+	if s.FTP != nil {
+		return "FTP"
 	}
 
 	return ""
