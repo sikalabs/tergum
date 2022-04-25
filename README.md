@@ -93,6 +93,7 @@ Source:
   KubernetesTLSSecret: <BackupSourceKubernetesTLSSecret>
   Kubernetes: <BackupSourceKubernetes>
   Notion: <BackupSourceNotion>
+  FTP: <BackupSourceFTP>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -250,6 +251,14 @@ Path: /data
 Token: <Notion token_v2>
 SpaceID: <Notion Space UID>
 Format: <Fotmat of export ("html" or "markdown")>
+```
+
+### Example BackupSBackupSourceFTPourceNotion Block
+
+```yaml
+Host: <FTP host>
+User: <FTP user>
+Password: <FTP password>
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
