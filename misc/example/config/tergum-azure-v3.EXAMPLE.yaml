@@ -1,0 +1,15 @@
+Meta:
+  SchemaVersion: 3
+Backups:
+  - ID: azure-blob-example
+    Source:
+      SingleFile:
+        Path: ./main.go
+    Targets:
+      - ID: azure-blob
+        AzureBlob:
+          AccountName: XXX
+          AccountKey: XXX
+          ContainerName: XXX
+          Prefix: main
+          Suffix: go.txt
