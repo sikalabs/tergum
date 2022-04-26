@@ -52,29 +52,10 @@ checksum:
 brews:
   -
     name: tergum
-    conflicts:
-      - tergum-edge
     tap:
       owner: sikalabs
       name: homebrew-tap
     skip_upload: auto
-    homepage: https://github.com/sikalabs/tergum
-    url_template: "https://github.com/sikalabs/tergum/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    folder: Formula
-    caveats: "How to use this binary: https://github.com/sikalabs/tergum"
-    description: "Tergum Backup Tool"
-    install: |
-      bin.install "tergum"
-    test: |
-      system "#{bin}/tergum version"
-  -
-    name: tergum-edge
-    conflicts:
-      - tergum
-    tap:
-      owner: sikalabs
-      name: homebrew-tap
-    skip_upload: false
     homepage: https://github.com/sikalabs/tergum
     url_template: "https://github.com/sikalabs/tergum/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     folder: Formula
