@@ -114,6 +114,8 @@ SleepBefore: <sleep time befor backup job in seconds>
 
 ```yaml
 Gzip: {}
+SymmetricEncryption:
+  Passphrase: "passphrase"
 ```
 
 #### Example BackupSourceMysqlConfiguration Block
