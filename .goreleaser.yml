@@ -72,6 +72,7 @@ dockers:
       goarch: amd64
       image_templates:
         - "sikalabs/tergum:{{ .Tag }}"
+        - "ghcr.io/sikalabs/tergum:{{ .Tag }}"
       dockerfile: Dockerfile
       ids:
         - tergum
@@ -91,6 +92,7 @@ dockers:
       goarch: arm64
       image_templates:
         - "sikalabs/tergum:{{ .Tag }}-arm64v8"
+        - "ghcr.io/sikalabs/tergum:{{ .Tag }}-arm64v8"
       dockerfile: Dockerfile.arm64v8
       ids:
         - tergum
