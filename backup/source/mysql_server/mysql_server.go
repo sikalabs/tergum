@@ -57,7 +57,10 @@ func (s MysqlServerSource) Backup() (io.ReadSeeker, error) {
 	if err != nil {
 		return nil, err
 	}
-	cmd.Wait()
+	err = cmd.Wait()
+	if err != nil {
+		return nil, err
+	}
 
 	outputFile.Seek(0, 0)
 	return outputFile, nil
