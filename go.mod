@@ -3,6 +3,8 @@ module github.com/sikalabs/tergum
 go 1.16
 
 require (
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v0.20.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.2.0 // indirect
 	github.com/aws/aws-sdk-go v1.38.47
 	github.com/cheggaaa/pb/v3 v3.0.8
 	github.com/go-resty/resty/v2 v2.7.0
