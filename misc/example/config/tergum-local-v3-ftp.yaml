@@ -4,9 +4,9 @@ Backups:
   - ID: example-ftp
     Source:
       FTP:
-        Host: ftp.dlptest.com
-        User: dlpuser
-        Password: rNrKYTX9g7z3RgJRmxWuGHbeu
+        Host: 127.0.0.1
+        User: foo
+        Password: bar
     Targets:
       - ID: filepath
         FilePath:
