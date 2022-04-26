@@ -105,6 +105,7 @@ Destinations:
     FilePath: <BackupDestinationFilePathConfiguration>
     File: <BackupDestinationFileConfiguration>
     S3: <BackupDestinationS3Configuration>
+    AzureBlob: <BackupDestinationAzureBlobConfiguration>
   - ...
 SleepBefore: <sleep time befor backup job in seconds>
 ```
@@ -297,6 +298,16 @@ region: "eu-central-1"
 bucketName: "tergum-backups"
 prefix: "mysql-default"
 suffix: "sql"
+```
+
+#### Example BackupDestinationAzureBlobConfiguration Block
+
+```yaml
+AccountName: account_name
+AccountKey: account_key
+ContainerName: container_name
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
 #### Notification Block
