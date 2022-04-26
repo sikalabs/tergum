@@ -388,7 +388,7 @@ Email: <email of tergum cloud account>
 - [x] Files
 - [x] S3
 - [ ] Tergum Cloud
-- [ ] Azure Files
+- [x] Azure Blob
 - [ ] GCS (Google Cloud Storage)
 - [ ] Container Registry
 
