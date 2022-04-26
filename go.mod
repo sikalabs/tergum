@@ -3,8 +3,8 @@ module github.com/sikalabs/tergum
 go 1.18
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v0.20.0
-	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.2.0
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v0.23.0
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.4.0
 	github.com/aws/aws-sdk-go v1.38.47
 	github.com/cheggaaa/pb/v3 v3.0.8
 	github.com/go-resty/resty/v2 v2.7.0
@@ -19,7 +19,7 @@ require (
 )
 
 require (
-	github.com/Azure/azure-sdk-for-go/sdk/internal v0.8.1 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v0.9.2 // indirect
 	github.com/VividCortex/ewma v1.1.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -45,7 +45,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602 // indirect
-	golang.org/x/sys v0.0.0-20210816074244-15123e1e1f71 // indirect
+	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect

@@ -20,9 +20,15 @@ func Upload(accountName, accountKey, containerName, fileName string, data io.Rea
 		return err
 	}
 
-	containerClient := serviceClient.NewContainerClient(containerName)
+	containerClient, err := serviceClient.NewContainerClient(containerName)
+	if err != nil {
+		return err
+	}
 
-	blockBlobClient := containerClient.NewBlockBlobClient(fileName)
+	blockBlobClient, err := containerClient.NewBlockBlobClient(fileName)
+	if err != nil {
+		return err
+	}
 
 	_, err = blockBlobClient.Upload(context.TODO(), streaming.NopCloser(data), nil)
 	if err != nil {
