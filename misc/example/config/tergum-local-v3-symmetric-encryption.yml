@@ -1,0 +1,18 @@
+Meta:
+  SchemaVersion: 3
+Backups:
+  - ID: symmetric-encryption-example
+    Source:
+      SingleFile:
+        Path: main.go
+    Targets:
+      - ID: filepath
+        Middlewares:
+          - SymmetricEncryption:
+              Passphrase: foo
+        FilePath:
+          # Decrypt:
+          #     gpg --batch --output tmp/main.go.txt --passphrase foo --decrypt tmp/main.go.txt.gpg
+          # or another example:
+          #     rm tmp/main.go.txt && gpg --batch --output tmp/main.go.txt --passphrase foo --decrypt tmp/main.go.txt.gpg && cat tmp/main.go.txt
+          Path: tmp/main.go.txt.gpg
