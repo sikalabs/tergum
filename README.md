@@ -380,7 +380,7 @@ Email: <email of tergum cloud account>
 ### Backup Processors
 
 - [x] GZIP Compression
-- [ ] Symmetric Encryption
+- [x] Symmetric Encryption
 - [ ] AsymmetricEncryption
 - [ ] GPG Encryption
 - [ ] GPG Signatures
