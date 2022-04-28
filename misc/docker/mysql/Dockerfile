@@ -1,2 +1,2 @@
-FROM mysql
+FROM mariadb
 COPY init.sql /docker-entrypoint-initdb.d/
