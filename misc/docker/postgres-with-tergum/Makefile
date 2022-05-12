@@ -1,5 +1,5 @@
 POSTGRES_VERSION=13
-TERGUM_VERSION=v0.27.0
+TERGUM_VERSION=v0.28.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
 all: build push
