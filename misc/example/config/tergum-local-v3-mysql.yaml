@@ -5,10 +5,12 @@ Backups:
     Source:
       Mysql:
         Host: 127.0.0.1
-        Port: 3306
+        Port: 13306
         User: root
         Password: root
         Database: default
+        MysqldumpExtraArgs:
+          - --column-statistics=0
     Targets:
       - ID: filepath
         FilePath:
