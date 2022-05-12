@@ -9,6 +9,7 @@ type BackupLogEvent struct {
 	BackupDuration            int
 	BackupMiddlewaresDuration int
 	TargetDuration            int
+	TargetFileSize            int64
 	TargetMiddlewaresDuration int
 	Error                     error
 }
@@ -32,6 +33,7 @@ func (l *BackupLog) SaveEvent(
 	backupMiddlewaresDuration int,
 	targetDuration int,
 	targetMiddlewaresDuration int,
+	targetFileSize int64,
 	err error,
 ) {
 	l.Events = append(l.Events, BackupLogEvent{
@@ -43,6 +45,7 @@ func (l *BackupLog) SaveEvent(
 		BackupMiddlewaresDuration: backupMiddlewaresDuration,
 		TargetDuration:            targetDuration,
 		TargetMiddlewaresDuration: targetMiddlewaresDuration,
+		TargetFileSize:            targetFileSize,
 		Success:                   err == nil,
 		Error:                     err,
 	})

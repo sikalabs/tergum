@@ -3,6 +3,7 @@ package target
 import (
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/sikalabs/tergum/backup/middleware"
 	"github.com/sikalabs/tergum/backup/target/azure_blob"
@@ -40,28 +41,31 @@ func (t Target) Validate() error {
 	return fmt.Errorf("target/validate: no target detected")
 }
 
-func (t Target) Save(data io.ReadSeeker) error {
+func (t Target) Save(data io.ReadSeeker) (int64, error) {
+	size, _ := data.Seek(0, os.SEEK_END)
+	data.Seek(0, 0)
+
 	if t.S3 != nil {
 		s3 := *t.S3
-		return s3.Save(data)
+		return size, s3.Save(data)
 	}
 
 	if t.File != nil {
 		f := *t.File
-		return f.Save(data)
+		return size, f.Save(data)
 	}
 
 	if t.FilePath != nil {
 		fp := *t.FilePath
-		return fp.Save(data)
+		return size, fp.Save(data)
 	}
 
 	if t.AzureBlob != nil {
 		fp := *t.AzureBlob
-		return fp.Save(data)
+		return size, fp.Save(data)
 	}
 
-	return fmt.Errorf("target/save: no target detected")
+	return size, fmt.Errorf("target/save: no target detected")
 }
 
 func (t Target) Name() string {

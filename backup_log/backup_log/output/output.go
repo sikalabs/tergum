@@ -8,6 +8,7 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/sikalabs/tergum/backup_log"
+	"github.com/sikalabs/tergum/utils/file_size_utils"
 )
 
 func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
@@ -15,7 +16,7 @@ func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 	table.SetHeader([]string{
 		"Success",
 		"Backup", "Backup Time",
-		"Target", "Upload Time",
+		"Target", "Upload Time", "File Size",
 		"Error",
 		"Time Total",
 	})
@@ -43,6 +44,7 @@ func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 			log.TargetName + ": " + log.TargetID,
 			strconv.Itoa(log.TargetDuration) + "s" +
 				" (+" + strconv.Itoa(log.TargetMiddlewaresDuration) + "s)",
+			file_size_utils.PrettyFileSize(log.TargetFileSize),
 			strError,
 			strconv.Itoa(log.TotalDuration()) + "s",
 		})
