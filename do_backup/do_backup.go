@@ -20,11 +20,14 @@ func DoBackup(
 	configPath string,
 	telemetryDisabled bool,
 	extraName string,
+	jsonLogs bool,
 ) {
-	log.Logger = log.Output(zerolog.ConsoleWriter{
-		Out:        os.Stdout,
-		TimeFormat: time.RFC3339,
-	})
+	if !jsonLogs {
+		log.Logger = log.Output(zerolog.ConsoleWriter{
+			Out:        os.Stdout,
+			TimeFormat: time.RFC3339,
+		})
+	}
 
 	// Seed random library
 	rand.Seed(time.Now().UTC().UnixNano())
