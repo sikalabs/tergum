@@ -128,6 +128,18 @@ Password: "root"
 Database: "default"
 ```
 
+With extra args
+
+```yaml
+Host: "127.0.0.1"
+Port: "3306"
+User: "root"
+Password: "root"
+Database: "default"
+MysqldumpExtraArgs:
+  - --column-statistics=0
+```
+
 #### Example BackupSourceMysqlServerConfiguration Block
 
 ```yaml
@@ -135,6 +147,17 @@ Host: "127.0.0.1"
 Port: "3306"
 User: "root"
 Password: "root"
+```
+
+With extra args
+
+```yaml
+Host: "127.0.0.1"
+Port: "3306"
+User: "root"
+Password: "root"
+MysqldumpExtraArgs:
+  - --column-statistics=0
 ```
 
 #### Example BackupSourcePostgresConfiguration Block
