@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 )
 
 type FTPSource struct {
@@ -27,12 +28,14 @@ func (s FTPSource) Validate() error {
 	return nil
 }
 
-func (s FTPSource) Backup() (io.ReadSeeker, error) {
+func (s FTPSource) Backup() (io.ReadSeeker, string, error) {
 	var err error
+
+	errorMessage := new(strings.Builder)
 
 	wgetDir, err := os.MkdirTemp("", "tergum-ftp-wget-")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	cmd := exec.Command(
@@ -44,18 +47,20 @@ func (s FTPSource) Backup() (io.ReadSeeker, error) {
 		"ftp://"+s.Host,
 	)
 	cmd.Dir = wgetDir
+	cmd.Stderr = errorMessage
+
 	err = cmd.Start()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
 	err = cmd.Wait()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
 
 	outputFile, err := os.CreateTemp("", "tergum-tar-gz-")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer os.Remove(outputFile.Name())
 
@@ -71,13 +76,13 @@ func (s FTPSource) Backup() (io.ReadSeeker, error) {
 
 	err = cmd.Start()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
 	err = cmd.Wait()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
 
 	outputFile.Seek(0, 0)
-	return outputFile, err
+	return outputFile, errorMessage.String(), err
 }

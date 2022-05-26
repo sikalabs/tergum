@@ -18,16 +18,16 @@ func (s DirSource) Validate() error {
 	return nil
 }
 
-func (s DirSource) Backup() (io.ReadSeeker, error) {
+func (s DirSource) Backup() (io.ReadSeeker, string, error) {
 	var err error
 
 	if _, err := os.Stat(s.Path); os.IsNotExist(err) {
-		return nil, err
+		return nil, "", err
 	}
 
 	outputFile, err := os.CreateTemp("", "tergum-tar-gz-")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer os.Remove(outputFile.Name())
 
@@ -40,13 +40,13 @@ func (s DirSource) Backup() (io.ReadSeeker, error) {
 
 	err = cmd.Start()
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	err = cmd.Wait()
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	outputFile.Seek(0, 0)
-	return outputFile, err
+	return outputFile, "", err
 }

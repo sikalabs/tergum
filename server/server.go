@@ -44,7 +44,7 @@ func Server(addr string) {
 		_ = r.Body.Close()
 		_ = json.Unmarshal(body, &source)
 
-		data, _ := source.Backup()
+		data, _, _ := source.Backup()
 
 		w.Header().Set("Content-Type", "application/octet-stream")
 		io.Copy(w, data)

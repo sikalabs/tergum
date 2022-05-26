@@ -90,7 +90,7 @@ func (s Source) Validate() error {
 	return fmt.Errorf("source/validate: no source detected")
 }
 
-func (s Source) Backup() (io.ReadSeeker, error) {
+func (s Source) Backup() (io.ReadSeeker, string, error) {
 	if s.MysqlServer != nil {
 		m := *s.MysqlServer
 		return m.Backup()
@@ -146,7 +146,7 @@ func (s Source) Backup() (io.ReadSeeker, error) {
 		return p.Backup()
 	}
 
-	return nil, fmt.Errorf("source/backup: no source detected")
+	return nil, "", fmt.Errorf("source/backup: no source detected")
 }
 
 func (s Source) Name() string {

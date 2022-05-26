@@ -61,3 +61,32 @@ func BackupLogToString(l backup_log.BackupLog) string {
 func BackupLogToOutput(l backup_log.BackupLog) {
 	BackupLogTable(l, os.Stdout)
 }
+
+func BackupErrorLogTable(l backup_log.BackupLog, writer io.Writer) {
+	table := tablewriter.NewWriter(writer)
+	table.SetHeader([]string{
+		"Backup",
+		"Target",
+		"Error",
+	})
+
+	for _, log := range l.Events {
+
+		table.Append([]string{
+			log.BackupID,
+			log.TargetID,
+			log.StdErr,
+		})
+	}
+	table.Render()
+}
+
+func BackupErrorLogToString(l backup_log.BackupLog) string {
+	buf := new(bytes.Buffer)
+	BackupErrorLogTable(l, buf)
+	return buf.String()
+}
+
+func BackupErrorLogToOutput(l backup_log.BackupLog) {
+	BackupErrorLogTable(l, os.Stdout)
+}

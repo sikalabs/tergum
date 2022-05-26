@@ -71,6 +71,7 @@ func DoBackup(
 
 	for i, b := range config.Backups {
 		var data io.ReadSeeker
+		var stdErr string
 
 		if b.SleepBefore != 0 && i != 0 {
 			logSleepStart(tel, b)
@@ -83,7 +84,7 @@ func DoBackup(
 		backupStart := time.Now()
 		if b.RemoteExec == nil {
 			// Standart local backup
-			data, err = b.Source.Backup()
+			data, stdErr, err = b.Source.Backup()
 		} else {
 			// Remote backup using tergum server
 			data, err = remoteBackup(b)
@@ -93,7 +94,8 @@ func DoBackup(
 		if err != nil {
 			bl.SaveEvent(
 				b.Source.Name(), b.ID, "---", "---",
-				int(backupDuration.Seconds()), 0, 0, 0, 0, err)
+				int(backupDuration.Seconds()), 0, 0, 0, 0,
+				err, stdErr)
 			logBackupFailed(tel, b, int(backupDuration.Seconds()), err)
 			continue
 		}
@@ -111,7 +113,8 @@ func DoBackup(
 				bl.SaveEvent(b.Source.Name(), b.ID, "---", "---",
 					int(backupDuration.Seconds()),
 					int(backupMiddlewareDuration.Seconds()),
-					0, 0, 0, errBackupMiddleware)
+					0, 0, 0,
+					errBackupMiddleware, "")
 				logBackupMiddlewareFailed(tel, b, m, int(backupMiddlewareDuration.Seconds()), err)
 				continue
 			}
@@ -142,7 +145,7 @@ func DoBackup(
 						0,
 						int(targetMiddlewareDuration.Seconds()),
 						0,
-						errTargetMiddleware)
+						errTargetMiddleware, "")
 					logTargetMiddlewareFailed(tel, b, t, m,
 						int(targetMiddlewareDuration.Seconds()),
 						errTargetMiddleware)
@@ -168,7 +171,7 @@ func DoBackup(
 					int(targetDuration.Seconds()),
 					int(targetMiddlewareDuration.Seconds()),
 					size,
-					err)
+					err, "")
 				logTargetFailed(tel, b, t, int(targetDuration.Seconds()), err)
 				continue
 			}
@@ -179,12 +182,13 @@ func DoBackup(
 				int(targetDuration.Seconds()),
 				int(targetMiddlewareDuration.Seconds()),
 				size,
-				err)
+				err, "")
 			logTargetDone(tel, b, t, int(targetDuration.Seconds()))
 		}
 	}
 
 	output.BackupLogToOutput(bl)
+	output.BackupErrorLogToOutput(bl)
 
 	// Send Notifications
 	if config.Notification != nil {
