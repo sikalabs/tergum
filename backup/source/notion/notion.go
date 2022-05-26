@@ -30,9 +30,9 @@ func (s NotionSource) Validate() error {
 	return nil
 }
 
-func (s NotionSource) Backup() (io.ReadSeeker, error) {
+func (s NotionSource) Backup() (io.ReadSeeker, string, error) {
 	outputFile, err := os.CreateTemp("", "tergum-dump-notion-")
 	outputFile.Seek(0, 0)
 	backup.Backup(s.Token, s.SpaceID, s.Format, outputFile.Name())
-	return outputFile, err
+	return outputFile, "", err
 }

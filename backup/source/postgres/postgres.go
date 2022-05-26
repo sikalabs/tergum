@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type PostgresSource struct {
@@ -34,12 +35,13 @@ func (s PostgresSource) Validate() error {
 	return nil
 }
 
-func (s PostgresSource) Backup() (io.ReadSeeker, error) {
+func (s PostgresSource) Backup() (io.ReadSeeker, string, error) {
 	var err error
+	errorMessage := new(strings.Builder)
 
 	outputFile, err := os.CreateTemp("", "tergum-dump-postgres-")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer os.Remove(outputFile.Name())
 
@@ -52,13 +54,17 @@ func (s PostgresSource) Backup() (io.ReadSeeker, error) {
 			" dbname="+s.Database,
 	)
 	cmd.Stdout = outputFile
+	cmd.Stderr = errorMessage
 
 	err = cmd.Start()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
-	cmd.Wait()
+	err = cmd.Wait()
+	if err != nil {
+		return nil, errorMessage.String(), err
+	}
 
 	outputFile.Seek(0, 0)
-	return outputFile, nil
+	return outputFile, "", nil
 }

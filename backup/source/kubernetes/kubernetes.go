@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type Kubernetes struct {
@@ -28,12 +29,13 @@ func (s Kubernetes) Validate() error {
 	return nil
 }
 
-func (s Kubernetes) Backup() (io.ReadSeeker, error) {
+func (s Kubernetes) Backup() (io.ReadSeeker, string, error) {
 	var err error
+	errorMessage := new(strings.Builder)
 
 	outputFile, err := os.CreateTemp("", "tergum-dump-k8s-")
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer os.Remove(outputFile.Name())
 
@@ -59,16 +61,17 @@ func (s Kubernetes) Backup() (io.ReadSeeker, error) {
 		args...,
 	)
 	cmd.Stdout = outputFile
+	cmd.Stderr = errorMessage
 
 	err = cmd.Start()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
 	err = cmd.Wait()
 	if err != nil {
-		return nil, err
+		return nil, errorMessage.String(), err
 	}
 
 	outputFile.Seek(0, 0)
-	return outputFile, nil
+	return outputFile, "", nil
 }

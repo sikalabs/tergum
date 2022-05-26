@@ -9,8 +9,8 @@ Backups:
         User: root
         Password: root
         Database: default
-        MysqldumpExtraArgs:
-          - --column-statistics=0
+        # MysqldumpExtraArgs:
+        #   - --column-statistics=0
     Targets:
       - ID: filepath
         FilePath:

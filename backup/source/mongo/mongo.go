@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type MongoSource struct {
@@ -26,10 +27,12 @@ func (s MongoSource) Validate() error {
 	return nil
 }
 
-func (s MongoSource) Backup() (io.ReadSeeker, error) {
+func (s MongoSource) Backup() (io.ReadSeeker, string, error) {
 	outputFile, err := os.CreateTemp("", "tergum-dump-mongo-")
+	errorMessage := new(strings.Builder)
+
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer os.Remove(outputFile.Name())
 	args := []string{
@@ -59,7 +62,9 @@ func (s MongoSource) Backup() (io.ReadSeeker, error) {
 		"mongodump",
 		args...,
 	)
+	cmd.Stderr = errorMessage
+
 	_, err = cmd.Output()
 	outputFile.Seek(0, 0)
-	return outputFile, err
+	return outputFile, errorMessage.String(), err
 }
