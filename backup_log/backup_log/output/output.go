@@ -71,6 +71,9 @@ func BackupErrorLogTable(l backup_log.BackupLog, writer io.Writer) {
 	})
 
 	for _, log := range l.Events {
+		if log.Success {
+			continue
+		}
 
 		table.Append([]string{
 			log.BackupID,
