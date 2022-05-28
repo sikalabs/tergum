@@ -99,6 +99,7 @@ func (t Telemetry) GetHostname() string {
 func (t *Telemetry) SendEvent(name, data string) {
 	if !t.Enabled {
 		log.Info().
+			Str("event_name", name).
 			Msg("Telemetry skip.")
 		return
 	}
@@ -114,9 +115,11 @@ func (t *Telemetry) SendEvent(name, data string) {
 		Post(t.Config.Origin + "/api/v1/event")
 	if err == nil {
 		log.Info().
+			Str("event_name", name).
 			Msg("Telemetry successfully sent.")
 	} else {
 		log.Warn().
+			Str("event_name", name).
 			Msg("Telemetry failed.")
 	}
 }
