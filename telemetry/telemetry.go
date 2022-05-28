@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/rs/zerolog/log"
+	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/version"
 )
 
@@ -128,4 +129,9 @@ func (t *Telemetry) SendEvent(name, data string) {
 func (t *Telemetry) SendEventInit() {
 	out, _ := json.Marshal(t.HostData)
 	t.SendEvent("init/v2", string(out))
+}
+
+func (t *Telemetry) SendEventBackupLog(bl backup_log.BackupLog) {
+	out, _ := json.Marshal(bl)
+	t.SendEvent("backup-log-dump/v1", string(out))
 }

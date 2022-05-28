@@ -1,6 +1,7 @@
 package do_backup
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"math/rand"
@@ -189,6 +190,18 @@ func DoBackup(
 
 	output.BackupLogToOutput(bl)
 	output.BackupErrorLogToOutput(bl)
+
+	// Log BackupLog to STDOUT in JSON
+	out, _ := json.Marshal(bl)
+	log.Info().
+		Str("log-id", "backup-log-dump").
+		Msg(string(out))
+
+	// Send BackupLog to telemetry server
+	if config.Telemetry != nil &&
+		config.Telemetry.CollectBackupLog {
+		tel.SendEventBackupLog(bl)
+	}
 
 	// Send Notifications
 	if config.Notification != nil {
