@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
+
+	"github.com/sikalabs/tergum/backup/backup_process_utils"
 )
 
 type DirSource struct {
@@ -21,32 +22,32 @@ func (s DirSource) Validate() error {
 func (s DirSource) Backup() (io.ReadSeeker, string, error) {
 	var err error
 
-	if _, err := os.Stat(s.Path); os.IsNotExist(err) {
+	// Check if source path exists
+	if _, err = os.Stat(s.Path); os.IsNotExist(err) {
 		return nil, "", err
 	}
 
-	outputFile, err := os.CreateTemp("", "tergum-tar-gz-")
+	f, err := os.CreateTemp("", "tergum-")
 	if err != nil {
 		return nil, "", err
 	}
-	defer os.Remove(outputFile.Name())
+	defer os.Remove(f.Name())
 
-	cmd := exec.Command(
+	_, stderr, err := backup_process_utils.BackupProcessExecToFile(
 		"tar",
 		"-cf",
-		outputFile.Name(),
+		f.Name(),
 		s.Path,
 	)
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, "", err
-	}
-	err = cmd.Wait()
 	if err != nil {
 		return nil, "", err
 	}
 
-	outputFile.Seek(0, 0)
-	return outputFile, "", err
+	// Seek to start of backup file
+	_, err = f.Seek(0, 0)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return f, stderr, nil
 }
