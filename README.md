@@ -359,6 +359,7 @@ Password: "asdfasdf"
 
 ```yaml
 Email: <NotificationEmailTarget>
+SlackWebhook: <NotificationSlackWebhookTarget>
 ```
 
 #### Example NotificationEmailTarget Block
@@ -367,6 +368,16 @@ Email: <NotificationEmailTarget>
 Emails:
   - ondrej@example.com
   - monitoring@example.com
+SendOK: false
+```
+
+- `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
+
+#### Example NotificationSlackWebhookTarget Block
+
+```yaml
+URLs:
+  - https://hooks.slack.com/services/xxx/yyy/zzz
 SendOK: false
 ```
 
