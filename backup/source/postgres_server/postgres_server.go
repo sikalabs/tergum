@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
-	"strings"
+
+	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
 type PostgresServerSource struct {
@@ -32,38 +32,14 @@ func (s PostgresServerSource) Validate() error {
 }
 
 func (s PostgresServerSource) Backup() (io.ReadSeeker, string, error) {
-	var err error
-	errorMessage := new(strings.Builder)
-
-	outputFile, err := os.CreateTemp("", "tergum-dump-postgres-")
-	if err != nil {
-		return nil, "", err
-	}
-	defer os.Remove(outputFile.Name())
-
-	cmd := exec.Command(
+	env := os.Environ()
+	env = append(env, "PGPASSWORD="+s.Password)
+	return backup_process_utils.BackupProcessExecEnvToFile(
+		env,
 		"pg_dumpall",
 		"--host", s.Host,
 		"--port", s.Port,
 		"--user", s.User,
 		"--no-password",
 	)
-	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, "PGPASSWORD="+s.Password)
-	cmd.Stdout = outputFile
-	cmd.Stderr = errorMessage
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-
-	err = cmd.Wait()
-	if err != nil {
-		fmt.Println(err)
-		return nil, errorMessage.String(), err
-	}
-
-	outputFile.Seek(0, 0)
-	return outputFile, "", nil
 }
