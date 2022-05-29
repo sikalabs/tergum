@@ -7,12 +7,19 @@ import (
 )
 
 func BackupProcessExecToFile(bin string, args ...string) (io.ReadSeeker, string, error) {
+	var err error
 	bp := backup_process.BackupProcess{}
 	bp.Init()
-	bp.InitDataTempFile()
+	err = bp.InitDataTempFile()
+	if err != nil {
+		return nil, "", err
+	}
 	bp.ExecWait(
 		bin,
 		args...,
 	)
+	if err != nil {
+		return nil, "", err
+	}
 	return bp.GetDataStderr()
 }
