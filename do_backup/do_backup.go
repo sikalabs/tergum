@@ -188,9 +188,6 @@ func DoBackup(
 		}
 	}
 
-	output.BackupLogToOutput(bl)
-	output.BackupErrorLogToOutput(bl)
-
 	// Log BackupLog to STDOUT in JSON
 	out, _ := json.Marshal(bl)
 	log.Info().
@@ -207,4 +204,7 @@ func DoBackup(
 	if config.Notification != nil {
 		config.Notification.SendNotification(bl)
 	}
+
+	output.BackupLogToOutput(bl)
+	output.BackupErrorLogToOutput(bl)
 }
