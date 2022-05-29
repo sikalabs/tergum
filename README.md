@@ -13,6 +13,10 @@ Tergum is simple tool provides centralized backup solution with multiple sources
 
 __Tergum is under active development, not all features are already implemented. Check [current project state](#current-project-state)__
 
+## Do you want to start using Tergum? Give us a call
+
+Let's discuss Tergum in your project in [30 min call](https://calendly.com/ondrejsika/tergum-intro)
+
 ## What "Tergum" means?
 
 Tergum means backup in latin.
