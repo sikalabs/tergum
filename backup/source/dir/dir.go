@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/sikalabs/tergum/backup/backup_process_utils"
+	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
 type DirSource struct {

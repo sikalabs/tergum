@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/sikalabs/tergum/backup/backup_process_utils"
+	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
 type MysqlServerSource struct {

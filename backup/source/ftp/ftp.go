@@ -6,7 +6,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/sikalabs/tergum/backup/backup_process"
+	"github.com/sikalabs/tergum/backup_process"
 )
 
 type FTPSource struct {

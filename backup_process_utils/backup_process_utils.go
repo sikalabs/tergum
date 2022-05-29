@@ -3,7 +3,7 @@ package backup_process_utils
 import (
 	"io"
 
-	"github.com/sikalabs/tergum/backup/backup_process"
+	"github.com/sikalabs/tergum/backup_process"
 )
 
 func BackupProcessExecToFile(bin string, args ...string) (io.ReadSeeker, string, error) {
