@@ -16,6 +16,20 @@ Notification:
           - ondrej@example.com
           - monitoring@example.com
 Backups:
+  - ID: example-redis
+    Source:
+      Redis:
+        Host: 127.0.0.1
+        Port: 16379
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/redis.rdb
+      - ID: filepath-gzip
+        Middlewares:
+          - Gzip: {}
+        FilePath:
+          Path: tmp/redis.rdb.gz
   - ID: example-mysql
     Source:
       Mysql:
