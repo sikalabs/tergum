@@ -14,3 +14,12 @@ Backups:
       - ID: filepath
         FilePath:
           Path: tmp/kubernetes-configmaps.yaml
+  - ID: example-kubernetes-tls
+    Source:
+      KubernetesTLSSecret:
+        Server: http://127.0.0.1:8001
+        Token: foo-bar-baz
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/kubernetes-tls.yaml
