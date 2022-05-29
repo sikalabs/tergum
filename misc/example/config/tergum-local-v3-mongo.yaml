@@ -19,6 +19,8 @@ Backups:
       Mongo:
         Host: 127.0.0.1
         Port: 27017
+        User: root
+        Password: root
     Targets:
       - ID: filepath
         FilePath:
