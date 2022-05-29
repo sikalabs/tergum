@@ -14,7 +14,7 @@ type DirSource struct {
 
 func (s DirSource) Validate() error {
 	if s.Path == "" {
-		return fmt.Errorf("DirSource need to have a FilePath")
+		return fmt.Errorf("DirSource need to have a Path")
 	}
 	return nil
 }
