@@ -51,13 +51,14 @@ func (bp *BackupProcess) GetDataStderr() (io.ReadSeeker, string, error) {
 	return data, stderr, nil
 }
 
-func (bp *BackupProcess) BaseExecWait(dir string, bin string, args ...string) error {
+func (bp *BackupProcess) BaseExecWait(env []string, dir string, bin string, args ...string) error {
 	var err error
 
 	cmd := exec.Command(bin, args...)
 	cmd.Stdout = bp.Data
 	cmd.Stderr = bp.StderrBuff
 	cmd.Dir = dir
+	cmd.Env = env
 
 	err = cmd.Start()
 	if err != nil {
@@ -72,9 +73,13 @@ func (bp *BackupProcess) BaseExecWait(dir string, bin string, args ...string) er
 }
 
 func (bp *BackupProcess) ExecWait(bin string, args ...string) error {
-	return bp.BaseExecWait("", bin, args...)
+	return bp.BaseExecWait(nil, "", bin, args...)
 }
 
 func (bp *BackupProcess) ExecDirWait(dir string, bin string, args ...string) error {
-	return bp.BaseExecWait(dir, bin, args...)
+	return bp.BaseExecWait(nil, dir, bin, args...)
+}
+
+func (bp *BackupProcess) ExecEnvWait(env []string, bin string, args ...string) error {
+	return bp.BaseExecWait(env, "", bin, args...)
 }
