@@ -98,6 +98,7 @@ Source:
   Kubernetes: <BackupSourceKubernetes>
   Notion: <BackupSourceNotion>
   FTP: <BackupSourceFTP>
+  Redis: <BackupSourceRedis>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -283,7 +284,7 @@ SpaceID: <Notion Space UID>
 Format: <Fotmat of export ("html" or "markdown")>
 ```
 
-### Example BackupSBackupSourceFTPourceNotion Block
+### Example BackupSourceFTP Block
 
 ```yaml
 Host: <FTP host>
