@@ -400,6 +400,14 @@ Email: <email of tergum cloud account>
 - [x] [Notion](https://notion.so)
 - [x] FTP Server (for old school hostings)
 
+### Passwords Sources
+
+- [x] YAML
+- [ ] Environment Variables
+- [ ] Hashicorp Vault
+- [ ] AWS Secrets Manager
+- [ ] Azure Key Vault
+
 ### Backup Processors
 
 - [x] GZIP Compression
