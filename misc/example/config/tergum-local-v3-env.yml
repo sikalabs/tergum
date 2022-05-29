@@ -1,0 +1,18 @@
+Meta:
+  SchemaVersion: 3
+Telemetry:
+  CollectBackupLog: true
+Backups:
+  - ID: example-dir
+    Source:
+      Dir:
+        Path: $SOURCE
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/$TARGET.tar
+      - ID: filepath-gz
+        Middlewares:
+          - Gzip: {}
+        FilePath:
+          Path: tmp/$TARGET.tar.gz
