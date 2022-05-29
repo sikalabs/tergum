@@ -18,7 +18,7 @@ func (bp *BackupProcess) Init() {
 }
 
 func (bp *BackupProcess) InitDataTempFile() error {
-	f, err := os.CreateTemp("", "tergum-dump-mysql-")
+	f, err := os.CreateTemp("", "tergum-")
 	if err != nil {
 		return err
 	}
