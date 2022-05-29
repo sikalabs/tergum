@@ -5,7 +5,7 @@ Backups:
     Source:
       PostgresServer:
         Host: 127.0.0.1
-        Port: 5432
+        Port: 15432
         User: postgres
         Password: pg
     Targets:
