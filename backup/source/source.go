@@ -13,6 +13,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/notion"
 	"github.com/sikalabs/tergum/backup/source/postgres"
 	"github.com/sikalabs/tergum/backup/source/postgres_server"
+	"github.com/sikalabs/tergum/backup/source/redis"
 	"github.com/sikalabs/tergum/backup/source/single_file"
 	"github.com/sikalabs/tergum/backup_output"
 )
@@ -29,6 +30,7 @@ type Source struct {
 	Dir                 *dir.DirSource                             `yaml:"Dir"`
 	Notion              *notion.NotionSource                       `yaml:"Notion"`
 	FTP                 *ftp.FTPSource                             `yaml:"FTP"`
+	Redis               *redis.RedisSource                         `yaml:"Redis"`
 }
 
 func (s Source) Validate() error {
@@ -84,6 +86,11 @@ func (s Source) Validate() error {
 
 	if s.FTP != nil {
 		p := *s.FTP
+		return p.Validate()
+	}
+
+	if s.Redis != nil {
+		p := *s.Redis
 		return p.Validate()
 	}
 
@@ -146,6 +153,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.Redis != nil {
+		p := *s.Redis
+		return p.Backup()
+	}
+
 	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -192,6 +204,10 @@ func (s Source) Name() string {
 
 	if s.FTP != nil {
 		return "FTP"
+	}
+
+	if s.Redis != nil {
+		return "Redis"
 	}
 
 	return ""
