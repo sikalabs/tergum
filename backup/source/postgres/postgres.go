@@ -3,9 +3,8 @@ package postgres
 import (
 	"fmt"
 	"io"
-	"os"
-	"os/exec"
-	"strings"
+
+	"github.com/sikalabs/tergum/backup/backup_process_utils"
 )
 
 type PostgresSource struct {
@@ -36,16 +35,7 @@ func (s PostgresSource) Validate() error {
 }
 
 func (s PostgresSource) Backup() (io.ReadSeeker, string, error) {
-	var err error
-	errorMessage := new(strings.Builder)
-
-	outputFile, err := os.CreateTemp("", "tergum-dump-postgres-")
-	if err != nil {
-		return nil, "", err
-	}
-	defer os.Remove(outputFile.Name())
-
-	cmd := exec.Command(
+	return backup_process_utils.BackupProcessExecToFile(
 		"pg_dump",
 		"host="+s.Host+
 			" port="+s.Port+
@@ -53,18 +43,4 @@ func (s PostgresSource) Backup() (io.ReadSeeker, string, error) {
 			" password="+s.Password+
 			" dbname="+s.Database,
 	)
-	cmd.Stdout = outputFile
-	cmd.Stderr = errorMessage
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-	err = cmd.Wait()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-
-	outputFile.Seek(0, 0)
-	return outputFile, "", nil
 }
