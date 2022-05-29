@@ -42,7 +42,7 @@ func (t SlackWebhook) SendNotification(
 	}
 
 	text := subject + "\n\n" +
-		"```\n" + table + "\n\n" + errorTable + "\n```"
+		"```\n" + table + "\n" + errorTable + "\n```"
 
 	for _, url := range t.URLs {
 		values := map[string]string{"text": text}
