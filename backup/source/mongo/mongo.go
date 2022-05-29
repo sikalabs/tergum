@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
-	"strings"
+
+	"github.com/sikalabs/tergum/backup/backup_process_utils"
 )
 
 type MongoSource struct {
@@ -28,15 +28,15 @@ func (s MongoSource) Validate() error {
 }
 
 func (s MongoSource) Backup() (io.ReadSeeker, string, error) {
-	outputFile, err := os.CreateTemp("", "tergum-dump-mongo-")
-	errorMessage := new(strings.Builder)
-
+	// Create file for backup
+	f, err := os.CreateTemp("", "tergum-")
 	if err != nil {
 		return nil, "", err
 	}
-	defer os.Remove(outputFile.Name())
+	defer os.Remove(f.Name())
+
 	args := []string{
-		"--archive=" + outputFile.Name(),
+		"--archive=" + f.Name(),
 		"--host", s.Host,
 		"--port", s.Port,
 	}
@@ -58,13 +58,20 @@ func (s MongoSource) Backup() (io.ReadSeeker, string, error) {
 			"--db", s.Database,
 		)
 	}
-	cmd := exec.Command(
+
+	_, stderr, err := backup_process_utils.BackupProcessExecToFile(
 		"mongodump",
 		args...,
 	)
-	cmd.Stderr = errorMessage
+	if err != nil {
+		return nil, stderr, err
+	}
 
-	_, err = cmd.Output()
-	outputFile.Seek(0, 0)
-	return outputFile, errorMessage.String(), err
+	// Seek to start of backup file
+	_, err = f.Seek(0, 0)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return f, stderr, nil
 }
