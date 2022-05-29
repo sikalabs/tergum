@@ -418,7 +418,7 @@ Email: <email of tergum cloud account>
 ### Passwords Sources
 
 - [x] YAML
-- [ ] Environment Variables
+- [x] Environment Variables
 - [ ] Hashicorp Vault
 - [ ] AWS Secrets Manager
 - [ ] Azure Key Vault
