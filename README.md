@@ -292,6 +292,13 @@ User: <FTP user>
 Password: <FTP password>
 ```
 
+### Example BackupSourceRedis Block
+
+```yaml
+Host: <host>
+Port: <port>
+```
+
 #### Example BackupDestinationFilePathConfiguration Block
 
 ```yaml
