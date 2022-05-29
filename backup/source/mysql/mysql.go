@@ -3,9 +3,8 @@ package mysql
 import (
 	"fmt"
 	"io"
-	"os"
-	"os/exec"
-	"strings"
+
+	"github.com/sikalabs/tergum/backup/backup_process_utils"
 )
 
 type MysqlSource struct {
@@ -37,16 +36,6 @@ func (s MysqlSource) Validate() error {
 }
 
 func (s MysqlSource) Backup() (io.ReadSeeker, string, error) {
-	var err error
-
-	errorMessage := new(strings.Builder)
-
-	outputFile, err := os.CreateTemp("", "tergum-dump-mysql-")
-	if err != nil {
-		return nil, "", err
-	}
-	defer os.Remove(outputFile.Name())
-
 	args := []string{
 		"-h", s.Host,
 		"-P", s.Port,
@@ -54,22 +43,9 @@ func (s MysqlSource) Backup() (io.ReadSeeker, string, error) {
 		"-p" + s.Password,
 		s.Database,
 	}
-	cmd := exec.Command(
+	args = append(s.MysqldumpExtraArgs, args...)
+	return backup_process_utils.BackupProcessExecToFile(
 		"mysqldump",
-		append(s.MysqldumpExtraArgs, args...)...,
+		args...,
 	)
-	cmd.Stdout = outputFile
-	cmd.Stderr = errorMessage
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-	err = cmd.Wait()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-
-	outputFile.Seek(0, 0)
-	return outputFile, "", nil
 }
