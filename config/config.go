@@ -28,7 +28,7 @@ type TergumConfig struct {
 	Cloud        *cloud.CloudConfig         `yaml:"Cloud"`
 }
 
-func (c *TergumConfig) Load(path string) error {
+func (c *TergumConfig) Load(path string, expandEnv bool) error {
 	jsonFile, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
@@ -36,6 +36,9 @@ func (c *TergumConfig) Load(path string) error {
 	byteValue, err := ioutil.ReadAll(jsonFile)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if expandEnv {
+		byteValue = []byte(os.ExpandEnv(string(byteValue)))
 	}
 	err = yaml.Unmarshal(byteValue, &c)
 	if err != nil {

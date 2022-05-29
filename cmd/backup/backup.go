@@ -10,6 +10,7 @@ var CmdFlagConfig string
 var CmdFlagExtraName string
 var FlagDisableTelemetry bool
 var FlagJsonLogs bool
+var FlagExpandEnv bool
 
 var Cmd = &cobra.Command{
 	Use:     "backup",
@@ -19,6 +20,7 @@ var Cmd = &cobra.Command{
 	Run: func(c *cobra.Command, args []string) {
 		do_backup.DoBackup(
 			CmdFlagConfig,
+			FlagExpandEnv,
 			FlagDisableTelemetry,
 			CmdFlagExtraName,
 			FlagJsonLogs,
@@ -54,5 +56,11 @@ func init() {
 		"json-logs",
 		false,
 		"Log output to JSON",
+	)
+	Cmd.Flags().BoolVar(
+		&FlagExpandEnv,
+		"expand-env",
+		false,
+		"Expand ENV Variables in YAML",
 	)
 }

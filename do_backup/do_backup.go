@@ -20,6 +20,7 @@ import (
 
 func DoBackup(
 	configPath string,
+	expandEnv bool,
 	telemetryDisabled bool,
 	extraName string,
 	jsonLogs bool,
@@ -42,7 +43,7 @@ func DoBackup(
 
 	// Load config from file
 	var config config.TergumConfig
-	config.Load(configPath)
+	config.Load(configPath, expandEnv)
 
 	var cloudEmail string
 	if config.Cloud != nil {
