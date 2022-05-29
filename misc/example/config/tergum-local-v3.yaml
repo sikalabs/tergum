@@ -24,6 +24,8 @@ Backups:
         User: root
         Password: root
         Database: default
+        MysqldumpExtraArgs:
+          - --column-statistics=0
     Targets:
       - ID: filepath
         FilePath:
@@ -84,6 +86,8 @@ Backups:
         User: root
         Password: root
         Database: default
+        MysqldumpExtraArgs:
+          - --column-statistics=0
     Middlewares:
       - Gzip: {}
     Targets:
@@ -100,6 +104,9 @@ Backups:
         Port: 13306
         User: root
         Password: root
+        MysqldumpExtraArgs:
+          - --column-statistics=0
+          - --lock-tables=0
     Targets:
       - ID: file
         File:
