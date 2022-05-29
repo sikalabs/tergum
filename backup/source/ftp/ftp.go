@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"path"
-	"strings"
+
+	"github.com/sikalabs/tergum/backup/backup_process"
 )
 
 type FTPSource struct {
@@ -31,14 +31,23 @@ func (s FTPSource) Validate() error {
 func (s FTPSource) Backup() (io.ReadSeeker, string, error) {
 	var err error
 
-	errorMessage := new(strings.Builder)
-
-	wgetDir, err := os.MkdirTemp("", "tergum-ftp-wget-")
+	tmpDir, err := os.MkdirTemp("", "tergum-ftp-wget-")
 	if err != nil {
 		return nil, "", err
 	}
 
-	cmd := exec.Command(
+	f, err := os.CreateTemp("", "tergum-")
+	if err != nil {
+		return nil, "", err
+	}
+	defer os.Remove(f.Name())
+
+	bp := backup_process.BackupProcess{}
+	bp.Init()
+
+	// Download from FTP server using wget
+	bp.ExecDirWait(
+		tmpDir,
 		"wget",
 		"-q",
 		"-r",
@@ -46,43 +55,22 @@ func (s FTPSource) Backup() (io.ReadSeeker, string, error) {
 		"--password", s.Password,
 		"ftp://"+s.Host,
 	)
-	cmd.Dir = wgetDir
-	cmd.Stderr = errorMessage
-
-	err = cmd.Start()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-	err = cmd.Wait()
-	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-
-	outputFile, err := os.CreateTemp("", "tergum-tar-gz-")
 	if err != nil {
 		return nil, "", err
 	}
-	defer os.Remove(outputFile.Name())
 
-	wgetDataRoot := path.Join(wgetDir, s.Host)
-
-	cmd = exec.Command(
+	// Create tar achrive
+	bp.ExecDirWait(
+		path.Join(tmpDir, s.Host),
 		"tar",
 		"-cf",
-		outputFile.Name(),
+		f.Name(),
 		".",
 	)
-	cmd.Dir = wgetDataRoot
-
-	err = cmd.Start()
 	if err != nil {
-		return nil, errorMessage.String(), err
-	}
-	err = cmd.Wait()
-	if err != nil {
-		return nil, errorMessage.String(), err
+		return nil, "", err
 	}
 
-	outputFile.Seek(0, 0)
-	return outputFile, errorMessage.String(), err
+	_, err = f.Seek(0, 0)
+	return f, "", err
 }
