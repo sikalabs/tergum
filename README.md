@@ -439,6 +439,6 @@ Email: <email of tergum cloud account>
 ### Notification
 
 - [x] Email
-- [ ] Slack
+- [x] Slack
 - [ ] Microsoft Teams
 - [ ] Pagerduty
