@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  redis:
+    image: redis
+    ports:
+      - 16379:6379
+  init:
+    image: redis
+    command:
+      - /bin/sh
+      - -c
+      - |
+        sleep 10 ;
+        redis-cli -h redis set foo hello ;
+        redis-cli -h redis set bar world ;
