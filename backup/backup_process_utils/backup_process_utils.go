@@ -14,12 +14,13 @@ func BackupProcessExecToFile(bin string, args ...string) (io.ReadSeeker, string,
 	if err != nil {
 		return nil, "", err
 	}
-	bp.ExecWait(
+	err = bp.ExecWait(
 		bin,
 		args...,
 	)
 	if err != nil {
-		return nil, "", err
+		stderr, _ := bp.GetStderr()
+		return nil, stderr, err
 	}
 	return bp.GetDataStderr()
 }
