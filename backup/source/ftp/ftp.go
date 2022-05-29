@@ -2,10 +2,10 @@ package ftp
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process"
 )
 
@@ -28,17 +28,18 @@ func (s FTPSource) Validate() error {
 	return nil
 }
 
-func (s FTPSource) Backup() (io.ReadSeeker, string, error) {
+func (s FTPSource) Backup() (backup_output.BackupOutput, error) {
 	var err error
+	var bo backup_output.BackupOutput
 
 	tmpDir, err := os.MkdirTemp("", "tergum-ftp-wget-")
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 
 	f, err := os.CreateTemp("", "tergum-")
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 	defer os.Remove(f.Name())
 
@@ -56,7 +57,7 @@ func (s FTPSource) Backup() (io.ReadSeeker, string, error) {
 		"ftp://"+s.Host,
 	)
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 
 	// Create tar achrive
@@ -68,9 +69,14 @@ func (s FTPSource) Backup() (io.ReadSeeker, string, error) {
 		".",
 	)
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 
 	_, err = f.Seek(0, 0)
-	return f, "", err
+
+	bo = backup_output.BackupOutput{
+		Data: f,
+	}
+
+	return bo, err
 }

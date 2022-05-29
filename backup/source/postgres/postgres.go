@@ -2,8 +2,8 @@ package postgres
 
 import (
 	"fmt"
-	"io"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -34,7 +34,7 @@ func (s PostgresSource) Validate() error {
 	return nil
 }
 
-func (s PostgresSource) Backup() (io.ReadSeeker, string, error) {
+func (s PostgresSource) Backup() (backup_output.BackupOutput, error) {
 	return backup_process_utils.BackupProcessExecToFile(
 		"pg_dump",
 		"host="+s.Host+

@@ -2,9 +2,9 @@ package mongo
 
 import (
 	"fmt"
-	"io"
 	"os"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -27,11 +27,13 @@ func (s MongoSource) Validate() error {
 	return nil
 }
 
-func (s MongoSource) Backup() (io.ReadSeeker, string, error) {
+func (s MongoSource) Backup() (backup_output.BackupOutput, error) {
+	var bo backup_output.BackupOutput
+
 	// Create file for backup
 	f, err := os.CreateTemp("", "tergum-")
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 	defer os.Remove(f.Name())
 
@@ -59,19 +61,24 @@ func (s MongoSource) Backup() (io.ReadSeeker, string, error) {
 		)
 	}
 
-	_, stderr, err := backup_process_utils.BackupProcessExecToFile(
+	tmpBo, err := backup_process_utils.BackupProcessExecToFile(
 		"mongodump",
 		args...,
 	)
 	if err != nil {
-		return nil, stderr, err
+		return bo, err
 	}
 
 	// Seek to start of backup file
 	_, err = f.Seek(0, 0)
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 
-	return f, stderr, nil
+	bo = backup_output.BackupOutput{
+		Data:   f,
+		Stderr: tmpBo.Stderr,
+	}
+
+	return bo, err
 }

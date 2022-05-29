@@ -1,18 +1,19 @@
 package backup_process_utils
 
 import (
-	"io"
-
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process"
 )
 
-func BackupProcessExecToFile(bin string, args ...string) (io.ReadSeeker, string, error) {
+func BackupProcessExecToFile(bin string, args ...string) (backup_output.BackupOutput, error) {
 	var err error
+	var bo backup_output.BackupOutput
+
 	bp := backup_process.BackupProcess{}
 	bp.Init()
 	err = bp.InitDataTempFile()
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 	err = bp.ExecWait(
 		bin,
@@ -20,18 +21,21 @@ func BackupProcessExecToFile(bin string, args ...string) (io.ReadSeeker, string,
 	)
 	if err != nil {
 		stderr, _ := bp.GetStderr()
-		return nil, stderr, err
+		bo.Stderr = stderr
+		return bo, err
 	}
 	return bp.GetDataStderr()
 }
 
-func BackupProcessExecEnvToFile(env []string, bin string, args ...string) (io.ReadSeeker, string, error) {
+func BackupProcessExecEnvToFile(env []string, bin string, args ...string) (backup_output.BackupOutput, error) {
 	var err error
+	var bo backup_output.BackupOutput
+
 	bp := backup_process.BackupProcess{}
 	bp.Init()
 	err = bp.InitDataTempFile()
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 	err = bp.ExecEnvWait(
 		env,
@@ -40,7 +44,8 @@ func BackupProcessExecEnvToFile(env []string, bin string, args ...string) (io.Re
 	)
 	if err != nil {
 		stderr, _ := bp.GetStderr()
-		return nil, stderr, err
+		bo.Stderr = stderr
+		return bo, err
 	}
 	return bp.GetDataStderr()
 }

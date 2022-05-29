@@ -44,10 +44,10 @@ func Server(addr string) {
 		_ = r.Body.Close()
 		_ = json.Unmarshal(body, &source)
 
-		data, _, _ := source.Backup()
+		bo, _ := source.Backup()
 
 		w.Header().Set("Content-Type", "application/octet-stream")
-		io.Copy(w, data)
+		io.Copy(w, bo.Data)
 
 		logApiCall("POST", "/api/v1/backup")
 	})

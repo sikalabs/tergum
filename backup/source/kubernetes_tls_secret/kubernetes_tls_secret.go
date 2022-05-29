@@ -2,8 +2,8 @@ package kubernetes_tls_secret
 
 import (
 	"fmt"
-	"io"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -24,7 +24,7 @@ func (s KubernetesTLSSecret) Validate() error {
 	return nil
 }
 
-func (s KubernetesTLSSecret) Backup() (io.ReadSeeker, string, error) {
+func (s KubernetesTLSSecret) Backup() (backup_output.BackupOutput, error) {
 	args := []string{
 		"--server", s.Server,
 		"--insecure-skip-tls-verify=true",

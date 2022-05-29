@@ -2,10 +2,10 @@ package notion
 
 import (
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/ondrejsika/notion-backup/lib/backup"
+	"github.com/sikalabs/tergum/backup_output"
 )
 
 type NotionSource struct {
@@ -30,9 +30,9 @@ func (s NotionSource) Validate() error {
 	return nil
 }
 
-func (s NotionSource) Backup() (io.ReadSeeker, string, error) {
+func (s NotionSource) Backup() (backup_output.BackupOutput, error) {
 	outputFile, err := os.CreateTemp("", "tergum-dump-notion-")
 	outputFile.Seek(0, 0)
 	backup.Backup(s.Token, s.SpaceID, s.Format, outputFile.Name())
-	return outputFile, "", err
+	return backup_output.BackupOutput{Data: outputFile}, err
 }

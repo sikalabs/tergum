@@ -12,6 +12,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/backup_log/backup_log/output"
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/config"
 	"github.com/sikalabs/tergum/telemetry"
 	"github.com/sikalabs/tergum/version"
@@ -71,6 +72,7 @@ func DoBackup(
 	}
 
 	for i, b := range config.Backups {
+		var bo backup_output.BackupOutput
 		var data io.ReadSeeker
 		var stdErr string
 
@@ -85,7 +87,9 @@ func DoBackup(
 		backupStart := time.Now()
 		if b.RemoteExec == nil {
 			// Standart local backup
-			data, stdErr, err = b.Source.Backup()
+			bo, err = b.Source.Backup()
+			data = bo.Data
+			stdErr = bo.Stderr
 		} else {
 			// Remote backup using tergum server
 			data, err = remoteBackup(b)

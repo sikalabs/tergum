@@ -2,8 +2,8 @@ package mysql_server
 
 import (
 	"fmt"
-	"io"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -31,7 +31,7 @@ func (s MysqlServerSource) Validate() error {
 	return nil
 }
 
-func (s MysqlServerSource) Backup() (io.ReadSeeker, string, error) {
+func (s MysqlServerSource) Backup() (backup_output.BackupOutput, error) {
 	args := []string{
 		"-h", s.Host,
 		"-P", s.Port,

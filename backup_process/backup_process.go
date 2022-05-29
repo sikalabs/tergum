@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/sikalabs/tergum/backup_output"
 )
 
 type BackupProcess struct {
@@ -39,16 +41,19 @@ func (bp *BackupProcess) GetData() (io.ReadSeeker, error) {
 	return bp.Data, err
 }
 
-func (bp *BackupProcess) GetDataStderr() (io.ReadSeeker, string, error) {
+func (bp *BackupProcess) GetDataStderr() (backup_output.BackupOutput, error) {
+	bo := backup_output.BackupOutput{}
 	data, err := bp.GetData()
+	bo.Data = data
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 	stderr, err := bp.GetStderr()
+	bo.Stderr = stderr
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
-	return data, stderr, nil
+	return bo, nil
 }
 
 func (bp *BackupProcess) BaseExecWait(env []string, dir string, bin string, args ...string) error {

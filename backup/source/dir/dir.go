@@ -2,9 +2,9 @@ package dir
 
 import (
 	"fmt"
-	"io"
 	"os"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -19,35 +19,41 @@ func (s DirSource) Validate() error {
 	return nil
 }
 
-func (s DirSource) Backup() (io.ReadSeeker, string, error) {
+func (s DirSource) Backup() (backup_output.BackupOutput, error) {
 	var err error
+	var bo backup_output.BackupOutput
 
 	// Check if source path exists
 	if _, err = os.Stat(s.Path); os.IsNotExist(err) {
-		return nil, "", err
+		return bo, err
 	}
 
 	f, err := os.CreateTemp("", "tergum-")
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 	defer os.Remove(f.Name())
 
-	_, stderr, err := backup_process_utils.BackupProcessExecToFile(
+	tmpBo, err := backup_process_utils.BackupProcessExecToFile(
 		"tar",
 		"-cf",
 		f.Name(),
 		s.Path,
 	)
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 
 	// Seek to start of backup file
 	_, err = f.Seek(0, 0)
 	if err != nil {
-		return nil, "", err
+		return bo, err
 	}
 
-	return f, stderr, nil
+	bo = backup_output.BackupOutput{
+		Data:   f,
+		Stderr: tmpBo.Stderr,
+	}
+
+	return bo, nil
 }

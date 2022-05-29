@@ -2,7 +2,6 @@ package source
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/sikalabs/tergum/backup/source/dir"
 	"github.com/sikalabs/tergum/backup/source/ftp"
@@ -15,6 +14,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/postgres"
 	"github.com/sikalabs/tergum/backup/source/postgres_server"
 	"github.com/sikalabs/tergum/backup/source/single_file"
+	"github.com/sikalabs/tergum/backup_output"
 )
 
 type Source struct {
@@ -90,7 +90,7 @@ func (s Source) Validate() error {
 	return fmt.Errorf("source/validate: no source detected")
 }
 
-func (s Source) Backup() (io.ReadSeeker, string, error) {
+func (s Source) Backup() (backup_output.BackupOutput, error) {
 	if s.MysqlServer != nil {
 		m := *s.MysqlServer
 		return m.Backup()
@@ -146,7 +146,7 @@ func (s Source) Backup() (io.ReadSeeker, string, error) {
 		return p.Backup()
 	}
 
-	return nil, "", fmt.Errorf("source/backup: no source detected")
+	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
 func (s Source) Name() string {

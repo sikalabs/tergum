@@ -2,9 +2,9 @@ package postgres_server
 
 import (
 	"fmt"
-	"io"
 	"os"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -31,7 +31,7 @@ func (s PostgresServerSource) Validate() error {
 	return nil
 }
 
-func (s PostgresServerSource) Backup() (io.ReadSeeker, string, error) {
+func (s PostgresServerSource) Backup() (backup_output.BackupOutput, error) {
 	env := os.Environ()
 	env = append(env, "PGPASSWORD="+s.Password)
 	return backup_process_utils.BackupProcessExecEnvToFile(

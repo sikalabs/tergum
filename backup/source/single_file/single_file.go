@@ -2,8 +2,9 @@ package single_file
 
 import (
 	"fmt"
-	"io"
 	"os"
+
+	"github.com/sikalabs/tergum/backup_output"
 )
 
 type SingleFileSource struct {
@@ -17,7 +18,7 @@ func (s SingleFileSource) Validate() error {
 	return nil
 }
 
-func (s SingleFileSource) Backup() (io.ReadSeeker, string, error) {
+func (s SingleFileSource) Backup() (backup_output.BackupOutput, error) {
 	out, err := os.Open(s.Path)
-	return out, "", err
+	return backup_output.BackupOutput{Data: out}, err
 }

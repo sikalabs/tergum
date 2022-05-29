@@ -2,8 +2,8 @@ package kubernetes
 
 import (
 	"fmt"
-	"io"
 
+	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
 )
 
@@ -28,7 +28,7 @@ func (s Kubernetes) Validate() error {
 	return nil
 }
 
-func (s Kubernetes) Backup() (io.ReadSeeker, string, error) {
+func (s Kubernetes) Backup() (backup_output.BackupOutput, error) {
 	args := []string{
 		"--server", s.Server,
 		"--insecure-skip-tls-verify=true",
