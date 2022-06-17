@@ -40,6 +40,11 @@ Backups:
         Database: default
         MysqldumpExtraArgs:
           - --column-statistics=0
+    Middlewares:
+      - Prefix:
+          Prefix: "-- BEGIN\n"
+      - Suffix:
+          Suffix: "-- END\n"
     Targets:
       - ID: filepath
         FilePath:
