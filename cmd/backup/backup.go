@@ -11,6 +11,7 @@ var CmdFlagExtraName string
 var FlagDisableTelemetry bool
 var FlagJsonLogs bool
 var FlagExpandEnv bool
+var FlagDoBackupV2 bool
 
 var Cmd = &cobra.Command{
 	Use:     "backup",
@@ -18,6 +19,16 @@ var Cmd = &cobra.Command{
 	Aliases: []string{"b"},
 	Args:    cobra.NoArgs,
 	Run: func(c *cobra.Command, args []string) {
+		if FlagDoBackupV2 {
+			do_backup.DoBackupV2(
+				CmdFlagConfig,
+				FlagExpandEnv,
+				FlagDisableTelemetry,
+				CmdFlagExtraName,
+				FlagJsonLogs,
+			)
+			return
+		}
 		do_backup.DoBackup(
 			CmdFlagConfig,
 			FlagExpandEnv,
@@ -62,5 +73,11 @@ func init() {
 		"expand-env",
 		false,
 		"Expand ENV Variables in YAML",
+	)
+	Cmd.Flags().BoolVar(
+		&FlagDoBackupV2,
+		"v2",
+		false,
+		"!! EXPERIMENTAL !! Use DoBackupV2 backup method (DOES NOT WORK YET)",
 	)
 }
