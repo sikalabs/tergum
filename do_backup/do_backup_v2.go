@@ -36,6 +36,7 @@ func DoBackupV2(
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	log.Info().Str("version", version.Version).Msg("Tergum Backup")
+	log.Info().Str("do_backup", "v2").Msg("Runs new (experimental) DoBackupV2 implementation")
 
 	if extraName != "" {
 		log.Info().Str("extra_name", extraName).Msg("extra name: " + extraName)
