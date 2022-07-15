@@ -2,7 +2,6 @@ package email
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/backup_log/backup_log/output"
@@ -50,10 +49,12 @@ func (r EmailRule) SendNotification(
 			subject,
 			body,
 		)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+		if err == nil {
+			logSend(email)
+		} else {
+			logError(err.Error())
+			logFailed(email)
 		}
 	}
-	logSend()
 	return nil
 }
