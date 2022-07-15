@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	gosendmail "github.com/ondrejsika/gosendmail/lib"
+	"github.com/sikalabs/tergum/version"
 )
 
 type EmailBackend struct {
@@ -39,7 +40,7 @@ func (b EmailBackend) SendMail(
 	} else {
 		finalSubject = "[tergum] " + subject
 	}
-	finalBody := body + "\n\n--\ntergum"
+	finalBody := body + "\n\n--\ntergum, " + version.Version
 	rawMessage := []byte("To: " + to + "\r\n" +
 		"From: " + b.From + "\r\n" +
 		"Subject: " + finalSubject + "\r\n" +
