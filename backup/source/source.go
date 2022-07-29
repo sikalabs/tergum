@@ -15,6 +15,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/postgres_server"
 	"github.com/sikalabs/tergum/backup/source/redis"
 	"github.com/sikalabs/tergum/backup/source/single_file"
+	"github.com/sikalabs/tergum/backup/source/vault"
 	"github.com/sikalabs/tergum/backup_output"
 )
 
@@ -31,6 +32,7 @@ type Source struct {
 	Notion              *notion.NotionSource                       `yaml:"Notion"`
 	FTP                 *ftp.FTPSource                             `yaml:"FTP"`
 	Redis               *redis.RedisSource                         `yaml:"Redis"`
+	Vault               *vault.VaultSource                         `yaml:"Vault"`
 }
 
 func (s Source) Validate() error {
@@ -91,6 +93,11 @@ func (s Source) Validate() error {
 
 	if s.Redis != nil {
 		p := *s.Redis
+		return p.Validate()
+	}
+
+	if s.Vault != nil {
+		p := *s.Vault
 		return p.Validate()
 	}
 
@@ -158,6 +165,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.Vault != nil {
+		p := *s.Vault
+		return p.Backup()
+	}
+
 	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -208,6 +220,10 @@ func (s Source) Name() string {
 
 	if s.Redis != nil {
 		return "Redis"
+	}
+
+	if s.Vault != nil {
+		return "Vault"
 	}
 
 	return ""
