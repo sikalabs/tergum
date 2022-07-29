@@ -12,6 +12,7 @@ var FlagDisableTelemetry bool
 var FlagJsonLogs bool
 var FlagExpandEnv bool
 var FlagDoBackupV2 bool
+var FlagDebugLogs bool
 
 var Cmd = &cobra.Command{
 	Use:     "backup",
@@ -26,7 +27,7 @@ var Cmd = &cobra.Command{
 				FlagDisableTelemetry,
 				CmdFlagExtraName,
 				FlagJsonLogs,
-				true,
+				FlagDebugLogs,
 			)
 			return
 		}
@@ -36,7 +37,7 @@ var Cmd = &cobra.Command{
 			FlagDisableTelemetry,
 			CmdFlagExtraName,
 			FlagJsonLogs,
-			true,
+			FlagDebugLogs,
 		)
 	},
 }
@@ -69,6 +70,12 @@ func init() {
 		"json-logs",
 		false,
 		"Log output to JSON",
+	)
+	Cmd.Flags().BoolVar(
+		&FlagDebugLogs,
+		"debug-logs",
+		false,
+		"Print debug logs",
 	)
 	Cmd.Flags().BoolVar(
 		&FlagExpandEnv,
