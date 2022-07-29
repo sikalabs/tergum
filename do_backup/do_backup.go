@@ -24,12 +24,18 @@ func DoBackup(
 	telemetryDisabled bool,
 	extraName string,
 	jsonLogs bool,
+	debugLogs bool,
 ) {
 	if !jsonLogs {
 		log.Logger = log.Output(zerolog.ConsoleWriter{
 			Out:        os.Stdout,
 			TimeFormat: time.RFC3339,
 		})
+	}
+
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	if debugLogs {
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
 	// Seed random library

@@ -26,6 +26,7 @@ var Cmd = &cobra.Command{
 				FlagDisableTelemetry,
 				CmdFlagExtraName,
 				FlagJsonLogs,
+				true,
 			)
 			return
 		}
@@ -35,6 +36,7 @@ var Cmd = &cobra.Command{
 			FlagDisableTelemetry,
 			CmdFlagExtraName,
 			FlagJsonLogs,
+			true,
 		)
 	},
 }
