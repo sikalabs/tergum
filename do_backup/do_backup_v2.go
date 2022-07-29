@@ -95,10 +95,7 @@ func DoBackupV2(
 		backupDuration := time.Since(backupStart)
 
 		if err != nil {
-			bl.SaveEvent(
-				b.Source.Name(), b.ID, "---", "---",
-				int(backupDuration.Seconds()), 0, 0, 0, 0,
-				err, stdErr)
+			saveEventBackupErr(&bl, b, backupDuration, err, stdErr)
 			logBackupFailed(tel, b, int(backupDuration.Seconds()), err)
 			continue
 		}
@@ -113,11 +110,7 @@ func DoBackupV2(
 			data, errBackupMiddleware = m.Process(data)
 			if errBackupMiddleware != nil {
 				backupMiddlewareDuration = time.Since(backupMiddlewareStart)
-				bl.SaveEvent(b.Source.Name(), b.ID, "---", "---",
-					int(backupDuration.Seconds()),
-					int(backupMiddlewareDuration.Seconds()),
-					0, 0, 0,
-					errBackupMiddleware, "")
+				saveEventBackupMiddlewareErr(&bl, b, backupDuration, backupMiddlewareDuration, errBackupMiddleware)
 				logBackupMiddlewareFailed(tel, b, m, int(backupMiddlewareDuration.Seconds()), err)
 				continue
 			}
@@ -142,13 +135,7 @@ func DoBackupV2(
 				targetData, errTargetMiddleware = m.Process(targetData)
 				if errTargetMiddleware != nil {
 					targetMiddlewareDuration = time.Since(targetMiddlewareStart)
-					bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID,
-						int(backupDuration.Seconds()),
-						int(backupMiddlewareDuration.Seconds()),
-						0,
-						int(targetMiddlewareDuration.Seconds()),
-						0,
-						errTargetMiddleware, "")
+					saveEventTargetMiddlewareErr(&bl, b, t, backupDuration, backupMiddlewareDuration, targetMiddlewareDuration, errTargetMiddleware)
 					logTargetMiddlewareFailed(tel, b, t, m,
 						int(targetMiddlewareDuration.Seconds()),
 						errTargetMiddleware)
@@ -167,25 +154,11 @@ func DoBackupV2(
 			size, err := t.Save(targetData)
 			targetDuration := time.Since(targetStart)
 			if err != nil {
-				bl.SaveEvent(
-					b.Source.Name(), b.ID, t.Name(), t.ID,
-					int(backupDuration.Seconds()),
-					int(backupMiddlewareDuration.Seconds()),
-					int(targetDuration.Seconds()),
-					int(targetMiddlewareDuration.Seconds()),
-					size,
-					err, "")
+				saveEventTargetSaveErr(&bl, b, t, backupDuration, backupMiddlewareDuration, targetMiddlewareDuration, targetDuration, size, err)
 				logTargetFailed(tel, b, t, int(targetDuration.Seconds()), err)
 				continue
 			}
-			bl.SaveEvent(
-				b.Source.Name(), b.ID, t.Name(), t.ID,
-				int(backupDuration.Seconds()),
-				int(backupMiddlewareDuration.Seconds()),
-				int(targetDuration.Seconds()),
-				int(targetMiddlewareDuration.Seconds()),
-				size,
-				err, "")
+			saveEventTargetSaveOK(&bl, b, t, backupDuration, backupMiddlewareDuration, targetMiddlewareDuration, targetDuration, size, err)
 			logTargetDone(tel, b, t, int(targetDuration.Seconds()))
 		}
 	}
