@@ -25,6 +25,10 @@ func (e *BackupLogEvent) TotalDuration() int {
 		e.TargetDuration + e.TargetMiddlewaresDuration
 }
 
+func (l *BackupLog) SaveEventRaw(ev BackupLogEvent) {
+	l.Events = append(l.Events, ev)
+}
+
 func (l *BackupLog) SaveEvent(
 	sourceName string,
 	backupID string,
