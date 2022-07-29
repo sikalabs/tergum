@@ -5,7 +5,16 @@ Backups:
     Source:
       SingleFile:
         Path: tmp/single-file.in
+    Middlewares:
+      - Prefix:
+          Prefix: "BEGIN\n"
     Targets:
       - ID: filepath
         FilePath:
           Path: tmp/single-file.out
+      - ID: filepath2
+        Middlewares:
+          - Suffix:
+              Suffix: "END\n"
+        FilePath:
+          Path: tmp/single-file.out2
