@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/sikalabs/tergum/backup"
+	"github.com/sikalabs/tergum/backup/middleware"
 	"github.com/sikalabs/tergum/backup/target"
 	"github.com/sikalabs/tergum/backup_log"
 	"github.com/sikalabs/tergum/telemetry"
@@ -17,89 +18,146 @@ func sleep(b backup.Backup, tel telemetry.Telemetry, i int) {
 	}
 }
 
-func saveEventBackupErr(
-	bl *backup_log.BackupLog,
-	b backup.Backup,
-	backupDuration time.Duration,
-	err error,
-	stdErr string,
-) {
-	bl.SaveEvent(
+type DoBackupProcess struct {
+	Telemetry                telemetry.Telemetry
+	BackupLog                *backup_log.BackupLog
+	Backup                   backup.Backup
+	Middleware               middleware.Middleware
+	Target                   target.Target
+	TargetSize               int64
+	BackupDuration           time.Duration
+	BackupMiddlewareDuration time.Duration
+	TargetMiddlewareDuration time.Duration
+	TargetDuration           time.Duration
+	BackupError              error
+	BackupStdError           string
+	BackupMiddlewareError    error
+	TargetMiddlewareError    error
+	TargetError              error
+	backupStart              time.Time
+	backupMiddlewareStart    time.Time
+	targetMiddlewareStart    time.Time
+	targetStart              time.Time
+}
+
+func (d *DoBackupProcess) BackupStart() {
+	d.backupStart = time.Now()
+	logBackupStart(d.Telemetry, d.Backup)
+}
+
+func (d *DoBackupProcess) BackupFinish() {
+	d.BackupDuration = time.Since(d.backupStart)
+}
+
+func (d *DoBackupProcess) BackupMiddlewareStart() {
+	d.backupMiddlewareStart = time.Now()
+	logBackupMiddlewareStart(d.Telemetry, d.Backup, d.Middleware)
+}
+
+func (d *DoBackupProcess) BackupMiddlewareFinish() {
+	d.BackupMiddlewareDuration = time.Since(d.backupMiddlewareStart)
+}
+
+func (d *DoBackupProcess) TargetMiddlewareStart() {
+	d.targetMiddlewareStart = time.Now()
+	logTargetMiddlewareStart(d.Telemetry, d.Backup, d.Target, d.Middleware)
+}
+
+func (d *DoBackupProcess) TargetMiddlewareFinish() {
+	d.TargetMiddlewareDuration = time.Since(d.targetMiddlewareStart)
+}
+
+func (d *DoBackupProcess) TargetStart() {
+	d.targetStart = time.Now()
+	logTargetStart(d.Telemetry, d.Backup, d.Target)
+}
+
+func (d *DoBackupProcess) TargetFinish() {
+	d.BackupDuration = time.Since(d.targetStart)
+}
+
+func (d DoBackupProcess) BackupErr() {
+	b := d.Backup
+	d.BackupLog.SaveEvent(
 		b.Source.Name(), b.ID, "---", "---",
-		int(backupDuration.Seconds()), 0, 0, 0, 0,
-		err, stdErr)
+		int(d.BackupDuration.Seconds()), 0, 0, 0, 0,
+		d.BackupError, d.BackupStdError)
+	logBackupFailed(d.Telemetry, b, int(d.BackupDuration.Seconds()), d.BackupError)
 }
 
-func saveEventBackupMiddlewareErr(
-	bl *backup_log.BackupLog,
-	b backup.Backup,
-	backupDuration time.Duration,
-	backupMiddlewareDuration time.Duration,
-	err error,
-) {
-	bl.SaveEvent(b.Source.Name(), b.ID, "---", "---",
-		int(backupDuration.Seconds()),
-		int(backupMiddlewareDuration.Seconds()),
+func (d DoBackupProcess) BackupOK() {
+	logBackupDone(d.Telemetry, d.Backup, int(d.BackupDuration.Seconds()))
+}
+
+func (d DoBackupProcess) BackupMiddlewareErr() {
+	b := d.Backup
+	m := d.Middleware
+	d.BackupLog.SaveEvent(b.Source.Name(), b.ID, "---", "---",
+		int(d.BackupDuration.Seconds()),
+		int(d.BackupMiddlewareDuration.Seconds()),
 		0, 0, 0,
-		err, "")
+		d.BackupMiddlewareError, "")
+	logBackupMiddlewareFailed(
+		d.Telemetry, b, m,
+		int(d.BackupMiddlewareDuration.Seconds()),
+		d.BackupMiddlewareError)
 }
 
-func saveEventTargetMiddlewareErr(
-	bl *backup_log.BackupLog,
-	b backup.Backup,
-	t target.Target,
-	backupDuration time.Duration,
-	backupMiddlewareDuration time.Duration,
-	targetMiddlewareDuration time.Duration,
-	err error,
-) {
-	bl.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID,
-		int(backupDuration.Seconds()),
-		int(backupMiddlewareDuration.Seconds()),
+func (d DoBackupProcess) BackupMiddlewareOK() {
+	b := d.Backup
+	m := d.Middleware
+	logBackupMiddlewareDone(d.Telemetry, b, m, int(d.BackupMiddlewareDuration.Seconds()))
+}
+
+func (d DoBackupProcess) TargetMiddlewareErr() {
+	b := d.Backup
+	t := d.Target
+	m := d.Middleware
+	d.BackupLog.SaveEvent(b.Source.Name(), b.ID, t.Name(), t.ID,
+		int(d.BackupDuration.Seconds()),
+		int(d.BackupMiddlewareDuration.Seconds()),
 		0,
-		int(targetMiddlewareDuration.Seconds()),
+		int(d.TargetMiddlewareDuration.Seconds()),
 		0,
-		err, "")
+		d.TargetMiddlewareError, "")
+
+	logTargetMiddlewareFailed(d.Telemetry, b, t, m,
+		int(d.TargetMiddlewareDuration.Seconds()),
+		d.TargetMiddlewareError)
 }
 
-func saveEventTargetSaveErr(
-	bl *backup_log.BackupLog,
-	b backup.Backup,
-	t target.Target,
-	backupDuration time.Duration,
-	backupMiddlewareDuration time.Duration,
-	targetMiddlewareDuration time.Duration,
-	targetDuration time.Duration,
-	size int64,
-	err error,
-) {
-	bl.SaveEvent(
-		b.Source.Name(), b.ID, t.Name(), t.ID,
-		int(backupDuration.Seconds()),
-		int(backupMiddlewareDuration.Seconds()),
-		int(targetDuration.Seconds()),
-		int(targetMiddlewareDuration.Seconds()),
-		size,
-		err, "")
+func (d DoBackupProcess) TargetMiddlewareOK() {
+	b := d.Backup
+	t := d.Target
+	m := d.Middleware
+	logTargetMiddlewareDone(d.Telemetry, b, t, m, int(d.TargetMiddlewareDuration.Seconds()))
 }
 
-func saveEventTargetSaveOK(
-	bl *backup_log.BackupLog,
-	b backup.Backup,
-	t target.Target,
-	backupDuration time.Duration,
-	backupMiddlewareDuration time.Duration,
-	targetMiddlewareDuration time.Duration,
-	targetDuration time.Duration,
-	size int64,
-	err error,
-) {
-	bl.SaveEvent(
+func (d DoBackupProcess) SaveErr() {
+	b := d.Backup
+	t := d.Target
+	d.BackupLog.SaveEvent(
 		b.Source.Name(), b.ID, t.Name(), t.ID,
-		int(backupDuration.Seconds()),
-		int(backupMiddlewareDuration.Seconds()),
-		int(targetDuration.Seconds()),
-		int(targetMiddlewareDuration.Seconds()),
-		size,
-		err, "")
+		int(d.BackupDuration.Seconds()),
+		int(d.BackupMiddlewareDuration.Seconds()),
+		int(d.TargetDuration.Seconds()),
+		int(d.TargetMiddlewareDuration.Seconds()),
+		d.TargetSize,
+		d.TargetError, "")
+	logTargetFailed(d.Telemetry, b, t, int(d.TargetDuration.Seconds()), d.TargetError)
+
+}
+
+func (d DoBackupProcess) SaveOK() {
+	b := d.Backup
+	t := d.Target
+	d.BackupLog.SaveEvent(
+		b.Source.Name(), b.ID, t.Name(), t.ID,
+		int(d.BackupDuration.Seconds()),
+		int(d.BackupMiddlewareDuration.Seconds()),
+		int(d.TargetDuration.Seconds()),
+		int(d.TargetMiddlewareDuration.Seconds()),
+		d.TargetSize,
+		d.TargetError, "")
+	logTargetDone(d.Telemetry, b, t, int(d.TargetDuration.Seconds()))
 }

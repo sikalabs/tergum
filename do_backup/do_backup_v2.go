@@ -82,90 +82,82 @@ func DoBackupV2(
 	for i, b := range config.Backups {
 		var bo backup_output.BackupOutput
 		var data io.ReadSeeker
-		var stdErr string
 
 		sleep(b, tel, i)
 
 		// Backup source
-		logBackupStart(tel, b)
-		backupStart := time.Now()
+		pb := DoBackupProcess{
+			Telemetry: tel,
+			BackupLog: &bl,
+			Backup:    b,
+		}
+
+		pb.BackupStart()
 		if b.RemoteExec == nil {
 			// Standart local backup
-			bo, err = b.Source.Backup()
+			bo, pb.BackupError = b.Source.Backup()
 			data = bo.Data
-			stdErr = bo.Stderr
+			pb.BackupStdError = bo.Stderr
 		} else {
 			// Remote backup using tergum server
-			data, err = remoteBackup(b)
+			data, pb.BackupError = remoteBackup(b)
 		}
-		backupDuration := time.Since(backupStart)
+		pb.BackupFinish()
 
-		if err != nil {
-			saveEventBackupErr(&bl, b, backupDuration, err, stdErr)
-			logBackupFailed(tel, b, int(backupDuration.Seconds()), err)
+		if pb.BackupError != nil {
+			pb.BackupErr()
 			continue
 		}
-		logBackupDone(tel, b, int(backupDuration.Seconds()))
+		pb.BackupOK()
 
 		// Process Backup's Middlewares
-		var errBackupMiddleware error = nil
-		backupMiddlewareStart := time.Now()
-		var backupMiddlewareDuration time.Duration
+		pb.BackupMiddlewareStart()
 		for _, m := range b.Middlewares {
-			logBackupMiddlewareStart(tel, b, m)
-			data, errBackupMiddleware = m.Process(data)
-			if errBackupMiddleware != nil {
-				backupMiddlewareDuration = time.Since(backupMiddlewareStart)
-				saveEventBackupMiddlewareErr(&bl, b, backupDuration, backupMiddlewareDuration, errBackupMiddleware)
-				logBackupMiddlewareFailed(tel, b, m, int(backupMiddlewareDuration.Seconds()), err)
+			pb.Middleware = m
+			pb.BackupMiddlewareStart()
+			data, pb.BackupMiddlewareError = m.Process(data)
+			pb.BackupMiddlewareFinish()
+			if pb.BackupMiddlewareError != nil {
+				pb.BackupMiddlewareErr()
 				continue
 			}
-			backupMiddlewareDuration = time.Since(backupMiddlewareStart)
-			logBackupMiddlewareDone(tel, b, m, int(backupMiddlewareDuration.Seconds()))
 		}
 
-		if errBackupMiddleware != nil {
+		if pb.BackupMiddlewareError != nil {
 			continue
 		}
 
 		for _, t := range b.Targets {
+			pb.Target = t
 			targetData := data
 			targetData.Seek(0, 0)
 
 			// Process Targets's Middlewares
-			var errTargetMiddleware error = nil
-			targetMiddlewareStart := time.Now()
-			var targetMiddlewareDuration time.Duration
 			for _, m := range t.Middlewares {
-				logTargetMiddlewareStart(tel, b, t, m)
-				targetData, errTargetMiddleware = m.Process(targetData)
-				if errTargetMiddleware != nil {
-					targetMiddlewareDuration = time.Since(targetMiddlewareStart)
-					saveEventTargetMiddlewareErr(&bl, b, t, backupDuration, backupMiddlewareDuration, targetMiddlewareDuration, errTargetMiddleware)
-					logTargetMiddlewareFailed(tel, b, t, m,
-						int(targetMiddlewareDuration.Seconds()),
-						errTargetMiddleware)
+				pb.Middleware = m
+				pb.TargetMiddlewareStart()
+				targetData, pb.TargetMiddlewareError = m.Process(targetData)
+				pb.TargetMiddlewareFinish()
+
+				if pb.TargetMiddlewareError != nil {
+					pb.TargetMiddlewareErr()
 					continue
 				}
-				targetMiddlewareDuration = time.Since(targetMiddlewareStart)
-				logTargetMiddlewareDone(tel, b, t, m, int(targetMiddlewareDuration.Seconds()))
+				pb.TargetMiddlewareOK()
 			}
-			if errTargetMiddleware != nil {
+			if pb.TargetMiddlewareError != nil {
 				continue
 			}
 
 			// Save backup to target
-			logTargetStart(tel, b, t)
-			targetStart := time.Now()
-			size, err := t.Save(targetData)
-			targetDuration := time.Since(targetStart)
-			if err != nil {
-				saveEventTargetSaveErr(&bl, b, t, backupDuration, backupMiddlewareDuration, targetMiddlewareDuration, targetDuration, size, err)
-				logTargetFailed(tel, b, t, int(targetDuration.Seconds()), err)
+			pb.TargetStart()
+			pb.TargetSize, pb.TargetError = t.Save(targetData)
+			pb.TargetFinish()
+			if pb.TargetError != nil {
+				pb.SaveErr()
 				continue
 			}
-			saveEventTargetSaveOK(&bl, b, t, backupDuration, backupMiddlewareDuration, targetMiddlewareDuration, targetDuration, size, err)
-			logTargetDone(tel, b, t, int(targetDuration.Seconds()))
+			pb.SaveOK()
 		}
 	}
 
