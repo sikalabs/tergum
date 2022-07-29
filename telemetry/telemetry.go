@@ -116,7 +116,7 @@ func (t *Telemetry) SendEvent(name, data string) {
 		}).
 		Post(t.Config.Origin + "/api/v1/event")
 	if err == nil {
-		log.Info().
+		log.Debug().
 			Str("event_name", name).
 			Msg("Telemetry successfully sent.")
 	} else {
