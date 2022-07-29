@@ -78,11 +78,7 @@ func DoBackupV2(
 		var data io.ReadSeeker
 		var stdErr string
 
-		if b.SleepBefore != 0 && i != 0 {
-			logSleepStart(tel, b)
-			time.Sleep(time.Duration(b.SleepBefore) * time.Second)
-			logSleepDone(tel, b)
-		}
+		sleep(b, tel, i)
 
 		// Backup source
 		logBackupStart(tel, b)
