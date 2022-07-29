@@ -422,7 +422,7 @@ Email: <email of tergum cloud account>
 - [x] Redis
 - [x] [Notion](https://notion.so)
 - [x] FTP Server (for old school hostings)
-- [ ] Hashicorp Vault
+- [x] Hashicorp Vault
 
 ### Passwords Sources
 
