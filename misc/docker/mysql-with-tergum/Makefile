@@ -6,6 +6,7 @@ all: build push
 
 build:
 	docker build \
+		--pull \
 		--platform linux/amd64 \
 		--build-arg MYSQL_VERSION=${MYSQL_VERSION} \
 		--build-arg TERGUM_VERSION=${TERGUM_VERSION} \

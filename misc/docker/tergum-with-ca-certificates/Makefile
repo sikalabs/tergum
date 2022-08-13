@@ -6,6 +6,7 @@ all: build push
 
 build:
 	docker build \
+		--pull \
 		--platform linux/amd64 \
 		--build-arg TERGUM_VERSION=${TERGUM_VERSION} \
 		-t ${IMAGE} \
