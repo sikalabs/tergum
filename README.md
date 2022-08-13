@@ -413,6 +413,8 @@ Email: <email of tergum cloud account>
 - [x] MySQLServer
 - [ ] Oracle (Enterprise)
 - [ ] S3
+- [ ] Ceph RBD
+- [ ] CephFS
 - [x] MongoDB
 - [ ] Gitlab
 - [ ] Proxmox
