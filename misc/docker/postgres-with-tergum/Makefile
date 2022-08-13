@@ -6,7 +6,7 @@ all: build push
 
 build:
 	docker build \
-        --platform linux/amd64 \
+		--platform linux/amd64 \
 		--build-arg POSTGRES_VERSION=${POSTGRES_VERSION} \
 		--build-arg TERGUM_VERSION=${TERGUM_VERSION} \
 		-t ${IMAGE} \
