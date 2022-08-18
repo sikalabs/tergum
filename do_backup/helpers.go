@@ -73,7 +73,7 @@ func (d *DoBackupProcess) TargetStart() {
 }
 
 func (d *DoBackupProcess) TargetFinish() {
-	d.BackupDuration = time.Since(d.targetStart)
+	d.TargetDuration = time.Since(d.targetStart)
 }
 
 func (d DoBackupProcess) BackupErr() {
