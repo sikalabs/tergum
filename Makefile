@@ -26,3 +26,9 @@ dev-test-aws-yaml:
 commit-go-mod-tidy:
 	git add go.sum
 	git commit -m "[auto] refactor: go mod tidy"
+
+docker-build-all-images:
+	(cd misc/docker/mysql-with-tergum && make build)
+	(cd misc/docker/postgres-with-redis-with-tergum && make build)
+	(cd misc/docker/postgres-with-tergum && make build)
+	(cd misc/docker/tergum-with-ca-certificates && make build)
