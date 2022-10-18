@@ -2,6 +2,7 @@ Meta:
   SchemaVersion: 3
 Telemetry:
   CollectBackupLog: true
+  CollectHostData: true
 Notification:
   Backend:
     Email:
