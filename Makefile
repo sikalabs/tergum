@@ -1,6 +1,9 @@
 AWS_ACCESS_KEY_ID ?=
 AWS_SECRET_ACCESS_KEY ?=
 
+build-linux-amd64:
+	GOOS=linux GOARCH=amd64 go build -o tergum-linux-amd64
+
 dev-test-all-implementation1: dev-test-local-implementation1 dev-test-aws-implementation1
 
 dev-test-local-implementation1:
