@@ -41,7 +41,7 @@ func (s DirSource) Backup() (backup_output.BackupOutput, error) {
 		s.Path,
 	)
 	if err != nil {
-		return bo, err
+		return tmpBo, err
 	}
 
 	// Seek to start of backup file
