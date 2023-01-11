@@ -9,7 +9,8 @@ import (
 )
 
 type DirSource struct {
-	Path string `yaml:"Path"`
+	Path             string `yaml:"Path"`
+	IgnoreFailedRead bool   `yaml:"IgnoreFailedRead"`
 }
 
 func (s DirSource) Validate() error {
@@ -34,11 +35,15 @@ func (s DirSource) Backup() (backup_output.BackupOutput, error) {
 	}
 	defer os.Remove(f.Name())
 
+	args := []string{}
+	if s.IgnoreFailedRead {
+		args = append(args, "--ignore-failed-read")
+	}
+	args = append(args, []string{"-cf", f.Name(), s.Path}...)
+
 	tmpBo, err := backup_process_utils.BackupProcessExecToFile(
 		"tar",
-		"-cf",
-		f.Name(),
-		s.Path,
+		args...,
 	)
 	if err != nil {
 		return tmpBo, err
