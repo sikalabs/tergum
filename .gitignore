@@ -17,6 +17,7 @@
 # Tergum
 tergum
 tergum.exe
+tergum-linux-amd64
 
 # Goreleaser
 /dist
