@@ -175,6 +175,18 @@ Password: "pg"
 Database: "postgres"
 ```
 
+With extra args
+
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
+Database: "postgres"
+PgdumpExtraArgs:
+  - --ignore-version
+```
+
 #### Example BackupSourcePostgresServerConfiguration Block
 
 ```yaml
@@ -182,6 +194,17 @@ Host: "127.0.0.1"
 Port: "15432"
 User: "postgres"
 Password: "pg"
+```
+
+With extra args
+
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
+PgdumpallExtraArgs:
+  - --ignore-version
 ```
 
 #### Example BackupSourceMongoConfiguration Block
