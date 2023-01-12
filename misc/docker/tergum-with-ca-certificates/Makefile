@@ -1,4 +1,4 @@
-TERGUM_VERSION=v0.31.1
+TERGUM_VERSION=v0.32.0
 IMAGE=ghcr.io/tergum-extra/tergum-with-ca-certificates:${TERGUM_VERSION}
 IMAGE_BACKPORT=ghcr.io/tergum-extra/tergum-ca-certificates:${TERGUM_VERSION}
 

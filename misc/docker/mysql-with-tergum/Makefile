@@ -1,5 +1,5 @@
 MYSQL_VERSION=latest
-TERGUM_VERSION=v0.31.1
+TERGUM_VERSION=v0.32.0
 IMAGE=ghcr.io/tergum-extra/mysql-with-tergum:${MYSQL_VERSION}-tergum-${TERGUM_VERSION}
 
 all: build push
