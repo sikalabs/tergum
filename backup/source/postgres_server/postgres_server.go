@@ -9,10 +9,11 @@ import (
 )
 
 type PostgresServerSource struct {
-	Host     string `yaml:"Host"`
-	Port     string `yaml:"Port"`
-	User     string `yaml:"User"`
-	Password string `yaml:"Password"`
+	Host               string   `yaml:"Host"`
+	Port               string   `yaml:"Port"`
+	User               string   `yaml:"User"`
+	Password           string   `yaml:"Password"`
+	PgdumpallExtraArgs []string `yaml:"PgdumpallExtraArgs"`
 }
 
 func (s PostgresServerSource) Validate() error {
@@ -34,12 +35,16 @@ func (s PostgresServerSource) Validate() error {
 func (s PostgresServerSource) Backup() (backup_output.BackupOutput, error) {
 	env := os.Environ()
 	env = append(env, "PGPASSWORD="+s.Password)
-	return backup_process_utils.BackupProcessExecEnvToFile(
-		env,
-		"pg_dumpall",
+	args := []string{
 		"--host", s.Host,
 		"--port", s.Port,
 		"--user", s.User,
 		"--no-password",
+	}
+	args = append(s.PgdumpallExtraArgs, args...)
+	return backup_process_utils.BackupProcessExecEnvToFile(
+		env,
+		"pg_dumpall",
+		args...,
 	)
 }
