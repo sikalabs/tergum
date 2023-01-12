@@ -8,11 +8,12 @@ import (
 )
 
 type PostgresSource struct {
-	Host     string `yaml:"Host"`
-	Port     string `yaml:"Port"`
-	User     string `yaml:"User"`
-	Password string `yaml:"Password"`
-	Database string `yaml:"Database"`
+	Host            string   `yaml:"Host"`
+	Port            string   `yaml:"Port"`
+	User            string   `yaml:"User"`
+	Password        string   `yaml:"Password"`
+	Database        string   `yaml:"Database"`
+	PgdumpExtraArgs []string `yaml:"PgdumpExtraArgs"`
 }
 
 func (s PostgresSource) Validate() error {
@@ -35,12 +36,16 @@ func (s PostgresSource) Validate() error {
 }
 
 func (s PostgresSource) Backup() (backup_output.BackupOutput, error) {
+	args := []string{
+		"host=" + s.Host +
+			" port=" + s.Port +
+			" user=" + s.User +
+			" password=" + s.Password +
+			" dbname=" + s.Database,
+	}
+	args = append(s.PgdumpExtraArgs, args...)
 	return backup_process_utils.BackupProcessExecToFile(
 		"pg_dump",
-		"host="+s.Host+
-			" port="+s.Port+
-			" user="+s.User+
-			" password="+s.Password+
-			" dbname="+s.Database,
+		args...,
 	)
 }
