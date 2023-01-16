@@ -1,6 +1,10 @@
 AWS_ACCESS_KEY_ID ?=
 AWS_SECRET_ACCESS_KEY ?=
 
+release:
+	goreleaser
+	rm -rf ./dist
+
 build-linux-amd64:
 	GOOS=linux GOARCH=amd64 go build -o tergum-linux-amd64
 
