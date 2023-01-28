@@ -401,8 +401,9 @@ Target:
 ```yaml
 SmtpHost: "mail.example.com"
 SmtpPort: "25"
-Email: "tergum@example.com"
-Password: "asdfasdf"
+Usename: "aaa"
+Password: "aaa/bbb"
+From: "tergum@example.com"
 ```
 
 #### NotificationTarget Block
