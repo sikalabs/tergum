@@ -99,6 +99,7 @@ Source:
   Notion: <BackupSourceNotion>
   FTP: <BackupSourceFTP>
   Redis: <BackupSourceRedis>
+  Vault: <BackupSourceVault>
   Dummy: <BackupSourceDummy>
 Middlewares:
   - <MiddlewareConfiguration>
@@ -321,6 +322,13 @@ Password: <FTP password>
 ```yaml
 Host: <host>
 Port: <port>
+```
+
+### Example BackupSourceVault Block
+
+```yaml
+Addr: <vault address>
+Token: <vault token>
 ```
 
 ### Example BackupSourceDummy Block
