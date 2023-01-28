@@ -1,3 +1,3 @@
-ARG TERGUM_VERSION=v0.32.0
+ARG TERGUM_VERSION=v0.33.0
 FROM sikalabs/tergum:$TERGUM_VERSION as tergum
 RUN apt-get update && apt-get install -y ca-certificates
