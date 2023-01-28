@@ -99,6 +99,7 @@ Source:
   Notion: <BackupSourceNotion>
   FTP: <BackupSourceFTP>
   Redis: <BackupSourceRedis>
+  Dummy: <BackupSourceDummy>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -322,6 +323,12 @@ Host: <host>
 Port: <port>
 ```
 
+### Example BackupSourceDummy Block
+
+```yaml
+Content: <backup content>
+```
+
 #### Example BackupDestinationFilePathConfiguration Block
 
 ```yaml
@@ -448,6 +455,7 @@ Email: <email of tergum cloud account>
 - [x] [Notion](https://notion.so)
 - [x] FTP Server (for old school hostings)
 - [x] Hashicorp Vault
+- [x] Dummy (for testing)
 
 ### Passwords Sources
 
