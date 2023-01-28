@@ -11,7 +11,7 @@ import (
 type EmailBackend struct {
 	SmtpHost string `yaml:"SmtpHost"`
 	SmtpPort string `yaml:"SmtpPort"`
-	Email    string `yaml:"Email"`
+	Username string `yaml:"Username"`
 	Password string `yaml:"Password"`
 	From     string `yaml:"From"`
 }
