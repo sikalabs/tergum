@@ -26,6 +26,12 @@ func (b EmailBackend) Validate() error {
 	if b.From == "" {
 		return errors.New("EmailBackend backend requires From")
 	}
+	if b.Username == "" {
+		return errors.New("EmailBackend backend requires Username")
+	}
+	if b.Password == "" {
+		return errors.New("EmailBackend backend requires Password")
+	}
 	return nil
 }
 
