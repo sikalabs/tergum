@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/sikalabs/tergum/backup/source/dir"
+	"github.com/sikalabs/tergum/backup/source/dummy"
 	"github.com/sikalabs/tergum/backup/source/ftp"
 	"github.com/sikalabs/tergum/backup/source/kubernetes"
 	"github.com/sikalabs/tergum/backup/source/kubernetes_tls_secret"
@@ -33,6 +34,7 @@ type Source struct {
 	FTP                 *ftp.FTPSource                             `yaml:"FTP"`
 	Redis               *redis.RedisSource                         `yaml:"Redis"`
 	Vault               *vault.VaultSource                         `yaml:"Vault"`
+	Dummy               *dummy.DummySource                         `yaml:"Dummy"`
 }
 
 func (s Source) Validate() error {
@@ -98,6 +100,11 @@ func (s Source) Validate() error {
 
 	if s.Vault != nil {
 		p := *s.Vault
+		return p.Validate()
+	}
+
+	if s.Dummy != nil {
+		p := *s.Dummy
 		return p.Validate()
 	}
 
@@ -170,6 +177,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.Dummy != nil {
+		p := *s.Dummy
+		return p.Backup()
+	}
+
 	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -224,6 +236,10 @@ func (s Source) Name() string {
 
 	if s.Vault != nil {
 		return "Vault"
+	}
+
+	if s.Dummy != nil {
+		return "Dummy"
 	}
 
 	return ""
