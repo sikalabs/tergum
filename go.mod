@@ -10,7 +10,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gorilla/mux v1.8.0
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/ondrejsika/gosendmail v0.3.0
+	github.com/ondrejsika/gosendmail v0.4.0
 	github.com/ondrejsika/notion-backup v0.1.0
 	github.com/rs/zerolog v1.25.0
 	github.com/spf13/cobra v1.2.1

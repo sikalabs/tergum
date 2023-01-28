@@ -52,8 +52,9 @@ func (b EmailBackend) SendMail(
 	err := gosendmail.GoRawSendMail(
 		b.SmtpHost,
 		b.SmtpPort,
-		b.From,
+		b.Username,
 		b.Password,
+		b.From,
 		to,
 		rawMessage,
 	)
