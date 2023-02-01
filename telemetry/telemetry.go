@@ -135,3 +135,10 @@ func (t *Telemetry) SendEventBackupLog(bl backup_log.BackupLog) {
 	out, _ := json.Marshal(bl)
 	t.SendEvent("backup-log-dump/v1", string(out))
 }
+
+func (t *Telemetry) SendEventInitExtra(doBackupImplementation string) {
+	out, _ := json.Marshal(map[string]string{
+		"do_backup_implementation": doBackupImplementation,
+	})
+	t.SendEvent("init-extra/v1", string(out))
+}

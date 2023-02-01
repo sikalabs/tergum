@@ -66,6 +66,7 @@ func DoBackup(
 	)
 
 	tel.SendEventInit()
+	tel.SendEventInitExtra("v1")
 
 	// Create Backup Log
 	bl := backup_log.BackupLog{
