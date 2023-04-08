@@ -1,0 +1,16 @@
+Meta:
+  SchemaVersion: 3
+Telemetry:
+  CollectBackupLog: true
+  CollectHostData: true
+Backups:
+  - ID: gitlab
+    Source:
+      Gitlab:
+        NamePrefix: tergum
+    Targets:
+      - ID: file
+        File:
+          Dir: /tmp/tergum
+          Prefix: gitlab
+          Suffix: tar
