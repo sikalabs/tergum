@@ -101,6 +101,7 @@ Source:
   Redis: <BackupSourceRedis>
   Vault: <BackupSourceVault>
   Dummy: <BackupSourceDummy>
+  Gitlab: <BackupSourceGitlab>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -335,6 +336,12 @@ Token: <vault token>
 
 ```yaml
 Content: <backup content>
+```
+
+### Example BackupSourceGitlab Block
+
+```yaml
+NamePrefix: <prefix Gitlab backup file in /var/opt/gitlab/backups>
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
