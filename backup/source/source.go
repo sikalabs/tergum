@@ -6,6 +6,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/dir"
 	"github.com/sikalabs/tergum/backup/source/dummy"
 	"github.com/sikalabs/tergum/backup/source/ftp"
+	"github.com/sikalabs/tergum/backup/source/gitlab"
 	"github.com/sikalabs/tergum/backup/source/kubernetes"
 	"github.com/sikalabs/tergum/backup/source/kubernetes_tls_secret"
 	"github.com/sikalabs/tergum/backup/source/mongo"
@@ -35,6 +36,7 @@ type Source struct {
 	Redis               *redis.RedisSource                         `yaml:"Redis"`
 	Vault               *vault.VaultSource                         `yaml:"Vault"`
 	Dummy               *dummy.DummySource                         `yaml:"Dummy"`
+	Gitlab              *gitlab.GitlabSource                       `yaml:"Gitlab"`
 }
 
 func (s Source) Validate() error {
@@ -105,6 +107,11 @@ func (s Source) Validate() error {
 
 	if s.Dummy != nil {
 		p := *s.Dummy
+		return p.Validate()
+	}
+
+	if s.Gitlab != nil {
+		p := *s.Gitlab
 		return p.Validate()
 	}
 
@@ -182,6 +189,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.Gitlab != nil {
+		p := *s.Gitlab
+		return p.Backup()
+	}
+
 	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -240,6 +252,10 @@ func (s Source) Name() string {
 
 	if s.Dummy != nil {
 		return "Dummy"
+	}
+
+	if s.Gitlab != nil {
+		return "Gitlab"
 	}
 
 	return ""
