@@ -462,7 +462,7 @@ Email: <email of tergum cloud account>
 - [ ] Ceph RBD
 - [ ] CephFS
 - [x] MongoDB
-- [ ] Gitlab
+- [x] Gitlab
 - [ ] Proxmox
 - [x] Kubernetes Resource
   - [x] Kubernetes TLS Secret
