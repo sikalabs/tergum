@@ -102,6 +102,7 @@ Source:
   Vault: <BackupSourceVault>
   Dummy: <BackupSourceDummy>
   Gitlab: <BackupSourceGitlab>
+  Consul: <BackupSourceConsul>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -342,6 +343,26 @@ Content: <backup content>
 
 ```yaml
 NamePrefix: <prefix Gitlab backup file in /var/opt/gitlab/backups>
+```
+
+### Example BackupSourceConsul Block
+
+```yaml
+Addr: <host>
+Token: <token>
+```
+
+Example without ACL
+
+```yaml
+Addr: http://127.0.0.1:8500
+```
+
+Example with ACL requires token
+
+```yaml
+Addr: http://127.0.0.1:8500
+Token: 51047cd1-c243-a969-2bf1-a845405e4da9
 ```
 
 #### Example BackupDestinationFilePathConfiguration Block
