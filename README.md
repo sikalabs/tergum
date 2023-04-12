@@ -492,7 +492,7 @@ Email: <email of tergum cloud account>
 - [x] [Notion](https://notion.so)
 - [x] FTP Server (for old school hostings)
 - [x] Hashicorp Vault
-- [ ] Hashicorp Consul
+- [x] Hashicorp Consul
 - [x] Dummy (for testing)
 
 ### Passwords Sources
