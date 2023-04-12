@@ -3,6 +3,7 @@ package source
 import (
 	"fmt"
 
+	"github.com/sikalabs/tergum/backup/source/consul"
 	"github.com/sikalabs/tergum/backup/source/dir"
 	"github.com/sikalabs/tergum/backup/source/dummy"
 	"github.com/sikalabs/tergum/backup/source/ftp"
@@ -37,6 +38,7 @@ type Source struct {
 	Vault               *vault.VaultSource                         `yaml:"Vault"`
 	Dummy               *dummy.DummySource                         `yaml:"Dummy"`
 	Gitlab              *gitlab.GitlabSource                       `yaml:"Gitlab"`
+	Consul              *consul.ConsulSource                       `yaml:"Consul"`
 }
 
 func (s Source) Validate() error {
@@ -112,6 +114,11 @@ func (s Source) Validate() error {
 
 	if s.Gitlab != nil {
 		p := *s.Gitlab
+		return p.Validate()
+	}
+
+	if s.Consul != nil {
+		p := *s.Consul
 		return p.Validate()
 	}
 
@@ -194,6 +201,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.Consul != nil {
+		p := *s.Consul
+		return p.Backup()
+	}
+
 	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -256,6 +268,10 @@ func (s Source) Name() string {
 
 	if s.Gitlab != nil {
 		return "Gitlab"
+	}
+
+	if s.Consul != nil {
+		return "Consul"
 	}
 
 	return ""
