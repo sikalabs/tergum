@@ -89,7 +89,9 @@ func httpGetWithToken(
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set(tokenHeaderName, tokenHeaderValue)
+	if tokenHeaderName != "" && tokenHeaderValue != "" {
+		req.Header.Set(tokenHeaderName, tokenHeaderValue)
+	}
 
 	client := http.Client{}
 	resp, err := client.Do(req)
