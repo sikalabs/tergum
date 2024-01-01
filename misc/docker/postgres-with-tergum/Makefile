@@ -2,7 +2,13 @@ POSTGRES_VERSION=16
 TERGUM_VERSION=v0.35.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
-all: build push
+all:
+	make build-and-push
+	make build-and-push POSTGRES_VERSION=15
+	make build-and-push POSTGRES_VERSION=14
+	make build-and-push POSTGRES_VERSION=13
+
+build-and-push: build push
 
 build:
 	docker build \
