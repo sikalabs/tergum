@@ -75,7 +75,7 @@ dockers:
       image_templates:
         - "sikalabs/tergum:{{ .Tag }}"
         - "ghcr.io/sikalabs/tergum:{{ .Tag }}"
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.goreleaser
       ids:
         - tergum
       build_flag_templates:
@@ -96,7 +96,7 @@ dockers:
       image_templates:
         - "sikalabs/tergum:{{ .Tag }}-arm64v8"
         - "ghcr.io/sikalabs/tergum:{{ .Tag }}-arm64v8"
-      dockerfile: Dockerfile.arm64v8
+      dockerfile: Dockerfile.goreleaser.arm64v8
       ids:
         - tergum
       build_flag_templates:
