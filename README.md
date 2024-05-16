@@ -343,7 +343,10 @@ Content: <backup content>
 
 ```yaml
 NamePrefix: <prefix Gitlab backup file in /var/opt/gitlab/backups>
+Skip: <skip (for example registry)>
 ```
+
+- Gitlab Docs about SKIP - <https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html?tab=Linux+package+%28Omnibus%29#excluding-specific-data-from-the-backup>
 
 ### Example BackupSourceConsul Block
 
