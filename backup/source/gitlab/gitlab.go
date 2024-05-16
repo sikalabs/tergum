@@ -12,6 +12,7 @@ import (
 
 type GitlabSource struct {
 	NamePrefix string `yaml:"NamePrefix"`
+	Skip       string `yaml:"Skip"`
 }
 
 func (s GitlabSource) Validate() error {
@@ -30,7 +31,17 @@ func (s GitlabSource) Backup() (backup_output.BackupOutput, error) {
 
 	bp := backup_process.BackupProcess{}
 	bp.Init()
-	err = bp.ExecWait("gitlab-backup", "create", "BACKUP="+backupName)
+
+	args := []string{
+		"create",
+		"BACKUP=" + backupName,
+	}
+
+	if s.Skip != "" {
+		args = append(args, "SKIP="+s.Skip)
+	}
+
+	err = bp.ExecWait("gitlab-backup", args...)
 	stderr, _ := bp.GetStderr()
 	if err != nil {
 		return backup_output.BackupOutput{
