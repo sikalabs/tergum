@@ -8,7 +8,7 @@ import (
 )
 
 type DummySource struct {
-	Content string `yaml:"Content"`
+	Content string `yaml:"Content" json:"Content,omitempty"`
 }
 
 func (s DummySource) Validate() error {

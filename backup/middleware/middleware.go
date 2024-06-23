@@ -11,10 +11,10 @@ import (
 )
 
 type Middleware struct {
-	Gzip                *gzip.GzipMiddleware                                `yaml:"Gzip"`
-	SymmetricEncryption *symmetric_encryption.SymmetricEncryptionMiddleware `yaml:"SymmetricEncryption"`
-	Prefix              *prefix.PrefixMiddleware                            `yaml:"Prefix"`
-	Suffix              *suffix.SuffixMiddleware                            `yaml:"Suffix"`
+	Gzip                *gzip.GzipMiddleware                                `yaml:"Gzip" json:"Gzip,omitempty"`
+	SymmetricEncryption *symmetric_encryption.SymmetricEncryptionMiddleware `yaml:"SymmetricEncryption" json:"SymmetricEncryption,omitempty"`
+	Prefix              *prefix.PrefixMiddleware                            `yaml:"Prefix" json:"Prefix,omitempty"`
+	Suffix              *suffix.SuffixMiddleware                            `yaml:"Suffix" json:"Suffix,omitempty"`
 }
 
 func (m Middleware) Validate() error {

@@ -11,8 +11,8 @@ import (
 )
 
 type GitlabSource struct {
-	NamePrefix string `yaml:"NamePrefix"`
-	Skip       string `yaml:"Skip"`
+	NamePrefix string `yaml:"NamePrefix" json:"NamePrefix,omitempty"`
+	Skip       string `yaml:"Skip" json:"Skip,omitempty"`
 }
 
 func (s GitlabSource) Validate() error {

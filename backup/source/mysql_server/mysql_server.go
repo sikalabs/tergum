@@ -8,11 +8,11 @@ import (
 )
 
 type MysqlServerSource struct {
-	Host               string   `yaml:"Host"`
-	Port               string   `yaml:"Port"`
-	User               string   `yaml:"User"`
-	Password           string   `yaml:"Password"`
-	MysqldumpExtraArgs []string `yaml:"MysqldumpExtraArgs"`
+	Host               string   `yaml:"Host" json:"Host,omitempty"`
+	Port               string   `yaml:"Port" json:"Port,omitempty"`
+	User               string   `yaml:"User" json:"User,omitempty"`
+	Password           string   `yaml:"Password" json:"Password,omitempty"`
+	MysqldumpExtraArgs []string `yaml:"MysqldumpExtraArgs" json:"MysqldumpExtraArgs,omitempty"`
 }
 
 func (s MysqlServerSource) Validate() error {

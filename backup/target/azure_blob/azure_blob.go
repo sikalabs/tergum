@@ -9,11 +9,11 @@ import (
 )
 
 type AzureBlobTarget struct {
-	AccountName   string `yaml:"AccountName"`
-	AccountKey    string `yaml:"AccountKey"`
-	ContainerName string `yaml:"ContainerName"`
-	Prefix        string `yaml:"Prefix"`
-	Suffix        string `yaml:"Suffix"`
+	AccountName   string `yaml:"AccountName" json:"AccountName,omitempty"`
+	AccountKey    string `yaml:"AccountKey" json:"AccountKey,omitempty"`
+	ContainerName string `yaml:"ContainerName" json:"ContainerName,omitempty"`
+	Prefix        string `yaml:"Prefix" json:"Prefix,omitempty"`
+	Suffix        string `yaml:"Suffix" json:"Suffix,omitempty"`
 }
 
 func (t AzureBlobTarget) Validate() error {

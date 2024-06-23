@@ -8,8 +8,8 @@ import (
 )
 
 type VaultSource struct {
-	Addr  string `yaml:"Addr"`
-	Token string `yaml:"Token"`
+	Addr  string `yaml:"Addr" json:"Addr,omitempty"`
+	Token string `yaml:"Token" json:"Token,omitempty"`
 }
 
 func (s VaultSource) Validate() error {

@@ -15,11 +15,11 @@ import (
 const DEFAULT_TELEMETRY_ORIGIN = "https://tergum-telemetry-api.sikalabs.com"
 
 type TelemetryConfig struct {
-	Origin           string `yaml:"Origin"`
-	Disable          bool   `yaml:"Disable"`
-	Name             string `yaml:"Name"`
-	CollectHostData  bool   `yaml:"CollectHostData"`
-	CollectBackupLog bool   `yaml:"CollectBackupLog"`
+	Origin           string `yaml:"Origin" json:"Origin,omitempty"`
+	Disable          bool   `yaml:"Disable" json:"Disable,omitempty"`
+	Name             string `yaml:"Name" json:"Name,omitempty"`
+	CollectHostData  bool   `yaml:"CollectHostData" json:"CollectHostData,omitempty"`
+	CollectBackupLog bool   `yaml:"CollectBackupLog" json:"CollectBackupLog,omitempty"`
 }
 
 type HostData struct {

@@ -8,8 +8,8 @@ import (
 )
 
 type RedisSource struct {
-	Host string `yaml:"Host"`
-	Port string `yaml:"Port"`
+	Host string `yaml:"Host" json:"Host,omitempty"`
+	Port string `yaml:"Port" json:"Port,omitempty"`
 }
 
 func (s RedisSource) Validate() error {
