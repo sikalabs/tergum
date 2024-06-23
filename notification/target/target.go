@@ -10,9 +10,9 @@ import (
 )
 
 type Target struct {
-	OnErrorOnly  bool                        `yaml:"OnErrorOnly"`
-	Email        *email.EmailRule            `yaml:"Email"`
-	SlackWebhook *slack_webhook.SlackWebhook `yaml:"SlackWebhook"`
+	OnErrorOnly  bool                        `yaml:"OnErrorOnly" json:"OnErrorOnly,omitempty"`
+	Email        *email.EmailRule            `yaml:"Email" json:"Email,omitempty"`
+	SlackWebhook *slack_webhook.SlackWebhook `yaml:"SlackWebhook" json:"SlackWebhook,omitempty"`
 }
 
 func (r Target) Validate() error {

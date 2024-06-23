@@ -7,8 +7,8 @@ import (
 )
 
 type Notification struct {
-	Backend backend.Backend `yaml:"Backend"`
-	Targets []target.Target `yaml:"Targets"`
+	Backend backend.Backend `yaml:"Backend" json:"Backend,omitempty"`
+	Targets []target.Target `yaml:"Targets" json:"Targets,omitempty"`
 }
 
 func (a Notification) Validate() error {

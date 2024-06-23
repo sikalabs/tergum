@@ -9,8 +9,8 @@ import (
 )
 
 type DirSource struct {
-	Path             string `yaml:"Path"`
-	IgnoreFailedRead bool   `yaml:"IgnoreFailedRead"`
+	Path             string `yaml:"Path" json:"Path,omitempty"`
+	IgnoreFailedRead bool   `yaml:"IgnoreFailedRead" json:"IgnoreFailedRead,omitempty"`
 }
 
 func (s DirSource) Validate() error {

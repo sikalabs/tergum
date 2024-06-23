@@ -9,16 +9,16 @@ import (
 )
 
 type RemoteExec struct {
-	Server string `yaml:"Server"`
+	Server string `yaml:"Server" json:"Server,omitempty"`
 }
 
 type Backup struct {
-	ID          string                  `yaml:"ID"`
-	RemoteExec  *RemoteExec             `yaml:"RemoteExec"`
-	Source      *source.Source          `yaml:"Source"`
-	Middlewares []middleware.Middleware `yaml:"Middlewares"`
-	Targets     []target.Target         `yaml:"Targets"`
-	SleepBefore int                     `yaml:"SleepBefore"`
+	ID          string                  `yaml:"ID" json:"ID,omitempty"`
+	RemoteExec  *RemoteExec             `yaml:"RemoteExec" json:"RemoteExec,omitempty"`
+	Source      *source.Source          `yaml:"Source" json:"Source,omitempty"`
+	Middlewares []middleware.Middleware `yaml:"Middlewares" json:"Middlewares,omitempty"`
+	Targets     []target.Target         `yaml:"Targets" json:"Targets,omitempty"`
+	SleepBefore int                     `yaml:"SleepBefore" json:"SleepBefore,omitempty"`
 }
 
 func (b Backup) Validate() error {

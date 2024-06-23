@@ -9,11 +9,11 @@ import (
 )
 
 type EmailBackend struct {
-	SmtpHost string `yaml:"SmtpHost"`
-	SmtpPort string `yaml:"SmtpPort"`
-	Username string `yaml:"Username"`
-	Password string `yaml:"Password"`
-	From     string `yaml:"From"`
+	SmtpHost string `yaml:"SmtpHost" json:"SmtpHost,omitempty"`
+	SmtpPort string `yaml:"SmtpPort" json:"SmtpPort,omitempty"`
+	Username string `yaml:"Username" json:"Username,omitempty"`
+	Password string `yaml:"Password" json:"Password,omitempty"`
+	From     string `yaml:"From" json:"From,omitempty"`
 }
 
 func (b EmailBackend) Validate() error {

@@ -8,7 +8,7 @@ import (
 )
 
 type PrefixMiddleware struct {
-	Prefix string `yaml:"Prefix"`
+	Prefix string `yaml:"Prefix" json:"Prefix,omitempty"`
 }
 
 func (m PrefixMiddleware) Validate() error {

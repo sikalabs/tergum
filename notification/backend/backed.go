@@ -3,7 +3,7 @@ package backend
 import "github.com/sikalabs/tergum/notification/backend/email"
 
 type Backend struct {
-	Email *email.EmailBackend `yaml:"Email"`
+	Email *email.EmailBackend `yaml:"Email" json:"Email,omitempty"`
 }
 
 func (b Backend) Validate() error {

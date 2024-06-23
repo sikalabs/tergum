@@ -8,10 +8,10 @@ import (
 )
 
 type KubernetesTLSSecret struct {
-	Server     string `yaml:"Server"`
-	Token      string `yaml:"Token"`
-	Namespace  string `yaml:"Namespace"`
-	SecretName string `yaml:"SecretName"`
+	Server     string `yaml:"Server" json:"Server,omitempty"`
+	Token      string `yaml:"Token" json:"Token,omitempty"`
+	Namespace  string `yaml:"Namespace" json:"Namespace,omitempty"`
+	SecretName string `yaml:"SecretName" json:"SecretName,omitempty"`
 }
 
 func (s KubernetesTLSSecret) Validate() error {

@@ -8,7 +8,7 @@ import (
 )
 
 type SuffixMiddleware struct {
-	Suffix string `yaml:"Suffix"`
+	Suffix string `yaml:"Suffix" json:"Suffix,omitempty"`
 }
 
 func (m SuffixMiddleware) Validate() error {

@@ -17,15 +17,15 @@ const MIN_CONFIG_VERSION = 3
 const MAX_CONFIG_VERSION = 3
 
 type TergumConfigMeta struct {
-	SchemaVersion int `yaml:"SchemaVersion"`
+	SchemaVersion int `yaml:"SchemaVersion" json:"SchemaVersion,omitempty"`
 }
 
 type TergumConfig struct {
-	Meta         TergumConfigMeta           `yaml:"Meta"`
-	Backups      []backup.Backup            `yaml:"Backups"`
-	Notification *notification.Notification `yaml:"Notification"`
-	Telemetry    *telemetry.TelemetryConfig `yaml:"Telemetry"`
-	Cloud        *cloud.CloudConfig         `yaml:"Cloud"`
+	Meta         TergumConfigMeta           `yaml:"Meta" json:"Meta,omitempty"`
+	Backups      []backup.Backup            `yaml:"Backups" json:"Backups,omitempty"`
+	Notification *notification.Notification `yaml:"Notification" json:"Notification,omitempty"`
+	Telemetry    *telemetry.TelemetryConfig `yaml:"Telemetry" json:"Telemetry,omitempty"`
+	Cloud        *cloud.CloudConfig         `yaml:"Cloud" json:"Cloud,omitempty"`
 }
 
 func (c *TergumConfig) Load(path string, expandEnv bool) error {

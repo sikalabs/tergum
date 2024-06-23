@@ -23,22 +23,22 @@ import (
 )
 
 type Source struct {
-	Mysql               *mysql.MysqlSource                         `yaml:"Mysql"`
-	MysqlServer         *mysql_server.MysqlServerSource            `yaml:"MysqlServer"`
-	Postgres            *postgres.PostgresSource                   `yaml:"Postgres"`
-	PostgresServer      *postgres_server.PostgresServerSource      `yaml:"PostgresServer"`
-	Mongo               *mongo.MongoSource                         `yaml:"Mongo"`
-	SingleFile          *single_file.SingleFileSource              `yaml:"SingleFile"`
-	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret"`
-	Kubernetes          *kubernetes.Kubernetes                     `yaml:"Kubernetes"`
-	Dir                 *dir.DirSource                             `yaml:"Dir"`
-	Notion              *notion.NotionSource                       `yaml:"Notion"`
-	FTP                 *ftp.FTPSource                             `yaml:"FTP"`
-	Redis               *redis.RedisSource                         `yaml:"Redis"`
-	Vault               *vault.VaultSource                         `yaml:"Vault"`
-	Dummy               *dummy.DummySource                         `yaml:"Dummy"`
-	Gitlab              *gitlab.GitlabSource                       `yaml:"Gitlab"`
-	Consul              *consul.ConsulSource                       `yaml:"Consul"`
+	Mysql               *mysql.MysqlSource                         `yaml:"Mysql" json:"Mysql,omitempty"`
+	MysqlServer         *mysql_server.MysqlServerSource            `yaml:"MysqlServer" json:"MysqlServer,omitempty"`
+	Postgres            *postgres.PostgresSource                   `yaml:"Postgres" json:"Postgres,omitempty"`
+	PostgresServer      *postgres_server.PostgresServerSource      `yaml:"PostgresServer" json:"PostgresServer,omitempty"`
+	Mongo               *mongo.MongoSource                         `yaml:"Mongo" json:"Mongo,omitempty"`
+	SingleFile          *single_file.SingleFileSource              `yaml:"SingleFile" json:"SingleFile,omitempty"`
+	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret" json:"KubernetesTLSSecret,omitempty"`
+	Kubernetes          *kubernetes.Kubernetes                     `yaml:"Kubernetes" json:"Kubernetes,omitempty"`
+	Dir                 *dir.DirSource                             `yaml:"Dir" json:"Dir,omitempty"`
+	Notion              *notion.NotionSource                       `yaml:"Notion" json:"Notion,omitempty"`
+	FTP                 *ftp.FTPSource                             `yaml:"FTP" json:"FTP,omitempty"`
+	Redis               *redis.RedisSource                         `yaml:"Redis" json:"Redis,omitempty"`
+	Vault               *vault.VaultSource                         `yaml:"Vault" json:"Vault,omitempty"`
+	Dummy               *dummy.DummySource                         `yaml:"Dummy" json:"Dummy,omitempty"`
+	Gitlab              *gitlab.GitlabSource                       `yaml:"Gitlab" json:"Gitlab,omitempty"`
+	Consul              *consul.ConsulSource                       `yaml:"Consul" json:"Consul,omitempty"`
 }
 
 func (s Source) Validate() error {

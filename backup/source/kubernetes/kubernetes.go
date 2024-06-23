@@ -8,11 +8,11 @@ import (
 )
 
 type Kubernetes struct {
-	Server    string `yaml:"Server"`
-	Token     string `yaml:"Token"`
-	Namespace string `yaml:"Namespace"`
-	Resource  string `yaml:"Resource"`
-	Name      string `yaml:"Name"`
+	Server    string `yaml:"Server" json:"Server,omitempty"`
+	Token     string `yaml:"Token" json:"Token,omitempty"`
+	Namespace string `yaml:"Namespace" json:"Namespace,omitempty"`
+	Resource  string `yaml:"Resource" json:"Resource,omitempty"`
+	Name      string `yaml:"Name" json:"Name,omitempty"`
 }
 
 func (s Kubernetes) Validate() error {

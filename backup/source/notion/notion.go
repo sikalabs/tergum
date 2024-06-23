@@ -9,9 +9,9 @@ import (
 )
 
 type NotionSource struct {
-	Token   string `yaml:"Token"`
-	SpaceID string `yaml:"SpaceID"`
-	Format  string `yaml:"Format"`
+	Token   string `yaml:"Token" json:"Token,omitempty"`
+	SpaceID string `yaml:"SpaceID" json:"SpaceID,omitempty"`
+	Format  string `yaml:"Format" json:"Format,omitempty"`
 }
 
 func (s NotionSource) Validate() error {

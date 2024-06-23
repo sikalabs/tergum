@@ -12,8 +12,8 @@ import (
 )
 
 type SlackWebhook struct {
-	URLs   []string `yaml:"URLs"`
-	SendOK bool     `yaml:"SendOK"`
+	URLs   []string `yaml:"URLs" json:"URLs,omitempty"`
+	SendOK bool     `yaml:"SendOK" json:"SendOK,omitempty"`
 }
 
 func (t SlackWebhook) Validate() error {

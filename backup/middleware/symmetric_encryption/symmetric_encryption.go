@@ -11,7 +11,7 @@ import (
 )
 
 type SymmetricEncryptionMiddleware struct {
-	Passphrase string `yaml:"Passphrase"`
+	Passphrase string `yaml:"Passphrase" json:"Passphrase,omitempty"`
 }
 
 func (m SymmetricEncryptionMiddleware) Validate() error {

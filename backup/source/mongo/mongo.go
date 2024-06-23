@@ -9,12 +9,12 @@ import (
 )
 
 type MongoSource struct {
-	Host                   string `yaml:"Host"`
-	Port                   string `yaml:"Port"`
-	User                   string `yaml:"User"`
-	Password               string `yaml:"Password"`
-	Database               string `yaml:"Database"`
-	AuthenticationDatabase string `yaml:"AuthenticationDatabase"`
+	Host                   string `yaml:"Host" json:"Host,omitempty"`
+	Port                   string `yaml:"Port" json:"Port,omitempty"`
+	User                   string `yaml:"User" json:"User,omitempty"`
+	Password               string `yaml:"Password" json:"Password,omitempty"`
+	Database               string `yaml:"Database" json:"Database,omitempty"`
+	AuthenticationDatabase string `yaml:"AuthenticationDatabase" json:"AuthenticationDatabase,omitempty"`
 }
 
 func (s MongoSource) Validate() error {

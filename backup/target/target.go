@@ -13,12 +13,12 @@ import (
 )
 
 type Target struct {
-	ID          string                      `yaml:"ID"`
-	Middlewares []middleware.Middleware     `yaml:"Middlewares"`
-	S3          *s3.S3Target                `yaml:"S3"`
-	File        *file.FileTarget            `yaml:"File"`
-	FilePath    *filepath.FilePathTarget    `yaml:"FilePath"`
-	AzureBlob   *azure_blob.AzureBlobTarget `yaml:"AzureBlob"`
+	ID          string                      `yaml:"ID" json:"ID,omitempty"`
+	Middlewares []middleware.Middleware     `yaml:"Middlewares" json:"Middlewares,omitempty"`
+	S3          *s3.S3Target                `yaml:"S3" json:"S3,omitempty"`
+	File        *file.FileTarget            `yaml:"File" json:"File,omitempty"`
+	FilePath    *filepath.FilePathTarget    `yaml:"FilePath" json:"FilePath,omitempty"`
+	AzureBlob   *azure_blob.AzureBlobTarget `yaml:"AzureBlob" json:"AzureBlob,omitempty"`
 }
 
 func (t Target) Validate() error {

@@ -9,8 +9,8 @@ import (
 )
 
 type EmailRule struct {
-	Emails []string `yaml:"Emails"`
-	SendOK bool     `yaml:"SendOK"`
+	Emails []string `yaml:"Emails" json:"Emails,omitempty"`
+	SendOK bool     `yaml:"SendOK" json:"SendOK,omitempty"`
 }
 
 func (r EmailRule) Validate() error {

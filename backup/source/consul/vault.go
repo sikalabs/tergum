@@ -8,8 +8,8 @@ import (
 )
 
 type ConsulSource struct {
-	Addr  string `yaml:"Addr"`
-	Token string `yaml:"Token"`
+	Addr  string `yaml:"Addr" json:"Addr,omitempty"`
+	Token string `yaml:"Token" json:"Token,omitempty"`
 }
 
 func (s ConsulSource) Validate() error {

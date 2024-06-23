@@ -8,7 +8,7 @@ import (
 )
 
 type SingleFileSource struct {
-	Path string `yaml:"Path"`
+	Path string `yaml:"Path" json:"Path,omitempty"`
 }
 
 func (s SingleFileSource) Validate() error {

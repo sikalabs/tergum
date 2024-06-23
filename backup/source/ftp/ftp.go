@@ -10,9 +10,9 @@ import (
 )
 
 type FTPSource struct {
-	Host     string `yaml:"Host"`
-	User     string `yaml:"User"`
-	Password string `yaml:"Password"`
+	Host     string `yaml:"Host" json:"Host,omitempty"`
+	User     string `yaml:"User" json:"User,omitempty"`
+	Password string `yaml:"Password" json:"Password,omitempty"`
 }
 
 func (s FTPSource) Validate() error {
