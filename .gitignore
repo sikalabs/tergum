@@ -13,6 +13,10 @@
 
 # Editor
 .vscode
+.idea
+*.swp
+*.swo
+*~
 
 # Tergum
 tergum
