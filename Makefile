@@ -36,6 +36,8 @@ commit-go-mod-tidy:
 
 docker-build-and-push-all-images:
 	(cd misc/docker/mysql-with-tergum && make all)
-	(cd misc/docker/postgres-with-redis-with-tergum && make all)
 	(cd misc/docker/postgres-with-tergum && make all)
+	(cd misc/docker/postgres-with-mysqldump-mongodump-with-tergum && make all)
+	(cd misc/docker/postgres-with-mysqldump-with-tergum && make all)
+	(cd misc/docker/postgres-with-redis-with-tergum && make all)
 	(cd misc/docker/tergum-with-ca-certificates && make all)
