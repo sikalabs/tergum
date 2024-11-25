@@ -471,6 +471,22 @@ SendOK: false
 Email: <email of tergum cloud account>
 ```
 
+### Tergum Utils
+
+#### `tergum utils cron`
+
+Simple cron scheduler in Tergum
+
+```
+tergum utils cron <cron-expression> <command> [args...]
+```
+
+Example usage:
+
+```
+tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yml
+```
+
 ## Current Project State
 
 ### Backup Sources
