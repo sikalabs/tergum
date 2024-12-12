@@ -36,6 +36,8 @@ func (s DirSource) Backup() (backup_output.BackupOutput, error) {
 	defer os.Remove(f.Name())
 
 	args := []string{}
+	args = append(args, "--exclude", f.Name())
+
 	if s.IgnoreFailedRead {
 		args = append(args, "--ignore-failed-read")
 	}
