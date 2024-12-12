@@ -300,6 +300,8 @@ Path: /data/export/dump.sql
 
 ```yaml
 Path: /data
+Excludes:
+  - /data/tmp
 ```
 
 

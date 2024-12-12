@@ -9,8 +9,9 @@ import (
 )
 
 type DirSource struct {
-	Path             string `yaml:"Path" json:"Path,omitempty"`
-	IgnoreFailedRead bool   `yaml:"IgnoreFailedRead" json:"IgnoreFailedRead,omitempty"`
+	Path             string   `yaml:"Path" json:"Path,omitempty"`
+	Excludes         []string `yaml:"Excludes" json:"Excludes,omitempty"`
+	IgnoreFailedRead bool     `yaml:"IgnoreFailedRead" json:"IgnoreFailedRead,omitempty"`
 }
 
 func (s DirSource) Validate() error {
@@ -41,6 +42,11 @@ func (s DirSource) Backup() (backup_output.BackupOutput, error) {
 	if s.IgnoreFailedRead {
 		args = append(args, "--ignore-failed-read")
 	}
+
+	for _, exclude := range s.Excludes {
+		args = append(args, "--exclude", exclude)
+	}
+
 	args = append(args, []string{"-cf", f.Name(), s.Path}...)
 
 	tmpBo, err := backup_process_utils.BackupProcessExecToFile(
