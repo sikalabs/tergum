@@ -21,7 +21,8 @@ type TergumConfigMeta struct {
 }
 
 type TergumConfigSettings struct {
-	UseDoBackupV2 bool `yaml:"UseDoBackupV2" json:"UseDoBackupV2,omitempty"`
+	UseDoBackupV2 bool   `yaml:"UseDoBackupV2" json:"UseDoBackupV2,omitempty"`
+	ExtraName     string `yaml:"ExtraName" json:"ExtraName,omitempty"`
 }
 
 type TergumConfig struct {
