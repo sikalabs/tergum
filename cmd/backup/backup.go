@@ -25,12 +25,17 @@ var Cmd = &cobra.Command{
 		var cfg config.TergumConfig
 		cfg.Load(CmdFlagConfig, FlagExpandEnv)
 
+		extraName := cfg.Settings.ExtraName
+		if CmdFlagExtraName != "" {
+			extraName = CmdFlagExtraName
+		}
+
 		if FlagDoBackupV2 || cfg.Settings.UseDoBackupV2 {
 			do_backup.DoBackupV2(
 				CmdFlagConfig,
 				FlagExpandEnv,
 				FlagDisableTelemetry,
-				CmdFlagExtraName,
+				extraName,
 				FlagJsonLogs,
 				FlagDebugLogs,
 			)
@@ -40,7 +45,7 @@ var Cmd = &cobra.Command{
 			CmdFlagConfig,
 			FlagExpandEnv,
 			FlagDisableTelemetry,
-			CmdFlagExtraName,
+			extraName,
 			FlagJsonLogs,
 			FlagDebugLogs,
 		)
