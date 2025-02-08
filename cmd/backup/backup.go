@@ -2,6 +2,7 @@ package backup
 
 import (
 	"github.com/sikalabs/tergum/cmd/root"
+	"github.com/sikalabs/tergum/config"
 	"github.com/sikalabs/tergum/do_backup"
 	"github.com/spf13/cobra"
 )
@@ -20,7 +21,11 @@ var Cmd = &cobra.Command{
 	Aliases: []string{"b"},
 	Args:    cobra.NoArgs,
 	Run: func(c *cobra.Command, args []string) {
-		if FlagDoBackupV2 {
+		// Load config from file
+		var cfg config.TergumConfig
+		cfg.Load(CmdFlagConfig, FlagExpandEnv)
+
+		if FlagDoBackupV2 || cfg.Settings.UseDoBackupV2 {
 			do_backup.DoBackupV2(
 				CmdFlagConfig,
 				FlagExpandEnv,
