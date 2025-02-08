@@ -20,8 +20,13 @@ type TergumConfigMeta struct {
 	SchemaVersion int `yaml:"SchemaVersion" json:"SchemaVersion,omitempty"`
 }
 
+type TergumConfigSettings struct {
+	UseDoBackupV2 bool `yaml:"UseDoBackupV2" json:"UseDoBackupV2,omitempty"`
+}
+
 type TergumConfig struct {
 	Meta         TergumConfigMeta           `yaml:"Meta" json:"Meta,omitempty"`
+	Settings     TergumConfigSettings       `yaml:"Settings" json:"Settings,omitempty"`
 	Backups      []backup.Backup            `yaml:"Backups" json:"Backups,omitempty"`
 	Notification *notification.Notification `yaml:"Notification" json:"Notification,omitempty"`
 	Telemetry    *telemetry.TelemetryConfig `yaml:"Telemetry" json:"Telemetry,omitempty"`
