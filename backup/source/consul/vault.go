@@ -24,5 +24,6 @@ func (s ConsulSource) Backup() (backup_output.BackupOutput, error) {
 		s.Addr+"/v1/snapshot",
 		"X-Consul-Token",
 		s.Token,
+		map[string]string{},
 	)
 }

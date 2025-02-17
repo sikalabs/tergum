@@ -8,8 +8,9 @@ import (
 )
 
 type VaultSource struct {
-	Addr  string `yaml:"Addr" json:"Addr,omitempty"`
-	Token string `yaml:"Token" json:"Token,omitempty"`
+	Addr    string            `yaml:"Addr" json:"Addr,omitempty"`
+	Token   string            `yaml:"Token" json:"Token,omitempty"`
+	Headers map[string]string `yaml:"Headers" json:"Headers,omitempty"`
 }
 
 func (s VaultSource) Validate() error {
@@ -27,5 +28,6 @@ func (s VaultSource) Backup() (backup_output.BackupOutput, error) {
 		s.Addr+"/v1/sys/storage/raft/snapshot",
 		"X-Vault-Token",
 		s.Token,
+		s.Headers,
 	)
 }

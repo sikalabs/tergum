@@ -333,7 +333,19 @@ Port: <port>
 ```yaml
 Addr: <vault address>
 Token: <vault token>
+Headers: <map[string]string of headers, optional>
 ```
+
+example with cloudflare access headers
+
+```yaml
+Addr: https://vault.corp.com
+Token: s.1234567890
+Headers:
+  CF-Access-Client-ID: xxx1234567890
+  CF-Access-Client-Secret: xxx123456789
+```
+
 
 ### Example BackupSourceDummy Block
 

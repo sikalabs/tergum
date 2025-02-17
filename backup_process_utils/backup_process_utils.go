@@ -58,6 +58,8 @@ func BackupProcessHttpGetWithToken(
 	url string,
 	tokenHeaderName string,
 	tokenHeaderValue string,
+	headers map[string]string,
+
 ) (backup_output.BackupOutput, error) {
 	var err error
 	var bo backup_output.BackupOutput
@@ -69,7 +71,7 @@ func BackupProcessHttpGetWithToken(
 		return bo, err
 	}
 
-	body, err := httpGetWithToken(url, tokenHeaderName, tokenHeaderValue)
+	body, err := httpGetWithToken(url, tokenHeaderName, tokenHeaderValue, headers)
 	if err != nil {
 		io.Copy(bp.StderrBuff, body)
 		bo, _ = bp.GetDataStderr()
@@ -84,6 +86,7 @@ func httpGetWithToken(
 	url string,
 	tokenHeaderName string,
 	tokenHeaderValue string,
+	headers map[string]string,
 ) (io.ReadCloser, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -91,6 +94,9 @@ func httpGetWithToken(
 	}
 	if tokenHeaderName != "" && tokenHeaderValue != "" {
 		req.Header.Set(tokenHeaderName, tokenHeaderValue)
+	}
+	for k, v := range headers {
+		req.Header.Set(k, v)
 	}
 
 	client := http.Client{}
