@@ -2,7 +2,13 @@ MYSQL_VERSION=latest
 TERGUM_VERSION=v0.37.0
 IMAGE=ghcr.io/tergum-extra/mysql-with-tergum:${MYSQL_VERSION}-tergum-${TERGUM_VERSION}
 
-all: build push
+all:
+	make build-push
+	make build-push MYSQL_VERSION=8
+
+build-push:
+	@make build
+	@make push
 
 build:
 	docker build \
