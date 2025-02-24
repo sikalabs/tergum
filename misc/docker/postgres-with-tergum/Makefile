@@ -1,5 +1,5 @@
 POSTGRES_VERSION=17
-TERGUM_VERSION=v0.37.0
+TERGUM_VERSION=v0.38.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
