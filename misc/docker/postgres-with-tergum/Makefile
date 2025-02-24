@@ -1,9 +1,10 @@
-POSTGRES_VERSION=16
-TERGUM_VERSION=v0.36.0
+POSTGRES_VERSION=17
+TERGUM_VERSION=v0.37.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
 	make build-and-push
+	make build-and-push POSTGRES_VERSION=16
 	make build-and-push POSTGRES_VERSION=15
 	make build-and-push POSTGRES_VERSION=14
 	make build-and-push POSTGRES_VERSION=13
