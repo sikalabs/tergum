@@ -14,6 +14,7 @@ type PostgresServerSource struct {
 	User               string   `yaml:"User" json:"User,omitempty"`
 	Password           string   `yaml:"Password" json:"Password,omitempty"`
 	PgdumpallExtraArgs []string `yaml:"PgdumpallExtraArgs" json:"PgdumpallExtraArgs,omitempty"`
+	SSLMode            string   `yaml:"SSLMode" json:"SSLMode,omitempty"`
 }
 
 func (s PostgresServerSource) Validate() error {
@@ -35,6 +36,9 @@ func (s PostgresServerSource) Validate() error {
 func (s PostgresServerSource) Backup() (backup_output.BackupOutput, error) {
 	env := os.Environ()
 	env = append(env, "PGPASSWORD="+s.Password)
+	if s.SSLMode != "" {
+		env = append(env, "PGSSLMODE="+s.SSLMode)
+	}
 	args := []string{
 		"--host", s.Host,
 		"--port", s.Port,
