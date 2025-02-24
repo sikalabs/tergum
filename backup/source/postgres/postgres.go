@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/sikalabs/tergum/backup_output"
 	"github.com/sikalabs/tergum/backup_process_utils"
@@ -14,6 +15,7 @@ type PostgresSource struct {
 	Password        string   `yaml:"Password" json:"Password,omitempty"`
 	Database        string   `yaml:"Database" json:"Database,omitempty"`
 	PgdumpExtraArgs []string `yaml:"PgdumpExtraArgs" json:"PgdumpExtraArgs,omitempty"`
+	SSLMode         string   `yaml:"SSLMode" json:"SSLMode,omitempty"`
 }
 
 func (s PostgresSource) Validate() error {
@@ -44,7 +46,14 @@ func (s PostgresSource) Backup() (backup_output.BackupOutput, error) {
 			" dbname=" + s.Database,
 	}
 	args = append(s.PgdumpExtraArgs, args...)
-	return backup_process_utils.BackupProcessExecToFile(
+
+	env := os.Environ()
+	if s.SSLMode != "" {
+		env = append(env, "PGSSLMODE="+s.SSLMode)
+	}
+
+	return backup_process_utils.BackupProcessExecEnvToFile(
+		env,
 		"pg_dump",
 		args...,
 	)
