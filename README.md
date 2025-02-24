@@ -191,6 +191,17 @@ PgdumpExtraArgs:
   - --ignore-version
 ```
 
+With SSL mode
+
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
+Database: "postgres"
+SSLMode: "require"
+```
+
 #### Example BackupSourcePostgresServerConfiguration Block
 
 ```yaml
