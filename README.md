@@ -222,6 +222,16 @@ PgdumpallExtraArgs:
   - --ignore-version
 ```
 
+With SSL mode
+
+```yaml
+Host: "127.0.0.1"
+Port: "15432"
+User: "postgres"
+Password: "pg"
+SSLMode: "require"
+```
+
 #### Example BackupSourceMongoConfiguration Block
 
 Dump all dbs & no auth
