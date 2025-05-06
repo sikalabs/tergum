@@ -16,7 +16,7 @@ func Upload(accountName, accountKey, containerName, fileName string, data io.Rea
 		return err
 	}
 
-	containerClient, err := container.NewClientWithSharedKeyCredential(fmt.Sprintf("https://%s.blob.core.windows.net/", accountName), cred, nil)
+	containerClient, err := container.NewClientWithSharedKeyCredential(fmt.Sprintf("https://%s.blob.core.windows.net/%s", accountName, containerName), cred, nil)
 	if err != nil {
 		return err
 	}
