@@ -46,7 +46,7 @@ func (b EmailBackend) SendMail(
 	} else {
 		finalSubject = "[tergum] " + subject
 	}
-	finalBody := body + "\n\n--\n<br/>tergum, " + version.Version
+	finalBody := body + "\n\n--\n<br/>tergum, " + version.Version + "\n<br/>https://github.com/sikalabs/tergum"
 	rawMessage := []byte("To: " + to + "\r\n" +
 		"From: " + b.From + "\r\n" +
 		"Subject: " + finalSubject + "\r\n" +
