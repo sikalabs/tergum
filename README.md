@@ -115,6 +115,7 @@ Destinations:
     File: <BackupDestinationFileConfiguration>
     S3: <BackupDestinationS3Configuration>
     AzureBlob: <BackupDestinationAzureBlobConfiguration>
+    Telegram: <BackupDestinationTelegramConfiguration>
   - ...
 SleepBefore: <sleep time befor backup job in seconds>
 ```
@@ -449,6 +450,14 @@ AccountKey: account_key
 ContainerName: container_name
 Prefix: "mysql-default"
 Suffix: "sql"
+```
+
+#### Example BackupDestinationTelegramConfiguration Block
+
+```yaml
+BotToken: "123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+ChatID: -123456789
+FileName: "backup.sql"
 ```
 
 #### Notification Block
