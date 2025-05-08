@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -23,6 +25,56 @@ func TelegramSendMessage(botToken string, chatID int64, message string) error {
 	}
 	defer resp.Body.Close()
 
+	return nil
+}
+
+func TelegramSendMessageWithFile(
+	botToken string, chatID int64, message string,
+	fileName string, file io.Reader,
+) error {
+	var requestBody bytes.Buffer
+	writer := multipart.NewWriter(&requestBody)
+
+	// Add chat_id field
+	err := writer.WriteField("chat_id", fmt.Sprintf("%d", chatID))
+	if err != nil {
+		return fmt.Errorf("failed to write chat_id field: %v", err)
+	}
+
+	// Add caption/message
+	err = writer.WriteField("caption", message)
+	if err != nil {
+		return fmt.Errorf("failed to write caption field: %v", err)
+	}
+
+	// Add the file
+	part, err := writer.CreateFormFile("document", fileName)
+	if err != nil {
+		log.Fatalf("Failed to create form file: %v", err)
+	}
+
+	// Copy from io.Reader into the form part
+	_, err = io.Copy(part, file)
+	if err != nil {
+		return fmt.Errorf("failed to copy file content: %v", err)
+	}
+
+	writer.Close()
+
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", botToken)
+
+	req, err := http.NewRequest("POST", url, &requestBody)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %v", err)
+	}
+
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
 	return nil
 }
 
