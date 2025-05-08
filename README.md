@@ -573,6 +573,7 @@ tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yml
 - [x] Azure Blob
 - [ ] GCS (Google Cloud Storage)
 - [ ] Container Registry
+- [x] Telegram
 
 ### Notification
 
