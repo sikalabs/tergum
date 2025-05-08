@@ -58,7 +58,7 @@ func BackupLogTelegram(l backup_log.BackupLog) string {
 	out.WriteString("\n")
 
 	for _, log := range l.Events {
-		var strStatus, emojiStatus, strError string
+		var strStatus, emojiStatus string
 
 		if log.Success {
 			strStatus = "OK"
@@ -66,12 +66,6 @@ func BackupLogTelegram(l backup_log.BackupLog) string {
 		} else {
 			strStatus = "ERROR"
 			emojiStatus = "\u274C"
-		}
-
-		if log.Error == nil {
-			strError = "---"
-		} else {
-			strError = log.Error.Error()
 		}
 
 		out.WriteString("Success: " + strStatus + " " + emojiStatus + "\n")
@@ -82,7 +76,9 @@ func BackupLogTelegram(l backup_log.BackupLog) string {
 		out.WriteString("Upload Time: " + strconv.Itoa(log.TargetDuration) + "s" +
 			" (+" + strconv.Itoa(log.TargetMiddlewaresDuration) + "s)" + "\n")
 		out.WriteString("File Size: " + file_size_utils.PrettyFileSize(log.TargetFileSize) + "\n")
-		out.WriteString("Error: " + strError + "\n")
+		if log.Error != nil {
+			out.WriteString("Error: " + log.Error.Error() + "\n")
+		}
 		out.WriteString("Time Total: " + strconv.Itoa(log.TotalDuration()) + "s" + "\n")
 		out.WriteString("\n")
 	}
