@@ -460,6 +460,8 @@ ChatID: -123456789
 FileName: "backup.sql"
 ```
 
+[example](./examples/config/telegram)
+
 #### Notification Block
 
 ```yaml
@@ -517,6 +519,8 @@ BotToken: "123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
 ChatIDs: -123456789
 SendOK: false
 ```
+
+[example](./examples/config/telegram)
 
 - `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
 
