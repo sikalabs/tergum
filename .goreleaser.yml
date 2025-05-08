@@ -1,3 +1,5 @@
+version: 2
+
 project_name: tergum
 
 before:
@@ -41,7 +43,7 @@ builds:
     binary: tergum
 
 archives:
-  - format: tar.gz
+  - formats: [ "tar.gz" ]
     name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 release:
@@ -54,13 +56,13 @@ checksum:
 brews:
   -
     name: tergum
-    tap:
+    repository:
       owner: sikalabs
       name: homebrew-tap
     skip_upload: auto
     homepage: https://github.com/sikalabs/tergum
     url_template: "https://github.com/sikalabs/tergum/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    folder: Formula
+    directory: Formula
     caveats: "How to use this binary: https://github.com/sikalabs/tergum"
     description: "Tergum Backup Tool"
     install: |
