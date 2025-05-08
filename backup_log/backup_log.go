@@ -74,3 +74,10 @@ func (l BackupLog) GlobalSuccessString() string {
 	}
 	return "ERR"
 }
+
+func (l BackupLog) GlobalSuccessEmoji() string {
+	if l.GlobalSuccess() {
+		return "\u2705"
+	}
+	return "\U0001F534"
+}
