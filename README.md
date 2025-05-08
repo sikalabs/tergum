@@ -579,5 +579,6 @@ tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yml
 
 - [x] Email
 - [x] Slack
+- [x] Telegram
 - [ ] Microsoft Teams
 - [ ] Pagerduty
