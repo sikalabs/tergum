@@ -1,0 +1,25 @@
+Meta:
+  SchemaVersion: 3
+Settings:
+  UseDoBackupV2: true
+  ExtraName: example-telegram
+Telemetry:
+  CollectBackupLog: true
+  CollectHostData: true
+Notification:
+  Targets:
+    - Telegram:
+        BotToken: ${TELEGRAM_BOT_TOKEN}
+        ChatID: ${TELEGRAM_CHAT_ID}
+        SendOK: true
+Backups:
+  - ID: dummy
+    Source:
+      Dummy:
+        Content: "Hello from Tergum to Telegram!\n"
+    Targets:
+      - ID: telegram
+        Telegram:
+          BotToken: ${TELEGRAM_BOT_TOKEN}
+          ChatID: ${TELEGRAM_CHAT_ID}
+          FileName: hello.txt
