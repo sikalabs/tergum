@@ -10,8 +10,6 @@ import (
 
 func BackupLogTelegram(l backup_log.BackupLog) string {
 	out := new(bytes.Buffer)
-	out.WriteString("=== log ===\n")
-	out.WriteString("\n")
 
 	for _, log := range l.Events {
 		var strStatus, emojiStatus string
