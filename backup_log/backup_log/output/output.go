@@ -52,10 +52,51 @@ func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 	table.Render()
 }
 
+func BackupLogTelegram(l backup_log.BackupLog) string {
+	out := new(bytes.Buffer)
+	out.WriteString("=== log ===\n")
+	out.WriteString("\n")
+
+	for _, log := range l.Events {
+		var strStatus, emojiStatus, strError string
+
+		if log.Success {
+			strStatus = "OK"
+			emojiStatus = "\u2705"
+		} else {
+			strStatus = "ERROR"
+			emojiStatus = "\u274C"
+		}
+
+		if log.Error == nil {
+			strError = "---"
+		} else {
+			strError = log.Error.Error()
+		}
+
+		out.WriteString("Success: " + strStatus + " " + emojiStatus + "\n")
+		out.WriteString("Backup: " + log.SourceName + ": " + log.BackupID + "\n")
+		out.WriteString("Backup Time: " + strconv.Itoa(log.BackupDuration) + "s" +
+			" (+" + strconv.Itoa(log.BackupMiddlewaresDuration) + "s)" + "\n")
+		out.WriteString("Target: " + log.TargetName + ": " + log.TargetID + "\n")
+		out.WriteString("Upload Time: " + strconv.Itoa(log.TargetDuration) + "s" +
+			" (+" + strconv.Itoa(log.TargetMiddlewaresDuration) + "s)" + "\n")
+		out.WriteString("File Size: " + file_size_utils.PrettyFileSize(log.TargetFileSize) + "\n")
+		out.WriteString("Error: " + strError + "\n")
+		out.WriteString("Time Total: " + strconv.Itoa(log.TotalDuration()) + "s" + "\n")
+		out.WriteString("\n")
+	}
+	return out.String()
+}
+
 func BackupLogToString(l backup_log.BackupLog) string {
 	buf := new(bytes.Buffer)
 	BackupLogTable(l, buf)
 	return buf.String()
+}
+
+func BackupLogToTelegramString(l backup_log.BackupLog) string {
+	return BackupLogTelegram(l)
 }
 
 func BackupLogToOutput(l backup_log.BackupLog) {
@@ -84,10 +125,35 @@ func BackupErrorLogTable(l backup_log.BackupLog, writer io.Writer) {
 	table.Render()
 }
 
+func BackupErrorLogTelegram(l backup_log.BackupLog) string {
+	noErrors := true
+	out := new(bytes.Buffer)
+	out.WriteString("=== errors ===\n")
+	out.WriteString("\n")
+	for _, log := range l.Events {
+		if log.Success {
+			continue
+		}
+		noErrors = false
+		out.WriteString("Backup: " + log.BackupID + "\n")
+		out.WriteString("Target: " + log.TargetID + "\n")
+		out.WriteString("Error: " + log.StdErr + "\n")
+		out.WriteString("\n")
+	}
+	if noErrors {
+		return ""
+	}
+	return out.String()
+}
+
 func BackupErrorLogToString(l backup_log.BackupLog) string {
 	buf := new(bytes.Buffer)
 	BackupErrorLogTable(l, buf)
 	return buf.String()
+}
+
+func BackupErrorLogToTelegramString(l backup_log.BackupLog) string {
+	return BackupErrorLogTelegram(l)
 }
 
 func BackupErrorLogToOutput(l backup_log.BackupLog) {
