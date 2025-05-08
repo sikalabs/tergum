@@ -72,10 +72,15 @@ func BackupLogTelegram(l backup_log.BackupLog) string {
 		out.WriteString("Backup: " + log.SourceName + ": " + log.BackupID + "\n")
 		out.WriteString("Backup Time: " + strconv.Itoa(log.BackupDuration) + "s" +
 			" (+" + strconv.Itoa(log.BackupMiddlewaresDuration) + "s)" + "\n")
-		out.WriteString("Target: " + log.TargetName + ": " + log.TargetID + "\n")
+		if !(log.TargetName == "---" && log.TargetID == "---") {
+			out.WriteString("Target: " + log.TargetName + ": " + log.TargetID + "\n")
+		}
 		out.WriteString("Upload Time: " + strconv.Itoa(log.TargetDuration) + "s" +
 			" (+" + strconv.Itoa(log.TargetMiddlewaresDuration) + "s)" + "\n")
-		out.WriteString("File Size: " + file_size_utils.PrettyFileSize(log.TargetFileSize) + "\n")
+		// Only show file size if target is not empty
+		if !(log.TargetName == "---" && log.TargetID == "---") {
+			out.WriteString("File Size: " + file_size_utils.PrettyFileSize(log.TargetFileSize) + "\n")
+		}
 		if log.Error != nil {
 			out.WriteString("Error: " + log.Error.Error() + "\n")
 		}
