@@ -35,8 +35,8 @@ func (t Telegram) SendNotification(
 		logSkipped()
 		return nil
 	}
-	table := telegram_output.BackupLogToTelegramString(bl)
-	errorTable := telegram_output.BackupErrorLogToTelegramString(bl)
+	table := telegram_output.BackupLogTelegram(bl)
+	errorTable := telegram_output.BackupErrorLogTelegram(bl)
 
 	text := bl.GlobalSuccessEmoji() +
 		bl.GlobalSuccessEmoji() +

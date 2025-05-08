@@ -44,10 +44,6 @@ func BackupLogTelegram(l backup_log.BackupLog) string {
 	return out.String()
 }
 
-func BackupLogToTelegramString(l backup_log.BackupLog) string {
-	return BackupLogTelegram(l)
-}
-
 func BackupErrorLogTelegram(l backup_log.BackupLog) string {
 	noErrors := true
 	out := new(bytes.Buffer)
@@ -69,8 +65,4 @@ func BackupErrorLogTelegram(l backup_log.BackupLog) string {
 		return ""
 	}
 	return out.String()
-}
-
-func BackupErrorLogToTelegramString(l backup_log.BackupLog) string {
-	return BackupErrorLogTelegram(l)
 }
