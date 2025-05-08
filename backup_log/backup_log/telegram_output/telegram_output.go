@@ -61,7 +61,9 @@ func BackupErrorLogTelegram(l backup_log.BackupLog) string {
 		}
 		noErrors = false
 		out.WriteString("Backup: " + log.BackupID + "\n")
-		out.WriteString("Target: " + log.TargetID + "\n")
+		if log.TargetID != "---" {
+			out.WriteString("Target: " + log.TargetID + "\n")
+		}
 		out.WriteString("Error: " + log.StdErr + "\n")
 		out.WriteString("\n")
 	}
