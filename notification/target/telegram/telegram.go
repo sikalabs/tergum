@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/sikalabs/tergum/backup_log"
-	"github.com/sikalabs/tergum/backup_log/backup_log/output"
+	"github.com/sikalabs/tergum/backup_log/backup_log/telegram_output"
 	"github.com/sikalabs/tergum/notification/backend"
 	"github.com/sikalabs/tergum/utils/telegram_utils"
 )
@@ -35,8 +35,8 @@ func (t Telegram) SendNotification(
 		logSkipped()
 		return nil
 	}
-	table := output.BackupLogToTelegramString(bl)
-	errorTable := output.BackupErrorLogToTelegramString(bl)
+	table := telegram_output.BackupLogToTelegramString(bl)
+	errorTable := telegram_output.BackupErrorLogToTelegramString(bl)
 
 	text := bl.GlobalSuccessEmoji() +
 		bl.GlobalSuccessEmoji() +
