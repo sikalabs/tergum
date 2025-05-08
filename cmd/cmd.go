@@ -8,6 +8,8 @@ import (
 	_ "github.com/sikalabs/tergum/cmd/utils"
 	_ "github.com/sikalabs/tergum/cmd/utils/cron"
 	_ "github.com/sikalabs/tergum/cmd/utils/pause"
+	_ "github.com/sikalabs/tergum/cmd/utils/telegram"
+	_ "github.com/sikalabs/tergum/cmd/utils/telegram/get_chat_id"
 	_ "github.com/sikalabs/tergum/cmd/version"
 	"github.com/spf13/cobra"
 )
