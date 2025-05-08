@@ -477,6 +477,7 @@ From: "tergum@example.com"
 ```yaml
 Email: <NotificationEmailTarget>
 SlackWebhook: <NotificationSlackWebhookTarget>
+Telegram: <NotificationTelegramTarget>
 ```
 
 #### Example NotificationEmailTarget Block
@@ -495,6 +496,16 @@ SendOK: false
 ```yaml
 URLs:
   - https://hooks.slack.com/services/xxx/yyy/zzz
+SendOK: false
+```
+
+- `SendOK=true` will send email notification for all tergum runs (failed & OK runs)
+
+#### Example NotificationTelegramTarget Block
+
+```yaml
+BotToken: "123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"
+ChatIDs: -123456789
 SendOK: false
 ```
 
