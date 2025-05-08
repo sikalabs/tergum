@@ -11,6 +11,7 @@ import (
 )
 
 var FlagBotToken string
+var FlagSendToChat bool
 
 var Cmd = &cobra.Command{
 	Use:   "get-chat-id",
@@ -22,6 +23,9 @@ var Cmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 		fmt.Println(chatID)
+		if FlagSendToChat {
+			telegram_utils.TelegramSendMessage(FlagBotToken, chatID, fmt.Sprintf("%d", chatID))
+		}
 	},
 }
 
@@ -38,4 +42,11 @@ func init() {
 	if botToken == "" {
 		Cmd.MarkFlagRequired("bot-token")
 	}
+	Cmd.Flags().BoolVarP(
+		&FlagSendToChat,
+		"send-to-chat",
+		"s",
+		false,
+		"Send message to chat",
+	)
 }
