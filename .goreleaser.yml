@@ -116,3 +116,12 @@ dockers:
         - "--label=com.github.actions.name={{.ProjectName}}"
         - "--label=repository=https://github.com/sikalabs/tergum"
         - "--label=maintainer=SikaLabs <opensource@sikalabs.com>"
+
+scoops:
+  -
+    repository:
+      owner: sikalabs
+      name: scoop-bucket
+    homepage:  https://github.com/sikalabs/tergum
+    description: Tergum Backup Tool
+    license: MIT
