@@ -41,7 +41,7 @@ func (t Telegram) SendNotification(
 	text := bl.GlobalSuccessEmoji() +
 		bl.GlobalSuccessEmoji() +
 		bl.GlobalSuccessEmoji() +
-		"\n\n" + table + "\n" + errorTable + "\n"
+		"\n\n" + table + errorTable + "\n"
 
 	err := telegram_utils.TelegramSendMessage(
 		t.BotToken,
