@@ -48,6 +48,8 @@ archives:
 
 release:
   prerelease: auto
+  extra_files:
+    - glob: ./dist/tergum_windows_amd64_v1/tergum.exe
 
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
