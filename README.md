@@ -39,6 +39,12 @@ Install using Brew:
 brew install sikalabs/tap/tergum
 ```
 
+Using [scoop](https://scoop.sh/) on Windows:
+
+```
+scoop install https://raw.githubusercontent.com/sikalabs/scoop-bucket/master/tergum.json
+```
+
 ### Autocomplete
 
 See: `tergum completion`
