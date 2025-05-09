@@ -16,6 +16,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/notion"
 	"github.com/sikalabs/tergum/backup/source/postgres"
 	"github.com/sikalabs/tergum/backup/source/postgres_server"
+	"github.com/sikalabs/tergum/backup/source/proxmox_local_vm"
 	"github.com/sikalabs/tergum/backup/source/redis"
 	"github.com/sikalabs/tergum/backup/source/single_file"
 	"github.com/sikalabs/tergum/backup/source/vault"
@@ -39,6 +40,7 @@ type Source struct {
 	Dummy               *dummy.DummySource                         `yaml:"Dummy" json:"Dummy,omitempty"`
 	Gitlab              *gitlab.GitlabSource                       `yaml:"Gitlab" json:"Gitlab,omitempty"`
 	Consul              *consul.ConsulSource                       `yaml:"Consul" json:"Consul,omitempty"`
+	ProxmoxLocalVM      *proxmox_local_vm.ProxmoxLocalVMSoure      `yaml:"ProxmoxLocalVM" json:"ProxmoxLocalVM,omitempty"`
 }
 
 func (s Source) Validate() error {
@@ -119,6 +121,11 @@ func (s Source) Validate() error {
 
 	if s.Consul != nil {
 		p := *s.Consul
+		return p.Validate()
+	}
+
+	if s.ProxmoxLocalVM != nil {
+		p := *s.ProxmoxLocalVM
 		return p.Validate()
 	}
 
@@ -206,6 +213,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.ProxmoxLocalVM != nil {
+		p := *s.ProxmoxLocalVM
+		return p.Backup()
+	}
+
 	return backup_output.BackupOutput{}, fmt.Errorf("source/backup: no source detected")
 }
 
@@ -272,6 +284,10 @@ func (s Source) Name() string {
 
 	if s.Consul != nil {
 		return "Consul"
+	}
+
+	if s.ProxmoxLocalVM != nil {
+		return "ProxmoxLocalVM"
 	}
 
 	return ""
