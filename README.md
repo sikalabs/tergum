@@ -83,6 +83,7 @@ Meta:
 Settings: <Settings>
 Cloud: <Cloud>
 Notification: <Notification>
+Telemetry: <Telemetry>
 Backups:
   - <Backup>
   - <Backup>
@@ -546,6 +547,23 @@ Email: <email of tergum cloud account>
 Settings:
   UseDoBackupV2: true
   ExtraName: "my-backup"
+```
+
+### Telemetry Block
+
+- `Origin` - origin of custom telemetry api
+- `Disable` - disable telemetry
+- `Name` - name of the instance in telemetry
+- `CollectHostData` - collect host data (hostname, os, arch, cpu, memory)
+- `CollectBackupLog` - collect backup log (backup log is sent to telemetry api)
+
+```yaml
+Telemetry:
+	Origin: "tergum-telemetry-api.corp.com"
+	Disable: true
+	Name: "my-tergum"
+	CollectHostData: true
+	CollectBackupLog: true
 ```
 
 ### Tergum Utils
