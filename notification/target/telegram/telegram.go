@@ -38,10 +38,17 @@ func (t Telegram) SendNotification(
 	table := telegram_output.BackupLogTelegram(bl)
 	errorTable := telegram_output.BackupErrorLogTelegram(bl)
 
+	extraName := ""
+	if bl.ExtraName != "" {
+		extraName = "=== " + bl.ExtraName + " ===\n\n"
+	}
+
 	text := bl.GlobalSuccessEmoji() +
 		bl.GlobalSuccessEmoji() +
 		bl.GlobalSuccessEmoji() +
-		"\n\n" + table + errorTable + "\n"
+		"\n\n" +
+		extraName +
+		table + errorTable + "\n"
 
 	err := telegram_utils.TelegramSendMessage(
 		t.BotToken,
