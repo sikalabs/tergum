@@ -80,6 +80,7 @@ Config file examples are in [misc/example/config](./misc/example/config) directo
 ```yaml
 Meta:
   SchemaVersion: 3
+Settings: <Settings>
 Cloud: <Cloud>
 Notification: <Notification>
 Backups:
@@ -534,6 +535,17 @@ SendOK: false
 
 ```yaml
 Email: <email of tergum cloud account>
+```
+
+### Settings Block
+
+- `UseDoBackupV2` - use new backup processor (default is false)
+- `ExtraName` - extra name for backup file (for example "my-backup") - default is empty
+
+```yaml
+Settings:
+  UseDoBackupV2: true
+  ExtraName: "my-backup"
 ```
 
 ### Tergum Utils
