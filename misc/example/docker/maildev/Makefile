@@ -1,5 +1,5 @@
 up:
-	docker-compose up -d
+	docker compose up -d
 
 down:
-	docker-compose down --volumes
+	docker compose down --volumes
