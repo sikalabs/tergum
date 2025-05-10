@@ -560,11 +560,11 @@ Settings:
 
 ```yaml
 Telemetry:
-	Origin: "tergum-telemetry-api.corp.com"
-	Disable: true
-	Name: "my-tergum"
-	CollectHostData: true
-	CollectBackupLog: true
+  Origin: "tergum-telemetry-api.corp.com"
+  Disable: true
+  Name: "my-tergum"
+  CollectHostData: true
+  CollectBackupLog: true
 ```
 
 ### Tergum Utils
