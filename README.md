@@ -40,6 +40,12 @@ Install using Brew:
 brew install sikalabs/tap/tergum
 ```
 
+On Linux (amd64):
+
+```
+curl -fsSL https://raw.githubusercontent.com/sikalabs/tergum/master/install.sh | sudo sh
+```
+
 Using [scoop](https://scoop.sh/) on Windows:
 
 ```
