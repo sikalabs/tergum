@@ -13,7 +13,7 @@ import (
 
 func BackupLogTable(l backup_log.BackupLog, writer io.Writer) {
 	table := tablewriter.NewWriter(writer)
-	table.SetHeader([]string{
+	table.Header([]string{
 		"Success",
 		"Backup", "Backup Time",
 		"Target", "Upload Time", "File Size",
@@ -64,7 +64,7 @@ func BackupLogToOutput(l backup_log.BackupLog) {
 
 func BackupErrorLogTable(l backup_log.BackupLog, writer io.Writer) {
 	table := tablewriter.NewWriter(writer)
-	table.SetHeader([]string{
+	table.Header([]string{
 		"Backup",
 		"Target",
 		"Error",
