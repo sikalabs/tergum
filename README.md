@@ -457,6 +457,20 @@ prefix: "mysql-default"
 suffix: "sql"
 ```
 
+Minio with 3 retries:
+
+You can set `UploadRetries` (default is 0) to retry upload in case of error.
+
+```yaml
+accessKey: "aws_access_key_id"
+secretKey: "aws_secret_access_key"
+region: "eu-central-1"
+bucketName: "tergum-backups"
+prefix: "mysql-default"
+suffix: "sql"
+UploadRetries: 3
+```
+
 #### Example BackupDestinationAzureBlobConfiguration Block
 
 ```yaml
