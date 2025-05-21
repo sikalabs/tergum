@@ -9,13 +9,14 @@ import (
 )
 
 type S3Target struct {
-	AccessKey  string `yaml:"AccessKey" json:"AccessKey,omitempty"`
-	SecretKey  string `yaml:"SecretKey" json:"SecretKey,omitempty"`
-	Region     string `yaml:"Region" json:"Region,omitempty"`
-	Endpoint   string `yaml:"Endpoint" json:"Endpoint,omitempty"`
-	BucketName string `yaml:"BucketName" json:"BucketName,omitempty"`
-	Prefix     string `yaml:"Prefix" json:"Prefix,omitempty"`
-	Suffix     string `yaml:"Suffix" json:"Suffix,omitempty"`
+	AccessKey     string `yaml:"AccessKey" json:"AccessKey,omitempty"`
+	SecretKey     string `yaml:"SecretKey" json:"SecretKey,omitempty"`
+	Region        string `yaml:"Region" json:"Region,omitempty"`
+	Endpoint      string `yaml:"Endpoint" json:"Endpoint,omitempty"`
+	BucketName    string `yaml:"BucketName" json:"BucketName,omitempty"`
+	Prefix        string `yaml:"Prefix" json:"Prefix,omitempty"`
+	Suffix        string `yaml:"Suffix" json:"Suffix,omitempty"`
+	UploadRetries int    `yaml:"UploadRetries" json:"UploadRetries,omitempty"`
 }
 
 func (t S3Target) Validate() error {
@@ -37,17 +38,28 @@ func (t S3Target) Validate() error {
 	if t.Suffix == "" {
 		return fmt.Errorf("S3Target requires Suffix")
 	}
+	if t.UploadRetries < 0 {
+		return fmt.Errorf("S3Target requires Retries >= 0")
+	}
 	return nil
 }
 
 func (t S3Target) Save(data io.ReadSeeker) error {
-	return s3_utils.Upload(
-		t.AccessKey,
-		t.SecretKey,
-		t.Region,
-		t.Endpoint,
-		t.BucketName,
-		file_utils.GetFileName(t.Prefix, t.Suffix),
-		data,
-	)
+	var err error
+	tries := 1 + t.UploadRetries
+	for i := 0; i < tries; i++ {
+		err = s3_utils.Upload(
+			t.AccessKey,
+			t.SecretKey,
+			t.Region,
+			t.Endpoint,
+			t.BucketName,
+			file_utils.GetFileName(t.Prefix, t.Suffix),
+			data,
+		)
+		if err == nil {
+			return nil
+		}
+	}
+	return err
 }
