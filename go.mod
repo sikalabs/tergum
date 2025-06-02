@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go v1.55.7
 	github.com/cheggaaa/pb/v3 v3.1.7
 	github.com/go-resty/resty/v2 v2.16.5
-	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/mux v1.8.1
 	github.com/olekukonko/tablewriter v1.0.6
 	github.com/ondrejsika/gosendmail v0.4.0
 	github.com/ondrejsika/notion-backup v0.2.0
