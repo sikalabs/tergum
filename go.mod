@@ -9,7 +9,7 @@ require (
 	github.com/cheggaaa/pb/v3 v3.1.7
 	github.com/go-resty/resty/v2 v2.16.5
 	github.com/gorilla/mux v1.8.1
-	github.com/olekukonko/tablewriter v1.0.6
+	github.com/olekukonko/tablewriter v1.0.7
 	github.com/ondrejsika/gosendmail v0.4.0
 	github.com/ondrejsika/notion-backup v0.2.0
 	github.com/robfig/cron/v3 v3.0.1
@@ -47,7 +47,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/olekukonko/errors v0.0.0-20250405072817-4e6d85265da6 // indirect
-	github.com/olekukonko/ll v0.0.8-0.20250516010636-22ea57d81985 // indirect
+	github.com/olekukonko/ll v0.0.8 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
