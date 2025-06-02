@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.18.0
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.1
-	github.com/aws/aws-sdk-go v1.38.47
+	github.com/aws/aws-sdk-go v1.55.7
 	github.com/cheggaaa/pb/v3 v3.1.7
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gorilla/mux v1.8.0
