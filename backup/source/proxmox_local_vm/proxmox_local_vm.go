@@ -44,7 +44,6 @@ func (s ProxmoxLocalVMSoure) Backup() (backup_output.BackupOutput, error) {
 		"--compress", "zstd",
 	}
 
-	fmt.Println("vzdump", args)
 	err = bp.ExecWait("vzdump", args...)
 	stderr, _ := bp.GetStderr()
 	if err != nil {
