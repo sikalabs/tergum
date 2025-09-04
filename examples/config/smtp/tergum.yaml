@@ -1,0 +1,30 @@
+Meta:
+  SchemaVersion: 3
+Settings:
+  UseDoBackupV2: true
+  ExtraName: example-smtp
+Telemetry:
+  CollectBackupLog: true
+  CollectHostData: true
+Notification:
+  Backend:
+    Email:
+      SmtpHost: ${SMTP_HOST}
+      SmtpPort: ${SMTP_PORT}
+      Username: ${SMTP_USERNAME}
+      Password: ${SMTP_PASSWORD}
+      From: ${EMAIL_FROM}
+  Targets:
+  - Email:
+      Emails:
+        - ${EMAIL_TO}
+      SendOK: true
+Backups:
+  - ID: dummy
+    Source:
+      Dummy:
+        Content: "Hello from Tergum to Email!\n"
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: /dev/null
