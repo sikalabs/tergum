@@ -15,6 +15,7 @@ type PostgresServerSource struct {
 	Password           string   `yaml:"Password" json:"Password,omitempty"`
 	PgdumpallExtraArgs []string `yaml:"PgdumpallExtraArgs" json:"PgdumpallExtraArgs,omitempty"`
 	SSLMode            string   `yaml:"SSLMode" json:"SSLMode,omitempty"`
+	UseBinaryBackup    bool     `yaml:"UseBinaryBackup" json:"UseBinaryBackup,omitempty"`
 }
 
 func (s PostgresServerSource) Validate() error {
@@ -39,16 +40,36 @@ func (s PostgresServerSource) Backup() (backup_output.BackupOutput, error) {
 	if s.SSLMode != "" {
 		env = append(env, "PGSSLMODE="+s.SSLMode)
 	}
-	args := []string{
-		"--host", s.Host,
-		"--port", s.Port,
-		"--user", s.User,
-		"--no-password",
+
+	var args []string
+	var command string
+
+	if s.UseBinaryBackup {
+		command = "pg_basebackup"
+		args = []string{
+			"--host", s.Host,
+			"--port", s.Port,
+			"--user", s.User,
+			"--no-password",
+			"--format=tar",
+			"--compress=9",
+			"--pgdata=-",
+		}
+		args = append(s.PgdumpallExtraArgs, args...)
+	} else {
+		command = "pg_dumpall"
+		args = []string{
+			"--host", s.Host,
+			"--port", s.Port,
+			"--user", s.User,
+			"--no-password",
+		}
+		args = append(s.PgdumpallExtraArgs, args...)
 	}
-	args = append(s.PgdumpallExtraArgs, args...)
+
 	return backup_process_utils.BackupProcessExecEnvToFile(
 		env,
-		"pg_dumpall",
+		command,
 		args...,
 	)
 }
