@@ -1,0 +1,39 @@
+Meta:
+  SchemaVersion: 3
+Backups:
+  # Single database binary dump using pg_dump with custom format
+  - ID: example-postgres-binary
+    Source:
+      Postgres:
+        Host: 127.0.0.1
+        Port: 15432
+        User: postgres
+        Password: pg
+        Database: mydb
+        UseBinaryBackup: true
+        # Optional: additional pg_dump arguments
+        # PgdumpExtraArgs: ["--verbose", "--exclude-table=logs"]
+        # Optional: SSL mode
+        # SSLMode: disable
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/postgres-binary.dump
+
+  # Server-wide binary backup using pg_basebackup
+  - ID: example-postgres-server-binary
+    Source:
+      PostgresServer:
+        Host: 127.0.0.1
+        Port: 15432
+        User: postgres
+        Password: pg
+        UseBinaryBackup: true
+        # Optional: additional pg_basebackup/pg_dumpall arguments
+        # PgdumpallExtraArgs: ["--verbose", "--progress"]
+        # Optional: SSL mode
+        # SSLMode: disable
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: tmp/postgres-server-binary.tar
