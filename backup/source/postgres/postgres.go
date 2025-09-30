@@ -16,6 +16,7 @@ type PostgresSource struct {
 	Database        string   `yaml:"Database" json:"Database,omitempty"`
 	PgdumpExtraArgs []string `yaml:"PgdumpExtraArgs" json:"PgdumpExtraArgs,omitempty"`
 	SSLMode         string   `yaml:"SSLMode" json:"SSLMode,omitempty"`
+	UseBinaryBackup bool     `yaml:"UseBinaryBackup" json:"UseBinaryBackup,omitempty"`
 }
 
 func (s PostgresSource) Validate() error {
@@ -38,19 +39,33 @@ func (s PostgresSource) Validate() error {
 }
 
 func (s PostgresSource) Backup() (backup_output.BackupOutput, error) {
-	args := []string{
-		"host=" + s.Host +
-			" port=" + s.Port +
-			" user=" + s.User +
-			" password=" + s.Password +
-			" dbname=" + s.Database,
-	}
-	args = append(s.PgdumpExtraArgs, args...)
-
 	env := os.Environ()
+	env = append(env, "PGPASSWORD="+s.Password)
 	if s.SSLMode != "" {
 		env = append(env, "PGSSLMODE="+s.SSLMode)
 	}
+
+	var args []string
+	if s.UseBinaryBackup {
+		args = []string{
+			"--host", s.Host,
+			"--port", s.Port,
+			"--user", s.User,
+			"--no-password",
+			"--format=custom",
+			"--compress=9",
+			s.Database,
+		}
+	} else {
+		args = []string{
+			"host=" + s.Host +
+				" port=" + s.Port +
+				" user=" + s.User +
+				" password=" + s.Password +
+				" dbname=" + s.Database,
+		}
+	}
+	args = append(s.PgdumpExtraArgs, args...)
 
 	return backup_process_utils.BackupProcessExecEnvToFile(
 		env,
