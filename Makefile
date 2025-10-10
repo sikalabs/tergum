@@ -35,6 +35,7 @@ commit-go-mod-tidy:
 	git commit -m "[auto] refactor: go mod tidy"
 
 docker-build-and-push-all-images:
+	(cd misc/docker/redis-with-tergum && make all)
 	(cd misc/docker/mysql-with-tergum && make all)
 	(cd misc/docker/postgres-with-tergum && make all)
 	(cd misc/docker/postgres-with-mysqldump-mongodump-with-tergum && make all)
