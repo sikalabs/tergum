@@ -1,0 +1,28 @@
+Meta:
+  SchemaVersion: 3
+Settings:
+  UseDoBackupV2: true
+  ExtraName: example-maildev
+Telemetry:
+  CollectBackupLog: true
+  CollectHostData: true
+Notification:
+  Backend:
+    Email:
+      SmtpHost: 127.0.0.1
+      SmtpPort: 1025
+      From: noreply@google.com
+  Targets:
+  - Email:
+      Emails:
+        - admin@microsoft.com
+      SendOK: true
+Backups:
+  - ID: dummy
+    Source:
+      Dummy:
+        Content: "Hello from Tergum to Maildev!\n"
+    Targets:
+      - ID: filepath
+        FilePath:
+          Path: /dev/null
