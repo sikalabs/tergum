@@ -1,0 +1,21 @@
+Meta:
+  SchemaVersion: 3
+Settings:
+  UseDoBackupV2: true
+  ExtraName: tergum-example/gitlab-sikademo-com
+Telemetry:
+  CollectBackupLog: true
+  CollectHostData: true
+Backups:
+  - ID: gitlab-sikademo-com
+    Middlewares:
+      - Gzip: {}
+    Source:
+      Gitlab:
+        NamePrefix: gitlab-sikademo-com
+    Targets:
+      - ID: file
+        File:
+          Dir: tmp/
+          Prefix: gitlab-sikademo-com
+          Suffix: tar.gz
