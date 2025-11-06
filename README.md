@@ -600,7 +600,7 @@ tergum utils cron <cron-expression> <command> [args...]
 Example usage:
 
 ```
-tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yml
+tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yaml
 ```
 
 ## Current Project State
