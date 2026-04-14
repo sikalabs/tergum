@@ -471,6 +471,22 @@ suffix: "sql"
 UploadRetries: 3
 ```
 
+S3 with retention policy:
+
+You can set `Retention` to automatically delete old backups after a successful upload. `KeepCount` keeps the last N backups, `KeepDays` keeps backups from the last N days. You can use one or both — if both are set, a backup is deleted when it matches either rule.
+
+```yaml
+AccessKey: "aws_access_key_id"
+SecretKey: "aws_secret_access_key"
+Region: "eu-central-1"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
+Retention:
+  KeepCount: 7
+  KeepDays: 30
+```
+
 #### Example BackupDestinationAzureBlobConfiguration Block
 
 ```yaml
