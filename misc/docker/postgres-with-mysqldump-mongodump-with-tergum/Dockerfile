@@ -1,12 +1,18 @@
 ARG POSTGRES_VERSION=17
-ARG TERGUM_VERSION=v0.42.0
+ARG TERGUM_VERSION=v0.43.0
 FROM ghcr.io/tergum-extra/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 # Install mysqldump
 RUN apt-get update && apt-get install -y mariadb-client
-# Install mongodump
+# Install mongodump (direct .deb; MongoDB apt repo unusable on Debian 13/trixie due to SHA1 key rejection by sqv)
+ARG MONGO_TOOLS_VERSION=100.16.0
 RUN \
-  apt-get install -y gnupg curl && \
-  curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor && \
-  echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list && \
-  apt-get update && \
-  apt-get install -y mongodb-org-tools
+  apt-get install -y curl && \
+  ARCH=$(dpkg --print-architecture) && \
+  case "$ARCH" in \
+    amd64) MONGO_ARCH=x86_64 ;; \
+    arm64) MONGO_ARCH=arm64 ;; \
+    *) echo "Unsupported arch: $ARCH" && exit 1 ;; \
+  esac && \
+  curl -fsSL "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-ubuntu2204-${MONGO_ARCH}-${MONGO_TOOLS_VERSION}.deb" -o /tmp/mdt.deb && \
+  apt-get install -y /tmp/mdt.deb && \
+  rm /tmp/mdt.deb

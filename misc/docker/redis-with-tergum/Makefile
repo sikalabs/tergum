@@ -1,5 +1,5 @@
 REDIS_VERSION=8
-TERGUM_VERSION=v0.42.0
+TERGUM_VERSION=v0.43.0
 IMAGE=ghcr.io/tergum-extra/redis-with-tergum:${REDIS_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
