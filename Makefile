@@ -42,3 +42,4 @@ docker-build-and-push-all-images:
 	(cd misc/docker/postgres-with-mysqldump-with-tergum && make all)
 	(cd misc/docker/postgres-with-redis-with-tergum && make all)
 	(cd misc/docker/tergum-with-ca-certificates && make all)
+	(cd misc/docker/mongo-with-tergum && make all)
