@@ -9,12 +9,15 @@ import (
 )
 
 type MongoSource struct {
-	Host                   string `yaml:"Host" json:"Host,omitempty"`
-	Port                   string `yaml:"Port" json:"Port,omitempty"`
-	User                   string `yaml:"User" json:"User,omitempty"`
-	Password               string `yaml:"Password" json:"Password,omitempty"`
-	Database               string `yaml:"Database" json:"Database,omitempty"`
-	AuthenticationDatabase string `yaml:"AuthenticationDatabase" json:"AuthenticationDatabase,omitempty"`
+	Host                     string `yaml:"Host" json:"Host,omitempty"`
+	Port                     string `yaml:"Port" json:"Port,omitempty"`
+	User                     string `yaml:"User" json:"User,omitempty"`
+	Password                 string `yaml:"Password" json:"Password,omitempty"`
+	Database                 string `yaml:"Database" json:"Database,omitempty"`
+	AuthenticationDatabase   string `yaml:"AuthenticationDatabase" json:"AuthenticationDatabase,omitempty"`
+	TLS                      bool   `yaml:"TLS" json:"TLS,omitempty"`
+	TLSCAFile                string `yaml:"TLSCAFile" json:"TLSCAFile,omitempty"`
+	TLSAllowInvalidHostnames bool   `yaml:"TLSAllowInvalidHostnames" json:"TLSAllowInvalidHostnames,omitempty"`
 }
 
 func (s MongoSource) Validate() error {
@@ -59,6 +62,15 @@ func (s MongoSource) Backup() (backup_output.BackupOutput, error) {
 			args,
 			"--db", s.Database,
 		)
+	}
+	if s.TLS {
+		args = append(args, "--tls")
+		if s.TLSCAFile != "" {
+			args = append(args, "--tlsCAFile", s.TLSCAFile)
+		}
+		if s.TLSAllowInvalidHostnames {
+			args = append(args, "--tlsAllowInvalidHostnames")
+		}
 	}
 
 	tmpBo, err := backup_process_utils.BackupProcessExecToFile(
