@@ -15,6 +15,8 @@ type MongoSource struct {
 	Password               string `yaml:"Password" json:"Password,omitempty"`
 	Database               string `yaml:"Database" json:"Database,omitempty"`
 	AuthenticationDatabase string `yaml:"AuthenticationDatabase" json:"AuthenticationDatabase,omitempty"`
+	SSL                    bool   `yaml:"SSL" json:"SSL,omitempty"`
+	SSLCAFile              string `yaml:"SSLCAFile" json:"SSLCAFile,omitempty"`
 }
 
 func (s MongoSource) Validate() error {
@@ -59,6 +61,12 @@ func (s MongoSource) Backup() (backup_output.BackupOutput, error) {
 			args,
 			"--db", s.Database,
 		)
+	}
+	if s.SSL {
+		args = append(args, "--ssl")
+		if s.SSLCAFile != "" {
+			args = append(args, "--sslCAFile", s.SSLCAFile)
+		}
 	}
 
 	tmpBo, err := backup_process_utils.BackupProcessExecToFile(
