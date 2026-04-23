@@ -287,6 +287,49 @@ AuthenticationDatabase: "test" # default is admin
 Database: "test"
 ```
 
+Dump single db with TLS
+
+The CA bundle is read from system trust store paths
+(`/etc/ssl/certs/ca-certificates.crt`, `/etc/pki/tls/certs/ca-bundle.crt`,
+`/etc/ssl/cert.pem`). On most Linux distributions and in Kubernetes pods
+where the cluster CA is mounted at these paths, no further configuration
+is needed.
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+User: "root"
+Password: "root"
+Database: "test"
+TLS: true
+```
+
+Dump single db with TLS and explicit CA file
+
+Use `TLSCAFile` if your CA is at a non-standard path.
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+User: "root"
+Password: "root"
+Database: "test"
+TLS: true
+TLSCAFile: "/etc/ssl/custom/ca.crt"
+```
+
+Dump single db with TLS and skip hostname verification
+
+```yaml
+Host: "127.0.0.1"
+Port: "27017"
+User: "root"
+Password: "root"
+Database: "test"
+TLS: true
+TLSAllowInvalidHostnames: true
+```
+
 #### Example BackupSourceKubernetesTLSSecret Block
 
 Backup all TLS secrets
