@@ -1,5 +1,5 @@
 ARG REDIS_VERSION=8
-ARG TERGUM_VERSION=v0.43.0
+ARG TERGUM_VERSION=v0.44.0
 FROM sikalabs/tergum:$TERGUM_VERSION AS tergum
 FROM redis:$REDIS_VERSION
 COPY --from=tergum /usr/local/bin/tergum /usr/local/bin/tergum

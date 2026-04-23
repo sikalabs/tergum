@@ -1,5 +1,5 @@
 POSTGRES_VERSION=17
-TERGUM_VERSION=v0.43.0
+TERGUM_VERSION=v0.44.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-mysqldump-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
