@@ -11,14 +11,17 @@ import (
 
 const KubernetesSATokenPath = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 
-func GetVaultTokenFromKubernetesSA(addr, role, authPath string) (string, error) {
+func GetVaultTokenFromKubernetesSA(addr, role, authPath, tokenFile string) (string, error) {
 	if authPath == "" {
 		authPath = "kubernetes"
 	}
+	if tokenFile == "" {
+		tokenFile = KubernetesSATokenPath
+	}
 
-	saToken, err := os.ReadFile(KubernetesSATokenPath)
+	saToken, err := os.ReadFile(tokenFile)
 	if err != nil {
-		return "", fmt.Errorf("failed to read Kubernetes SA token at %s: %w", KubernetesSATokenPath, err)
+		return "", fmt.Errorf("failed to read Kubernetes SA token at %s: %w", tokenFile, err)
 	}
 
 	body, err := json.Marshal(map[string]string{

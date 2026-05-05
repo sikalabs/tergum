@@ -9,18 +9,19 @@ import (
 )
 
 type VaultSource struct {
-	Addr               string            `yaml:"Addr" json:"Addr,omitempty"`
-	Token              string            `yaml:"Token" json:"Token,omitempty"`
-	KubernetesRole     string            `yaml:"KubernetesRole" json:"KubernetesRole,omitempty"`
-	KubernetesAuthPath string            `yaml:"KubernetesAuthPath" json:"KubernetesAuthPath,omitempty"`
-	Headers            map[string]string `yaml:"Headers" json:"Headers,omitempty"`
+	Addr                string            `yaml:"Addr" json:"Addr,omitempty"`
+	Token               string            `yaml:"Token" json:"Token,omitempty"`
+	KubernetesRole      string            `yaml:"KubernetesRole" json:"KubernetesRole,omitempty"`
+	KubernetesAuthPath  string            `yaml:"KubernetesAuthPath" json:"KubernetesAuthPath,omitempty"`
+	KubernetesTokenFile string            `yaml:"KubernetesTokenFile" json:"KubernetesTokenFile,omitempty"`
+	Headers             map[string]string `yaml:"Headers" json:"Headers,omitempty"`
 }
 
 func (s VaultSource) getToken() (string, error) {
 	if s.Token != "" {
 		return s.Token, nil
 	}
-	return vault_utils.GetVaultTokenFromKubernetesSA(s.Addr, s.KubernetesRole, s.KubernetesAuthPath)
+	return vault_utils.GetVaultTokenFromKubernetesSA(s.Addr, s.KubernetesRole, s.KubernetesAuthPath, s.KubernetesTokenFile)
 }
 
 func (s VaultSource) Validate() error {
