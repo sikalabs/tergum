@@ -398,13 +398,14 @@ Port: <port>
 
 ### Example BackupSourceVault Block
 
+With static token:
+
 ```yaml
 Addr: <vault address>
 Token: <vault token>
-Headers: <map[string]string of headers, optional>
 ```
 
-example with cloudflare access headers
+With static token and Cloudflare Access headers:
 
 ```yaml
 Addr: https://vault.corp.com
@@ -414,6 +415,39 @@ Headers:
   CF-Access-Client-Secret: xxx123456789
 ```
 
+With Kubernetes Service Account token (running inside a Kubernetes pod):
+
+```yaml
+Addr: https://vault.corp.com
+KubernetesRole: <vault kubernetes auth role>
+```
+
+Tergum reads the SA token from `/var/run/secrets/kubernetes.io/serviceaccount/token` (the standard in-cluster path) and exchanges it for a Vault token using the `kubernetes` auth method.
+
+With a custom Kubernetes auth path (when Vault has multiple Kubernetes backends mounted):
+
+```yaml
+Addr: https://vault.corp.com
+KubernetesRole: tergum
+KubernetesAuthPath: local-cluster
+```
+
+With a custom token file path (useful for local testing or non-standard mounts):
+
+```yaml
+Addr: https://vault.corp.com
+KubernetesRole: tergum
+KubernetesTokenFile: ./token.local.txt
+```
+
+Parameters:
+
+- `Addr` - Vault address (required)
+- `Token` - static Vault token; if set, Kubernetes auth is skipped
+- `KubernetesRole` - Vault Kubernetes auth role; required when not using `Token`
+- `KubernetesAuthPath` - Vault auth mount path for the Kubernetes backend (default: `kubernetes`)
+- `KubernetesTokenFile` - path to the Kubernetes SA JWT token file (default: `/var/run/secrets/kubernetes.io/serviceaccount/token`)
+- `Headers` - optional extra HTTP headers (e.g. for Cloudflare Access)
 
 ### Example BackupSourceDummy Block
 
