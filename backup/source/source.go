@@ -11,6 +11,7 @@ import (
 	"github.com/sikalabs/tergum/backup/source/kubernetes"
 	"github.com/sikalabs/tergum/backup/source/kubernetes_tls_secret"
 	"github.com/sikalabs/tergum/backup/source/mongo"
+	"github.com/sikalabs/tergum/backup/source/mssql"
 	"github.com/sikalabs/tergum/backup/source/mysql"
 	"github.com/sikalabs/tergum/backup/source/mysql_server"
 	"github.com/sikalabs/tergum/backup/source/notion"
@@ -28,6 +29,7 @@ type Source struct {
 	MysqlServer         *mysql_server.MysqlServerSource            `yaml:"MysqlServer" json:"MysqlServer,omitempty"`
 	Postgres            *postgres.PostgresSource                   `yaml:"Postgres" json:"Postgres,omitempty"`
 	PostgresServer      *postgres_server.PostgresServerSource      `yaml:"PostgresServer" json:"PostgresServer,omitempty"`
+	Mssql               *mssql.MssqlSource                         `yaml:"Mssql" json:"Mssql,omitempty"`
 	Mongo               *mongo.MongoSource                         `yaml:"Mongo" json:"Mongo,omitempty"`
 	SingleFile          *single_file.SingleFileSource              `yaml:"SingleFile" json:"SingleFile,omitempty"`
 	KubernetesTLSSecret *kubernetes_tls_secret.KubernetesTLSSecret `yaml:"KubernetesTLSSecret" json:"KubernetesTLSSecret,omitempty"`
@@ -61,6 +63,11 @@ func (s Source) Validate() error {
 
 	if s.PostgresServer != nil {
 		p := *s.PostgresServer
+		return p.Validate()
+	}
+
+	if s.Mssql != nil {
+		p := *s.Mssql
 		return p.Validate()
 	}
 
@@ -153,6 +160,11 @@ func (s Source) Backup() (backup_output.BackupOutput, error) {
 		return p.Backup()
 	}
 
+	if s.Mssql != nil {
+		p := *s.Mssql
+		return p.Backup()
+	}
+
 	if s.Mongo != nil {
 		p := *s.Mongo
 		return p.Backup()
@@ -236,6 +248,10 @@ func (s Source) Name() string {
 
 	if s.PostgresServer != nil {
 		return "PostgresServer"
+	}
+
+	if s.Mssql != nil {
+		return "Mssql"
 	}
 
 	if s.Mongo != nil {
