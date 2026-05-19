@@ -1,0 +1,23 @@
+Meta:
+  SchemaVersion: 3
+Settings:
+  UseDoBackupV2: true
+  ExtraName: mssql-example
+Telemetry:
+  CollectBackupLog: true
+  CollectHostData: true
+Backups:
+  - ID: mssql-example
+    Source:
+      Mssql:
+        Host: 127.0.0.1
+        Port: "1433"
+        User: sa
+        Password: Password1
+        Database: example
+        TrustServerCertificate: true
+        ExtractAllTableData: true
+    Targets:
+      - ID: file
+        FilePath:
+          Path: tmp/backup.dacpac
