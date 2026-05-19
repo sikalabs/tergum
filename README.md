@@ -106,6 +106,7 @@ Source:
   MysqlServer: <BackupSourceMysqlServerConfiguration>
   Postgres: <BackupSourcePostgresConfiguration>
   PostgresServer: <BackupSourcePostgresServerConfiguration>
+  Mssql: <BackupSourceMssqlConfiguration>
   Mongo: <BackupSourceMongoConfiguration>
   SingleFile: <BackupSourceSingleFileConfiguration>
   Dir: <BackupSourceDirConfiguration>
@@ -484,6 +485,34 @@ Addr: http://127.0.0.1:8500
 Token: 51047cd1-c243-a969-2bf1-a845405e4da9
 ```
 
+### Example BackupSourceMssql Block
+
+```yaml
+Host: "127.0.0.1"
+Port: "1433"
+User: sa
+Password: Password1
+Database: example
+TrustServerCertificate: true
+ExtractAllTableData: true
+```
+
+With extra args:
+
+```yaml
+Host: "127.0.0.1"
+Port: "1433"
+User: sa
+Password: Password1
+Database: example
+TrustServerCertificate: true
+ExtractAllTableData: true
+SqlpackageExtraArgs:
+  - /p:VerifyExtraction=False
+```
+
+Uses `sqlpackage` to extract the database as a `.dacpac` file (requires `sqlpackage` to be installed).
+
 #### Example BackupDestinationFilePathConfiguration Block
 
 ```yaml
@@ -694,6 +723,7 @@ tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yaml
 - [x] PostgresServer
 - [x] MySQL
 - [x] MySQLServer
+- [x] MSSQL
 - [ ] Oracle (Enterprise)
 - [ ] S3
 - [ ] Ceph RBD
