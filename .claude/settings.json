@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go doc:*)",
+      "Read",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git blame:*)",
+      "Bash(git shortlog:*)",
+      "Bash(git reflog:*)",
+      "Bash(git grep:*)"
+    ],
+    "deny": [],
+    "ask": [
+      "Bash(git commit:*)"
+    ]
+  }
+}
