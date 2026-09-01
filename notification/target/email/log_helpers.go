@@ -19,7 +19,7 @@ func logSend(email string) {
 func logFailed(email string) {
 	log.Error().
 		Str("log-id", "notification-email-failed").
-		Msg("Email notification failed to sent (" + email + ")")
+		Msg("Email notification failed to send (" + email + ")")
 }
 
 func logError(errorMessage string) {
