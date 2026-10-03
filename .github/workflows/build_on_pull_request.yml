@@ -1,7 +1,7 @@
-name: "Try to build it"
+name: "Build on Pull Request"
 
 on:
-  push:
+  pull_request:
     branches: [ "*" ]
 
 jobs:
@@ -10,6 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
