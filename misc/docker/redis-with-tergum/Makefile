@@ -1,6 +1,7 @@
 REDIS_VERSION=8
 TERGUM_VERSION=v0.45.0
 IMAGE=ghcr.io/tergum-extra/redis-with-tergum:${REDIS_VERSION}-tergum-${TERGUM_VERSION}
+IMAGE_NEW=ghcr.io/tergumregistry/redis-with-tergum:${REDIS_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
 	make build-and-push
@@ -14,7 +15,9 @@ build:
 		--build-arg REDIS_VERSION=${REDIS_VERSION} \
 		--build-arg TERGUM_VERSION=${TERGUM_VERSION} \
 		-t ${IMAGE} \
+		-t ${IMAGE_NEW} \
 		.
 
 push:
 	docker push ${IMAGE}
+	docker push ${IMAGE_NEW}
