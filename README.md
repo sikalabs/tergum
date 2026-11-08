@@ -119,6 +119,7 @@ Source:
   Dummy: <BackupSourceDummy>
   Gitlab: <BackupSourceGitlab>
   Consul: <BackupSourceConsul>
+  ProxmoxLocalVM: <BackupSourceProxmoxLocalVM>
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
@@ -513,6 +514,14 @@ SqlpackageExtraArgs:
 
 Uses `sqlpackage` to extract the database as a `.dacpac` file (requires `sqlpackage` to be installed).
 
+#### Example BackupSourceProxmoxLocalVM Block
+
+```yaml
+VMID: 100
+```
+
+Uses `vzdump` to back up a local Proxmox VM (must run on the Proxmox host).
+
 #### Example BackupDestinationFilePathConfiguration Block
 
 ```yaml
@@ -730,7 +739,7 @@ tergum utils cron "0 0 * * *" -- tergum backup -c tergum.yaml
 - [ ] CephFS
 - [x] MongoDB
 - [x] Gitlab
-- [ ] Proxmox
+- [x] Proxmox (local VM)
 - [x] Kubernetes Resource
   - [x] Kubernetes TLS Secret
 - [ ] Container Image
