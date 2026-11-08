@@ -1,8 +1,9 @@
-POSTGRES_VERSION=17
-TERGUM_VERSION=v0.44.0
+POSTGRES_VERSION=18
+TERGUM_VERSION=v0.45.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-mysqldump-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
+	make build-and-push
 	make build-and-push POSTGRES_VERSION=17
 	make build-and-push POSTGRES_VERSION=16
 	make build-and-push POSTGRES_VERSION=15
