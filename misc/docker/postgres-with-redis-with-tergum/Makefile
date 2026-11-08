@@ -1,6 +1,7 @@
 POSTGRES_VERSION=18
 TERGUM_VERSION=v0.45.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-tergum-with-redis:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
+IMAGE_NEW=ghcr.io/tergumregistry/postgres-with-tergum-with-redis:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
 	make build-and-push
@@ -18,7 +19,9 @@ build:
 		--build-arg POSTGRES_VERSION=${POSTGRES_VERSION} \
 		--build-arg TERGUM_VERSION=${TERGUM_VERSION} \
 		-t ${IMAGE} \
+		-t ${IMAGE_NEW} \
 		.
 
 push:
 	docker push ${IMAGE}
+	docker push ${IMAGE_NEW}
