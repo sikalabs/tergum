@@ -1,5 +1,5 @@
 MONGO_VERSION=latest
-TERGUM_VERSION=v0.44.0
+TERGUM_VERSION=v0.45.0
 IMAGE=ghcr.io/tergum-extra/mongo-with-tergum:${MONGO_VERSION}-tergum-${TERGUM_VERSION}
 
 all:
