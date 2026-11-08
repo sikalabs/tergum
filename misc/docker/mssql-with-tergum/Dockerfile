@@ -1,5 +1,5 @@
 ARG TERGUM_VERSION=v0.45.0
-FROM sikalabs/tergum:$TERGUM_VERSION AS tergum
+FROM ghcr.io/sikalabs/tergum:$TERGUM_VERSION AS tergum
 FROM ubuntu:22.04
 RUN apt-get update \
     && apt-get install -y curl unzip libicu70 \
