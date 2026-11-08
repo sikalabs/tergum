@@ -139,8 +139,15 @@ SleepBefore: <sleep time before backup job in seconds>
 
 #### GzipMiddlewareConfiguration
 
+Gzip compression:
+
 ```yaml
 Gzip: {}
+```
+
+Symmetric encryption:
+
+```yaml
 SymmetricEncryption:
   Passphrase: "passphrase"
 ```
