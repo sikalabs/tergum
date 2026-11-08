@@ -1,4 +1,4 @@
-TERGUM_VERSION=v0.44.0
+TERGUM_VERSION=v0.45.0
 IMAGE=ghcr.io/tergum-extra/mssql-with-tergum:tergum-${TERGUM_VERSION}
 
 all:
