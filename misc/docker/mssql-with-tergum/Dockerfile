@@ -1,4 +1,4 @@
-ARG TERGUM_VERSION=v0.45.0
+ARG TERGUM_VERSION=v0.46.0
 FROM ghcr.io/sikalabs/tergum:$TERGUM_VERSION AS tergum
 FROM ubuntu:22.04
 RUN apt-get update \

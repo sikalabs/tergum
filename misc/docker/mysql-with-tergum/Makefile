@@ -1,5 +1,5 @@
 MYSQL_VERSION=latest
-TERGUM_VERSION=v0.45.0
+TERGUM_VERSION=v0.46.0
 IMAGE=ghcr.io/tergum-extra/mysql-with-tergum:${MYSQL_VERSION}-tergum-${TERGUM_VERSION}
 IMAGE_NEW=ghcr.io/tergumregistry/mysql-with-tergum:${MYSQL_VERSION}-tergum-${TERGUM_VERSION}
 

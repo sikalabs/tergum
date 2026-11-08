@@ -1,5 +1,5 @@
 POSTGRES_VERSION=18
-TERGUM_VERSION=v0.45.0
+TERGUM_VERSION=v0.46.0
 IMAGE=ghcr.io/tergum-extra/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 IMAGE_NEW=ghcr.io/tergumregistry/postgres-with-tergum:${POSTGRES_VERSION}-tergum-${TERGUM_VERSION}
 
