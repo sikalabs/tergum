@@ -134,7 +134,7 @@ Targets:
     AzureBlob: <BackupDestinationAzureBlobConfiguration>
     Telegram: <BackupDestinationTelegramConfiguration>
   - ...
-SleepBefore: <sleep time befor backup job in seconds>
+SleepBefore: <sleep time before backup job in seconds>
 ```
 
 #### GzipMiddlewareConfiguration
@@ -380,7 +380,7 @@ Excludes:
 ```yaml
 Token: <Notion token_v2>
 SpaceID: <Notion Space UID>
-Format: <Fotmat of export ("html" or "markdown")>
+Format: <Format of export ("html" or "markdown")>
 ```
 
 ### Example BackupSourceFTP Block
@@ -460,7 +460,7 @@ Content: <backup content>
 ### Example BackupSourceGitlab Block
 
 ```yaml
-NamePrefix: <prefix Gitlab backup file in /var/opt/gitlab/backups>
+NamePrefix: <prefix of Gitlab backup file in /var/opt/gitlab/backups>
 Skip: <skip (for example registry)>
 ```
 
@@ -479,7 +479,7 @@ Example without ACL
 Addr: http://127.0.0.1:8500
 ```
 
-Example with ACL requires token
+Example with ACL (requires token)
 
 ```yaml
 Addr: http://127.0.0.1:8500
@@ -552,12 +552,12 @@ Suffix: "sql"
 AWS:
 
 ```yaml
-accessKey: "aws_access_key_id"
-secretKey: "aws_secret_access_key"
-region: "eu-central-1"
-bucketName: "tergum-backups"
-prefix: "mysql-default"
-suffix: "sql"
+AccessKey: "aws_access_key_id"
+SecretKey: "aws_secret_access_key"
+Region: "eu-central-1"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
 ```
 
 AWS with 3 retries:
@@ -565,12 +565,12 @@ AWS with 3 retries:
 You can set `UploadRetries` (default is 0) to retry upload in case of error.
 
 ```yaml
-accessKey: "aws_access_key_id"
-secretKey: "aws_secret_access_key"
-region: "eu-central-1"
-bucketName: "tergum-backups"
-prefix: "mysql-default"
-suffix: "sql"
+AccessKey: "aws_access_key_id"
+SecretKey: "aws_secret_access_key"
+Region: "eu-central-1"
+BucketName: "tergum-backups"
+Prefix: "mysql-default"
+Suffix: "sql"
 UploadRetries: 3
 ```
 
@@ -613,9 +613,9 @@ FileName: "backup.sql"
 #### Notification Block
 
 ```yaml
-Backends: {
-  Email:  <NotificationBackendEmail>
-Target:
+Backend:
+  Email: <NotificationBackendEmail>
+Targets:
   - <NotificationTarget>
   - <NotificationTarget>
   - ...
@@ -626,7 +626,7 @@ Target:
 ```yaml
 SmtpHost: "mail.example.com"
 SmtpPort: "25"
-Usename: "aaa"
+Username: "aaa"
 Password: "aaa/bbb"
 From: "tergum@example.com"
 ```
