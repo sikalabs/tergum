@@ -123,8 +123,8 @@ Source:
 Middlewares:
   - <MiddlewareConfiguration>
   - ...
-Destinations:
-  - ID: <UniqueBackupDestinationID>
+Targets:
+  - ID: <UniqueBackupTargetID>
     Middlewares:
       - <MiddlewareConfiguration>
       - ...
